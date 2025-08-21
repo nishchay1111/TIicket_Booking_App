@@ -1,0 +1,167 @@
+[
+    {
+      "type": "Movie",
+      "eventName": "Avengers: Endgame",
+      "organizer": "1234567890abcdef12345678",
+      "image": "images/avengers_endgame.jpg",
+      "showTimes": [
+        {
+          "date": "2025-03-01T00:00:00.000Z",
+          "times": [
+            {
+              "time": "10:00 AM",
+              "totalTickets": 200,
+              "availableTickets": 150
+            },
+            {
+              "time": "01:00 PM",
+              "totalTickets": 200,
+              "availableTickets": 180
+            }
+          ]
+        },
+        {
+          "date": "2025-03-02T00:00:00.000Z",
+          "times": [
+            {
+              "time": "02:00 PM",
+              "totalTickets": 200,
+              "availableTickets": 170
+            }
+          ]
+        }
+      ],
+      "status": true,
+      "language": "English",
+      "genre": "Action",
+      "city": "New York",
+      "venue": "Madison Square Garden",
+      "createdAt": "2025-01-20T00:00:00.000Z"
+    },
+    {
+      "type": "Concert",
+      "eventName": "Imagine Dragons Live",
+      "organizer": "abcdef1234567890abcdef12",
+      "image": "images/imagine_dragons_live.jpg",
+      "showTimes": [
+        {
+          "date": "2025-04-10T00:00:00.000Z",
+          "times": [
+            {
+              "time": "07:00 PM",
+              "totalTickets": 500,
+              "availableTickets": 450
+            }
+          ]
+        }
+      ],
+      "status": true,
+      "language": "English",
+      "genre": "Rock",
+      "city": "Los Angeles",
+      "venue": "Hollywood Bowl",
+      "createdAt": "2025-01-25T00:00:00.000Z"
+    },
+    {
+      "type": "Sports",
+      "eventName": "NBA Finals",
+      "organizer": "123456abcdef7890abcdef12",
+      "image": "images/nba_finals.jpg",
+      "showTimes": [
+        {
+          "date": "2025-05-15T00:00:00.000Z",
+          "times": [
+            {
+              "time": "05:30 PM",
+              "totalTickets": 1000,
+              "availableTickets": 850
+            }
+          ]
+        }
+      ],
+      "status": true,
+      "language": "English",
+      "genre": "Basketball",
+      "city": "Chicago",
+      "venue": "United Center",
+      "createdAt": "2025-02-01T00:00:00.000Z"
+    },
+    {
+      "type": "Movie",
+      "eventName": "The Dark Knight",
+      "organizer": "1234567890abcdef12345678",
+      "image": "images/the_dark_knight.jpg",
+      "showTimes": [
+        {
+          "date": "2025-02-28T00:00:00.000Z",
+          "times": [
+            {
+              "time": "08:00 PM",
+              "totalTickets": 250,
+              "availableTickets": 220
+            }
+          ]
+        }
+      ],
+      "status": true,
+      "language": "English",
+      "genre": "Action",
+      "city": "Los Angeles",
+      "venue": "LA Theater",
+      "createdAt": "2025-01-30T00:00:00.000Z"
+    },
+    {
+      "type": "Concert",
+      "eventName": "Taylor Swift's World Tour",
+      "organizer": "abcdef1234567890abcdef12",
+      "image": "images/taylor_swift_tour.jpg",
+      "showTimes": [
+        {
+          "date": "2025-06-20T00:00:00.000Z",
+          "times": [
+            {
+              "time": "08:00 PM",
+              "totalTickets": 800,
+              "availableTickets": 650
+            }
+          ]
+        }
+      ],
+      "status": true,
+      "language": "English",
+      "genre": "Pop",
+      "city": "Miami",
+      "venue": "Hard Rock Stadium",
+      "createdAt": "2025-01-10T00:00:00.000Z"
+    },
+    {
+      "type": "Movie",
+      "eventName": "Avatar 2",
+      "organizer": "abcdef1234567890abcdef12",
+      "image": "images/avatar2.jpg",
+      "showTimes": [
+        {
+          "date": "2025-03-10T00:00:00.000Z",
+          "times": [
+            {
+              "time": "11:00 AM",
+              "totalTickets": 300,
+              "availableTickets": 270
+            },
+            {
+              "time": "02:00 PM",
+              "totalTickets": 300,
+              "availableTickets": 290
+            }
+          ]
+        }
+      ],
+      "status": true,
+      "language": "English",
+      "genre": "Sci-Fi",
+      "city": "Chicago",
+      "venue": "AMC Theater",
+      "createdAt": "2025-01-15T00:00:00.000Z"
+    }
+  ]
+  

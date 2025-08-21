@@ -1,0 +1,107 @@
+[
+    {
+        "name": "Organizer 1",
+        "email": "organizer1@eventhub.com",
+        "password": "$2b$12$Z5cOPTfg.agmq7PL4LLZM.5zXuY7to6j7R7bTvxxBF/CID.4mdGMu",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    },
+    {
+        "name": "Organizer 2",
+        "email": "organizer2@eventhub.com",
+        "password": "$2b$12$gO3CGqBYbEce6rmm4fyti.UQKinr5.dSxnxnMe/or8PihZQlDl9lu",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    },
+    {
+        "name": "Organizer 3",
+        "email": "organizer3@eventhub.com",
+        "password": "$2b$12$KTOvtVziqBkk/HdMduq2HOwJljwoIZHGS5RTqVo2sPj19Ul5PGZPu",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    },
+    {
+        "name": "Organizer 4",
+        "email": "organizer4@eventhub.com",
+        "password": "$2b$12$bxjhoNqVvR05Y62lUen.WeqoiTQoQAdfuFV.xFHmQ8nj51rjltgiK",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    },
+    {
+        "name": "Organizer 5",
+        "email": "organizer5@eventhub.com",
+        "password": "$2b$12$LYxFq32G9n/D79k2gIDYoeX2AymN1rvFgioqexQJN0PkAy1JMDTAK",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    },
+    {
+        "name": "Organizer 6",
+        "email": "organizer6@eventhub.com",
+        "password": "$2b$12$QwRdFTM604mzucLDZQaPqusAV1PqW0ZFasY64xfhjI.L/JwTzS4fe",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    },
+    {
+        "name": "Organizer 7",
+        "email": "organizer7@eventhub.com",
+        "password": "$2b$12$o7u67zoekG2zmbHwF09eGecgMLihmkjKUG8BHPeUbP6.f0vagTZD6",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    },
+    {
+        "name": "Organizer 8",
+        "email": "organizer8@eventhub.com",
+        "password": "$2b$12$ybMBQL9KZeZLw2Yy09YKYeDhDPY9n5n8RLknUsOfSmiy8zgUJy.JC",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    },
+    {
+        "name": "Organizer 9",
+        "email": "organizer9@eventhub.com",
+        "password": "$2b$12$Q6ztcA4nY6MQA0Aznr7Z..Bf7e2jzfea3EqLqacs7Ht8fcIB4LqLu",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    },
+    {
+        "name": "Organizer 10",
+        "email": "organizer10@eventhub.com",
+        "password": "$2b$12$xueUKM6PjE7Tk.lMAlHUZ.oS06HCPsXTLdpv30okHkrf.v8VI9wSi",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    },
+    {
+        "name": "Organizer 11",
+        "email": "organizer11@eventhub.com",
+        "password": "$2b$12$wOP8fzes60.9Ojqed0o5Ie16TXat05A8/FynrqEu72tO1Tc1NC5MC",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    },
+    {
+        "name": "Organizer 12",
+        "email": "organizer12@eventhub.com",
+        "password": "$2b$12$v2p76wUGuHhgDovd5rU4zeuBlU/pKFgGkfBv48GW.JOvGhnTH5iAe",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    },
+    {
+        "name": "Organizer 13",
+        "email": "organizer13@eventhub.com",
+        "password": "$2b$12$1nc/xHjFNIxhsPTAsVwI3eIsrm1vki1bk8y3q9m78OzpudIN12aFi",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    },
+    {
+        "name": "Organizer 14",
+        "email": "organizer14@eventhub.com",
+        "password": "$2b$12$CfGzwBbWx/Iz8Hzi5GJP2eDM0lefu3hbw2.UgeLy.vE2pNerqjs3S",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    },
+    {
+        "name": "Organizer 15",
+        "email": "organizer15@eventhub.com",
+        "password": "$2b$12$omOiRY91Vw6asIH4vDbeeu5xITboMCmBULYZ5nN3RYh0gH7OdAF72",
+        "verified": 0,
+        "date": "2025-01-29T00:00:00Z"
+    }
+]
