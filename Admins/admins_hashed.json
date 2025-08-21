@@ -1,0 +1,15 @@
+[
+    {
+      "name": "John Doe",
+      "email": "johndoe@example.com",
+      "password": "$2a$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36W0M.VNfJo7RZ2npXwlR2C",
+      "date": "2025-03-27T12:00:00Z"
+    },
+    {
+      "name": "Jane Smith",
+      "email": "janesmith@example.com",
+      "password": "$2a$10$7QvpoB8B5FyZUMZd1.kPuOiOJcPChF5lHGm8xCZY/okU/xwqFJ5j6",
+      "date": "2025-03-27T12:00:00Z"
+    }
+  ]
+  
