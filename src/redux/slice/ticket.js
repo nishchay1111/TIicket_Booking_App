@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 export const fetchTickets = createAsyncThunk('fetchTickets', async () => {
     const token = localStorage.getItem("token");
     console.log("Using auth-token:", token);
-    const response = await fetch("http://localhost:5000/api/booking/fetchalltickets", {
+    const response = await fetch("http://localhost:5001/api/booking/fetchalltickets", {
         method: "POST",
         headers: {
             "Content-Type": "application/json", // ✅ Fixed Content-Type

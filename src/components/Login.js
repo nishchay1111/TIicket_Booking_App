@@ -10,7 +10,7 @@ const Login = ({ setUser }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/api/auth/login", {
+    const response = await fetch("http://localhost:5001/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +28,7 @@ const Login = ({ setUser }) => {
       localStorage.setItem("token", json.authtoken);
 
       // Fetch user details after login
-      const userResponse = await fetch("http://localhost:5000/api/auth/getuser", {
+      const userResponse = await fetch("http://localhost:5001/api/auth/getuser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { setAlert } from '../redux/slice/alert'; // Import setAlert action
+import { useDispatch } from "react-redux"; // Use dispatch hook
 
 const Signup = (props) => {
   const [credentials, setCredentials] = useState({ name: "", email: "", password: "", cpassword: "" });
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // Get dispatch function
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -11,7 +14,7 @@ const Signup = (props) => {
     if(credentials.cpassword!=credentials.password){
       return props.showAlert("Error", "Password Does not Match", "red");
     }
-    const response = await fetch("http://localhost:5000/api/auth/createuser", {
+    const response = await fetch("http://localhost:5001/api/auth/createuser", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -23,12 +26,12 @@ const Signup = (props) => {
 
     if (json.success) {
       // Save the auth token and redirect
-      props.showAlert("Success", "You've Signed Up Successfully", "green");
+      dispatch(setAlert({ type: 'success', title: 'Success', msg: 'Logged in Successfully' }));
       localStorage.setItem('token', json.authtoken);
       navigate("/");
     }
     else{
-      props.showAlert("Error", json.error, "red");
+      dispatch(setAlert({ type: 'error', title: 'Error', msg: 'Invalid Credentials' }));
     }
   };
 

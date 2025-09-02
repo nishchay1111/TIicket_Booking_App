@@ -6,7 +6,7 @@ export const verifyAdmin = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/organizers/adminlogin",
+        "http://localhost:5001/api/organizers/adminlogin",
         {
           method: "POST",
           headers: {
