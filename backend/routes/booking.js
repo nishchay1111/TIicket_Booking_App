@@ -4,30 +4,36 @@ const fetchuser = require('../fetchuser/fetchuser');
 const Booked = require('../models/Booked'); // Import the Booking model
 const Events = require('../models/Events')
 const { body, validationResult } = require('express-validator');
+const crypto = require('crypto');
+const {loadData, saveData} = require('../jsonStore')
 
 router.post('/fetchalltickets', fetchuser, async (req, res) => {
     try {
-        let success = false
-        let userEmail = req.user.email;
-        const ticket = await Booked.find({email: userEmail});
-        if(ticket){
+        let success = false;
+        // 1. Load the tickets data
+        let tickets = loadData('tickets');
+        
+        // 2. Filter tickets for this specific user
+        const userTickets = tickets.filter(t => t.user_id === req.user.id);
+        
+        // 3. Check if the array has any items
+        if (userTickets.length > 0) {
             success = true;
-            res.json({success, ticket})
+            return res.json({ success, userTickets });
+        } else {
+            // Send a clear message if no tickets exist
+            return res.json({ success: false, message: "No tickets found for this user", userTickets: [] });
         }
-        else{
-            res.json(success)
-        }
-    }   catch (error) {
-        console.error(error.message);
-        res.status(500).send("Internal server Error");
+    } catch (error) {
+        console.error("Fetch Tickets Error:", error.message);
+        res.status(500).json({ success: false, error: "Internal Server Error" });
     }
 });
 
 router.get('/fetchallevents', async (req, res) => {
     try {
         // Fetch all events
-        const events = await Events.find();
-
+        const events = loadData('events')
         // Return the fetched events as a JSON response
         res.json(events);
     } catch (error) {
