@@ -1,12 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const fetchuser = require('../fetchuser/fetchuser');
-const Booked = require('../models/Booked'); // Import the Booking model
-const Events = require('../models/Events')
+const fetchuser = require('../fetchuser/fetchuser'); // Ensure this path is correct!
 const { body, validationResult } = require('express-validator');
 const crypto = require('crypto');
-const {loadData, saveData} = require('../jsonStore')
-
+const { loadData, saveData } = require('../jsonStore'); // This is your new "Database"
 router.post('/fetchalltickets', fetchuser, async (req, res) => {
     try {
         let success = false;
@@ -44,169 +41,105 @@ router.get('/fetchallevents', async (req, res) => {
 });
 
 router.post('/bookticket/:id', fetchuser, [
-    body('eventName', 'Enter Name of the Event').notEmpty(),
-    body('showTime', 'Enter a valid Show Time').notEmpty(),
-    body('showDate', 'Enter a valid Show Date').isDate(),
-    body('numberOfTickets', 'Enter a valid number of tickets').isInt({ min: 1 }),
+    body("numberOfTickets", "Enter Number of Tickets you want to Reserve (min 1)").isInt({ min: 1 })
 ], async (req, res) => {
-    // Validate request body
     const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+    if (!errors.isEmpty()) return res.status(400).json({ success: false, errors: errors.array() });
 
     try {
-        const { eventName, showTime, showDate, numberOfTickets } = req.body;
+        const { numberOfTickets } = req.body;
+        let events = loadData('events');
 
-        // Convert showDate to a Date object
-        const formattedShowDate = new Date(showDate);
-
-        // Find the event by name
-        const event = await Events.findOne({ eventName: req.body.eventName });
-
-        if (!event) {
-            return res.status(404).json({ error: "Event not found" });
-        }
-
-        // Verify the event name matches
-        if (event.eventName !== eventName) {
-            return res.status(400).json({ error: "Event name does not match" });
-        }
-
-        // Check if the provided show date exists in the event
-        const dateMatch = event.showTimes.find(
-            (showDateObj) => showDateObj.date.toISOString().split('T')[0] === formattedShowDate.toISOString().split('T')[0]
+        // 1. Find the event that contains the matching show_id
+        let fetchEvent = events.find(e => 
+            e.show_dates.some(s => s.show_id?.toString() === req.params.id?.toString())
         );
 
-        if (!dateMatch) {
-            return res.status(400).json({ error: "Show date not available for this event" });
+        if (!fetchEvent) return res.status(404).json({ success: false, error: "Show does not exist" });
+
+        // 2. Find the SPECIFIC show inside that event
+        let selectedShow = fetchEvent.show_dates.find(s => s.show_id?.toString() === req.params.id?.toString());
+
+        // 3. Check Ticket Availability
+        if (numberOfTickets > selectedShow.availableSeats) {
+            return res.status(400).json({ success: false, error: "Not Enough Tickets" });
         }
 
-        // Check if the provided show time exists for the matched date
-        const timeMatch = dateMatch.times.find((timeObj) => timeObj.time === showTime);
+        // 4. Update memory (Subtraction)
+        selectedShow.availableSeats -= numberOfTickets;
 
-        if (!timeMatch) {
-            return res.status(400).json({ error: "Show time not available for this date" });
-        }
+        // 5. SAVE the entire updated events array
+        saveData('events', events);
 
-        // Check if there are enough available tickets for the selected showtime
-        if (timeMatch.availableTickets < numberOfTickets) {
-            return res.status(400).json({ error: "Not enough tickets available" });
-        }
+        // 6. Create the Ticket Object for tickets.json
+        const newTicket = {
+            ticket_id:          crypto.randomUUID(),
+            user_id:            req.user.id,
+            event_id:           fetchEvent.event_id,
+            event_name:         fetchEvent.event_name,
+            show_id:            selectedShow.show_id,
+            show_date:          selectedShow.show_date,
+            event_location:     fetchEvent.event_location,
+            image_url:          fetchEvent.image_url,
+            number_of_tickets:  numberOfTickets,
+            total_price:        (numberOfTickets * selectedShow.price),
+            date_booked:        new Date().toISOString()
+        };
 
-        // Update the available tickets
-        timeMatch.availableTickets -= numberOfTickets;
-        await event.save();
+        // 7. Save to tickets.json
+        const allTickets = loadData('tickets');
+        allTickets.push(newTicket);
+        saveData('tickets', allTickets);
 
-        // Create a new booking record
-        const newBooking = await Booked.create({
-            user: req.user.id,
-            event: event._id,
-            eventType: event.type,
-            eventName,
-            showTime, // This is now a string
-            showDate: formattedShowDate,
-            numberofTickets: numberOfTickets
-        });
+        res.json({ success: true, message: "Ticket booked successfully", ticket: newTicket });
 
-        res.json({ message: "Ticket booked successfully", booking: newBooking });
     } catch (error) {
-        console.error(error.message);
-        res.status(500).send("Internal server Error");
+        console.error("Booking Error:", error.message);
+        res.status(500).json({ success: false, error: "Internal server Error" });
     }
 });
-
-
-router.put('/updateticket/:id',
-    fetchuser,[
-        body('numberofTickets').isInt({ min: 1 }).withMessage('Number of tickets must be a positive integer.'
-        )],async (req, res) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        try {
-            const { numberofTickets } = req.body;
-
-            // Find the booked ticket
-            let ticket = await Booked.findById(req.params.id);
-            if (!ticket) {
-                return res.status(404).send("Ticket not found");
-            }
-
-            // Ensure the user is authorized
-            if (ticket.user.toString() !== req.user.id) {
-                return res.status(401).send("Not authorized to update this ticket");
-            }
-
-            // Ensure that the user retains at least 1 ticket
-            if (numberofTickets > ticket.numberofTickets && numberofTickets==ticket.numberofTickets) {
-                return res.status(400).send("You must retain more than one ticket.");
-            }
-
-            // Find the associated event
-            const event = await Events.findById(ticket.event);
-            if (!event) {
-                return res.status(404).send("Event not found");
-            }
-
-            // Find the specific show date and time
-            const showDateObj = event.showTimes.find(
-                (dateObj) => dateObj.date.toISOString().split('T')[0] === new Date(ticket.showDate).toISOString().split('T')[0]
-            );
-
-            if (!showDateObj) {
-                return res.status(404).send("Show date not found");
-            }
-
-            const showTimeObj = showDateObj.times.find((timeObj) => timeObj.time === ticket.showTime);
-            if (!showTimeObj) {
-                return res.status(404).send("Show time not found");
-            }
-
-            // Update the available tickets
-            const ticketsToCancel = ticket.numberofTickets - numberofTickets;
-            showTimeObj.availableTickets += ticketsToCancel;
-
-            // Save the updated event
-            await event.save();
-
-            // Update the booked ticket
-            ticket = await Booked.findByIdAndUpdate(
-                req.params.id,
-                {$set: { numberofTickets }},
-                {new: true}
-            );
-
-            res.json({ success: true, ticket });
-        } catch (error) {
-            console.error(error.message);
-            res.status(500).send("Internal server error");
-        }
-    }
-);
-
 
 
 // Route 4: Delete an existing note using : Delete "/api/auth/updatenote". Login required
 router.delete('/deleteticket/:id', fetchuser, async (req, res) => {
     try {
-        //Find the note to be Deleted and Delete it
-        let ticket = await Booked.findById(req.params.id);
-        if (!ticket) { return res.status(404).send("Not Found") }
+        let tickets = loadData('tickets');
+        let events = loadData('events');
 
-        //Allow User to remove the note if it belongs to him/her
-        if (ticket.user.toString() !== req.user.id) {
-            return res.status(401).send("Not Allowed");
+        // 1. Find the ticket to be deleted
+        let ticket = tickets.find(t => t.ticket_id?.toString() === req.params.id);
+        if (!ticket) return res.status(404).json({ error: "Ticket Not Found" });
+
+        // 2. Security: Ensure the user owns this ticket
+        if (ticket.user_id !== req.user.id) {
+            return res.status(401).json({ error: "Not Allowed!" });
         }
 
-        ticket = await Booked.findByIdAndDelete(req.params.id);
-        res.json({ "Success": "Data has been deleted", ticket: ticket });
+        // 3. Find the Event and Show to restore seats
+        // We use ticket.show_id because req.params.id is the TICKET ID
+        let event = events.find(e => 
+            e.show_dates.some(s => s.show_id === ticket.show_id)
+        );
+
+        if (event) {
+            let show = event.show_dates.find(s => s.show_id === ticket.show_id);
+            // Restore the seats: Add the number of tickets back to availableSeats
+            show.availableSeats += ticket.number_of_tickets;
+            
+            // Save the updated events array
+            saveData('events', events);
+        }
+
+        // 4. Delete the ticket from the list
+        let updatedTickets = tickets.filter(t => t.ticket_id !== req.params.id);
+        saveData('tickets', updatedTickets);
+
+        res.json({ success: true, message: "Ticket deleted and seats restored", ticket });
+
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal server Error");
     }
-
-})
+});
 
 module.exports = router;

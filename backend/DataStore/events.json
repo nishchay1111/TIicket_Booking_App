@@ -1,0 +1,1052 @@
+[
+    {
+        "event_id": "e86e3edc-f6bb-4191-91da-feb97ea7bbb7",
+        "event_name": "Catch Me if You Can (2002)",
+        "event_description": "Frank Abagnale, Jr. works as a doctor, a lawyer and as a co-pilot for a major airline, all before his 18th birthday. A master of deception, he is a brilliant forger, whose skill gives him his first real claim to fame. At the age of 17, Frank Abagnale, Jr. becomes the most successful bank robber in the history of the U.S. FBI Agent Carl Hanratty makes it his prime mission to capture Frank and bring him to justice, but Frank is always one step ahead of him.",
+        "event_city": "New York City",
+        "event_address": "145 W 47th St, New York, NY 10036",
+        "event_category": "Movie",
+        "event_gener": "Thriller",
+        "image_location": "/images/symphony_banner.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "5062f324-5f68-4f8a-9acd-74fb9e2adb23",
+                "show_date": "2026-05-20",
+                "show_time": "19:30",
+                "show_language": "English",
+                "total_tickets": 200,
+                "available_tickets": 200,
+                "ticket_price": 45.5
+            },
+            {
+                "show_id": "a17d2942-2f25-4b2e-b792-3e3672b025d6",
+                "show_date": "2026-05-21",
+                "show_time": "20:00",
+                "show_language": "Hindi",
+                "total_tickets": 150,
+                "available_tickets": 150,
+                "ticket_price": 50
+            },
+            {
+                "show_id": "757ac4c9-6b6d-43fe-8134-f2e3d5741b69",
+                "show_date": "2026-05-22",
+                "show_time": "21:00",
+                "show_language": "Spanish",
+                "total_tickets": 250,
+                "available_tickets": 250,
+                "ticket_price": 50
+            },
+            {
+                "show_id": "82181424-64f4-462a-b39b-ba17d73eac1c",
+                "show_date": "2026-05-23",
+                "show_time": "19:00",
+                "show_language": "German",
+                "total_tickets": 350,
+                "available_tickets": 350,
+                "ticket_price": 50
+            }
+        ],
+        "date_created": "2026-01-21T02:32:22.264Z"
+    },
+    {
+        "event_id": "d75e1df1-5139-4dc1-b8af-be8b26cfde51",
+        "event_name": "The Dark Knight (2008)",
+        "event_description": "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+        "event_city": "New York City",
+        "event_address": "234 W 42nd St, New York, NY 10036",
+        "event_category": "movie",
+        "event_gener": "Action",
+        "image_location": "/images/dark_knight.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "0d6a16b6-7fde-4c90-a210-5a2f587de7ef",
+                "show_date": "2026-06-10",
+                "show_time": "18:00",
+                "show_language": "English",
+                "total_tickets": 300,
+                "available_tickets": 300,
+                "ticket_price": 18.5
+            },
+            {
+                "show_id": "bdfcb4a5-dfb3-4399-b096-108de311f395",
+                "show_date": "2026-06-11",
+                "show_time": "21:00",
+                "show_language": "English",
+                "total_tickets": 300,
+                "available_tickets": 300,
+                "ticket_price": 18.5
+            },
+            {
+                "show_id": "fab924b4-1e63-4640-8342-51470914640c",
+                "show_date": "2026-06-12",
+                "show_time": "15:00",
+                "show_language": "Spanish",
+                "total_tickets": 200,
+                "available_tickets": 200,
+                "ticket_price": 15
+            },
+            {
+                "show_id": "db4d6393-5ada-46c2-b421-90f37e8fd3b4",
+                "show_date": "2026-06-13",
+                "show_time": "19:00",
+                "show_language": "French",
+                "total_tickets": 200,
+                "available_tickets": 200,
+                "ticket_price": 15
+            }
+        ],
+        "date_created": "2026-01-21T03:04:28.961Z"
+    },
+    {
+        "event_id": "806e89b5-63df-43aa-9f52-4c5d67247b4e",
+        "event_name": "Inception (2010)",
+        "event_description": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
+        "event_city": "Los Angels",
+        "event_address": "6925 Hollywood Blvd, Hollywood, CA 90028",
+        "event_category": "movie",
+        "event_gener": "Sci-Fi",
+        "image_location": "/images/inception.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "d96fb0d0-eb14-46f3-bb41-5bc702bb8c2e",
+                "show_date": "2026-07-01",
+                "show_time": "14:00",
+                "show_language": "English",
+                "total_tickets": 400,
+                "available_tickets": 400,
+                "ticket_price": 22
+            },
+            {
+                "show_id": "5e5005f7-c23c-457b-aeef-88acb72dffa7",
+                "show_date": "2026-07-02",
+                "show_time": "18:00",
+                "show_language": "English",
+                "total_tickets": 400,
+                "available_tickets": 400,
+                "ticket_price": 22
+            },
+            {
+                "show_id": "96bb2065-5797-4cb1-9f57-bb282a7847ba",
+                "show_date": "2026-07-03",
+                "show_time": "20:00",
+                "show_language": "Japanese",
+                "total_tickets": 150,
+                "available_tickets": 150,
+                "ticket_price": 20
+            },
+            {
+                "show_id": "48009647-a05a-4967-a982-fb14e2806825",
+                "show_date": "2026-07-04",
+                "show_time": "22:00",
+                "show_language": "German",
+                "total_tickets": 150,
+                "available_tickets": 150,
+                "ticket_price": 20
+            }
+        ],
+        "date_created": "2026-01-21T03:05:05.805Z"
+    },
+    {
+        "event_id": "029031d4-3b16-4aea-8e56-a8dc85bbaf1d",
+        "event_name": "Pulp Fiction (1997)",
+        "event_description": "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
+        "event_city": "Chicago",
+        "event_address": "700 N Michigan Ave, Chicago, IL 60611",
+        "event_category": "movie",
+        "event_gener": "Crime",
+        "image_location": "/images/pulp_fiction.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "bedb1bcc-29ce-404b-91ae-30739e159fa1",
+                "show_date": "2026-04-15",
+                "show_time": "21:00",
+                "show_language": "English",
+                "total_tickets": 100,
+                "available_tickets": 100,
+                "ticket_price": 12
+            },
+            {
+                "show_id": "187e7906-f3c7-47d6-85a4-2d7099c1fa7f",
+                "show_date": "2026-04-16",
+                "show_time": "21:00",
+                "show_language": "English",
+                "total_tickets": 100,
+                "available_tickets": 100,
+                "ticket_price": 12
+            },
+            {
+                "show_id": "b06535fc-66a5-4316-90a2-ce8ec9897621",
+                "show_date": "2026-04-17",
+                "show_time": "23:00",
+                "show_language": "Spanish",
+                "total_tickets": 80,
+                "available_tickets": 80,
+                "ticket_price": 10
+            },
+            {
+                "show_id": "fdc3279b-9bb9-422f-b4e5-58e481af0838",
+                "show_date": "2026-04-18",
+                "show_time": "23:59",
+                "show_language": "Italian",
+                "total_tickets": 80,
+                "available_tickets": 80,
+                "ticket_price": 10
+            }
+        ],
+        "date_created": "2026-01-21T03:05:31.244Z"
+    },
+    {
+        "event_id": "2f485905-1b21-465d-bd54-2a90ce569877",
+        "event_name": "Interstellar (2014)",
+        "event_description": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+        "event_city": "Dallas",
+        "event_address": "11816 N Central Expy, Dallas, TX 75243",
+        "event_category": "movie",
+        "event_gener": "Adventure",
+        "image_location": "/images/interstellar.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "e4e82c5d-3c8c-4c0f-8927-f11cec9dd207",
+                "show_date": "2026-08-05",
+                "show_time": "13:00",
+                "show_language": "English",
+                "total_tickets": 500,
+                "available_tickets": 500,
+                "ticket_price": 25
+            },
+            {
+                "show_id": "b9d2b105-de24-4b0a-8eea-d346f1a620e0",
+                "show_date": "2026-08-06",
+                "show_time": "16:00",
+                "show_language": "Hindi",
+                "total_tickets": 300,
+                "available_tickets": 300,
+                "ticket_price": 20
+            },
+            {
+                "show_id": "c3a25e9d-9e5d-4543-a6eb-58718c91d158",
+                "show_date": "2026-08-07",
+                "show_time": "19:00",
+                "show_language": "Mandarin",
+                "total_tickets": 300,
+                "available_tickets": 300,
+                "ticket_price": 20
+            },
+            {
+                "show_id": "dbf83a8b-edfa-471f-87d2-58fc09cccaba",
+                "show_date": "2026-08-08",
+                "show_time": "22:00",
+                "show_language": "English",
+                "total_tickets": 500,
+                "available_tickets": 500,
+                "ticket_price": 25
+            }
+        ],
+        "date_created": "2026-01-21T03:06:02.497Z"
+    },
+    {
+        "event_id": "6b06e76d-eb06-442c-b2e3-769da1a1d539",
+        "event_name": "The Godfather (1990)",
+        "event_description": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+        "event_city": "Washington DC",
+        "event_address": "3100 South St NW, Washington, DC 20007",
+        "event_category": "movie",
+        "event_gener": "Drama",
+        "image_location": "/images/godfather.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "07b985ee-06a5-44d4-87ac-c71794ee8538",
+                "show_date": "2026-03-01",
+                "show_time": "17:00",
+                "show_language": "English",
+                "total_tickets": 150,
+                "available_tickets": 150,
+                "ticket_price": 15
+            },
+            {
+                "show_id": "7f7f3fe2-04d9-4702-860a-7ee7430cf8b2",
+                "show_date": "2026-03-02",
+                "show_time": "20:00",
+                "show_language": "Italian",
+                "total_tickets": 100,
+                "available_tickets": 100,
+                "ticket_price": 18
+            },
+            {
+                "show_id": "8e38eb96-8986-44a2-a390-b1b61e374196",
+                "show_date": "2026-03-03",
+                "show_time": "17:00",
+                "show_language": "English",
+                "total_tickets": 150,
+                "available_tickets": 150,
+                "ticket_price": 15
+            },
+            {
+                "show_id": "209bcfb1-95ef-4cc6-aad6-0a0c70e770f0",
+                "show_date": "2026-03-04",
+                "show_time": "20:00",
+                "show_language": "Spanish",
+                "total_tickets": 100,
+                "available_tickets": 100,
+                "ticket_price": 18
+            }
+        ],
+        "date_created": "2026-01-21T03:06:29.366Z"
+    },
+    {
+        "event_id": "dfe35f38-0cd9-464a-9db8-47300032e4ad",
+        "event_name": "Symphonic Rock 2026",
+        "event_description": "A fusion of classical orchestra and heavy metal rock legends performing live at the Boston Arena.",
+        "event_city": "Boston",
+        "event_address": "100 Legends Way, Boston, MA 02114",
+        "event_category": "concert",
+        "event_gener": "Rock",
+        "image_location": "/images/rock.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "61e0899a-f35d-4329-a718-90d0081f0c82",
+                "show_date": "2026-05-20",
+                "show_time": "19:00",
+                "show_language": "English",
+                "total_tickets": 5000,
+                "available_tickets": 5000,
+                "ticket_price": 85
+            },
+            {
+                "show_id": "eac7e110-810d-424a-9bd6-f074f6fb57fe",
+                "show_date": "2026-05-21",
+                "show_time": "19:00",
+                "show_language": "English",
+                "total_tickets": 5000,
+                "available_tickets": 5000,
+                "ticket_price": 85
+            },
+            {
+                "show_id": "be06c3d2-5199-49fe-8eaf-5d190cd5b9eb",
+                "show_date": "2026-05-22",
+                "show_time": "20:00",
+                "show_language": "English",
+                "total_tickets": 5000,
+                "available_tickets": 5000,
+                "ticket_price": 95
+            },
+            {
+                "show_id": "234f40ec-9b41-40e5-8c66-efa5c7a121b7",
+                "show_date": "2026-05-23",
+                "show_time": "20:00",
+                "show_language": "English",
+                "total_tickets": 5000,
+                "available_tickets": 5000,
+                "ticket_price": 95
+            }
+        ],
+        "date_created": "2026-01-21T03:06:48.566Z"
+    },
+    {
+        "event_id": "28b29bb8-5d42-4563-8132-3554fe0db4bf",
+        "event_name": "Jazz Under the Stars",
+        "event_description": "Smooth jazz performances by world-renowned saxophonists in an intimate outdoor setting.",
+        "event_city": "New York City",
+        "event_address": "Central Park, New York, NY 10024",
+        "event_category": "concert",
+        "event_gener": "Jazz",
+        "image_location": "/images/jazz.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "38af530c-ae18-4179-87a8-d8ebd5c26cd5",
+                "show_date": "2026-06-15",
+                "show_time": "18:30",
+                "show_language": "English",
+                "total_tickets": 200,
+                "available_tickets": 200,
+                "ticket_price": 40
+            },
+            {
+                "show_id": "f35f057c-8906-47c1-9a75-87ea17fd84ac",
+                "show_date": "2026-06-16",
+                "show_time": "18:30",
+                "show_language": "French",
+                "total_tickets": 200,
+                "available_tickets": 200,
+                "ticket_price": 40
+            },
+            {
+                "show_id": "6b1059d0-8845-4dda-ad85-5d458b0396dc",
+                "show_date": "2026-06-17",
+                "show_time": "20:30",
+                "show_language": "English",
+                "total_tickets": 200,
+                "available_tickets": 200,
+                "ticket_price": 45
+            },
+            {
+                "show_id": "bb49e384-3738-428d-a8a9-76b9fd7ebade",
+                "show_date": "2026-06-18",
+                "show_time": "20:30",
+                "show_language": "German",
+                "total_tickets": 200,
+                "available_tickets": 200,
+                "ticket_price": 45
+            }
+        ],
+        "date_created": "2026-01-21T03:06:57.010Z"
+    },
+    {
+        "event_id": "aaefc724-f41a-46a3-8f32-2d8ce4d08b84",
+        "event_name": "Electronic Neon Night",
+        "event_description": "The biggest EDM festival on the West Coast featuring top international DJs.",
+        "event_city": "Los Angels",
+        "event_address": "1000 Vin Scully Ave, Los Angeles, CA 90012",
+        "event_category": "concert",
+        "event_gener": "EDM",
+        "image_location": "/images/edm.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "8724ffc8-7b17-499e-b3c6-b4d11f506431",
+                "show_date": "2026-08-20",
+                "show_time": "22:00",
+                "show_language": "English",
+                "total_tickets": 2000,
+                "available_tickets": 2000,
+                "ticket_price": 120
+            },
+            {
+                "show_id": "67a9f088-86ed-4a0d-a4a0-7b575443eda0",
+                "show_date": "2026-08-21",
+                "show_time": "22:00",
+                "show_language": "Spanish",
+                "total_tickets": 2000,
+                "available_tickets": 2000,
+                "ticket_price": 120
+            },
+            {
+                "show_id": "9f49e486-664a-428f-968b-ef3a50a8f03c",
+                "show_date": "2026-08-22",
+                "show_time": "22:00",
+                "show_language": "Japanese",
+                "total_tickets": 2000,
+                "available_tickets": 2000,
+                "ticket_price": 120
+            },
+            {
+                "show_id": "102a3827-632b-4d06-8518-563cf05314f2",
+                "show_date": "2026-08-23",
+                "show_time": "22:00",
+                "show_language": "English",
+                "total_tickets": 2000,
+                "available_tickets": 2000,
+                "ticket_price": 150
+            }
+        ],
+        "date_created": "2026-01-21T03:07:09.584Z"
+    },
+    {
+        "event_id": "90df199e-6ceb-433d-8e9c-63151b387a51",
+        "event_name": "Pop Princess World Tour",
+        "event_description": "A high-energy pop concert with spectacular visuals and choreography.",
+        "event_city": "Chicago",
+        "event_address": "1901 W Madison St, Chicago, IL 60612",
+        "event_category": "concert",
+        "event_gener": "Pop",
+        "image_location": "/images/pop.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "055dbfbc-5595-47de-8a64-9e2c6bf74ae7",
+                "show_date": "2026-09-10",
+                "show_time": "19:30",
+                "show_language": "English",
+                "total_tickets": 3000,
+                "available_tickets": 3000,
+                "ticket_price": 110
+            },
+            {
+                "show_id": "5c9684bf-aa75-45d6-b628-150672f60a9b",
+                "show_date": "2026-09-11",
+                "show_time": "19:30",
+                "show_language": "English",
+                "total_tickets": 3000,
+                "available_tickets": 3000,
+                "ticket_price": 110
+            },
+            {
+                "show_id": "0135b5b7-5316-46fa-aa3c-f2f695333a5b",
+                "show_date": "2026-09-12",
+                "show_time": "19:30",
+                "show_language": "English",
+                "total_tickets": 3000,
+                "available_tickets": 3000,
+                "ticket_price": 110
+            },
+            {
+                "show_id": "67cc7859-93b7-4281-a821-5ef662716d85",
+                "show_date": "2026-09-13",
+                "show_time": "19:30",
+                "show_language": "English",
+                "total_tickets": 3000,
+                "available_tickets": 3000,
+                "ticket_price": 110
+            }
+        ],
+        "date_created": "2026-01-21T03:07:20.932Z"
+    },
+    {
+        "event_id": "31ee0484-871d-402c-9ad7-79deb792ea77",
+        "event_name": "Country Gold Festival",
+        "event_description": "The soul of the South comes to Dallas for a weekend of classic and modern country music.",
+        "event_city": "Dallas",
+        "event_address": "1 Cowboys Way, Arlington, TX 76011",
+        "event_category": "concert",
+        "event_gener": "Country",
+        "image_location": "/images/country.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "24080916-8041-485c-a7d6-d8247016d9b1",
+                "show_date": "2026-10-01",
+                "show_time": "16:00",
+                "show_language": "English",
+                "total_tickets": 1500,
+                "available_tickets": 1500,
+                "ticket_price": 60
+            },
+            {
+                "show_id": "7282d034-18cb-4186-802a-906e03fd68f5",
+                "show_date": "2026-10-02",
+                "show_time": "16:00",
+                "show_language": "English",
+                "total_tickets": 1500,
+                "available_tickets": 1500,
+                "ticket_price": 60
+            },
+            {
+                "show_id": "5b46a27e-21e2-4724-9823-4ae3e613d5a2",
+                "show_date": "2026-10-03",
+                "show_time": "18:00",
+                "show_language": "English",
+                "total_tickets": 1500,
+                "available_tickets": 1500,
+                "ticket_price": 75
+            },
+            {
+                "show_id": "9237f155-a333-40f9-a7b4-102e286c4365",
+                "show_date": "2026-10-04",
+                "show_time": "18:00",
+                "show_language": "English",
+                "total_tickets": 1500,
+                "available_tickets": 1500,
+                "ticket_price": 75
+            }
+        ],
+        "date_created": "2026-01-21T03:07:38.148Z"
+    },
+    {
+        "event_id": "4c5ae616-b638-4fe9-9a05-e5a2d670cfcb",
+        "event_name": "National Tennis Open",
+        "event_description": "The annual tennis championship featuring top-seeded international players.",
+        "event_city": "Washington DC",
+        "event_address": "16th and Kennedy St NW, Washington, DC 20011",
+        "event_category": "sports",
+        "event_gener": "Tennis",
+        "image_location": "/images/tennis.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "8a3a685d-7d22-4a2d-8651-2121b4a8abfd",
+                "show_date": "2026-07-20",
+                "show_time": "09:00",
+                "show_language": "English",
+                "total_tickets": 800,
+                "available_tickets": 800,
+                "ticket_price": 55
+            },
+            {
+                "show_id": "82657295-08c5-41e4-a5f4-0ff660fba802",
+                "show_date": "2026-07-21",
+                "show_time": "09:00",
+                "show_language": "English",
+                "total_tickets": 800,
+                "available_tickets": 800,
+                "ticket_price": 55
+            },
+            {
+                "show_id": "add5c439-d2f9-4ea6-afd0-7d44b8d1f8c3",
+                "show_date": "2026-07-22",
+                "show_time": "09:00",
+                "show_language": "Spanish",
+                "total_tickets": 800,
+                "available_tickets": 800,
+                "ticket_price": 65
+            },
+            {
+                "show_id": "3a6958c8-eeba-4b04-9972-124a3406f326",
+                "show_date": "2026-07-23",
+                "show_time": "14:00",
+                "show_language": "English",
+                "total_tickets": 1000,
+                "available_tickets": 1000,
+                "ticket_price": 85
+            }
+        ],
+        "date_created": "2026-01-21T03:07:49.332Z"
+    },
+    {
+        "event_id": "0ae23967-3aae-4f7e-9557-f85eb40117a9",
+        "event_name": "Midwest Basketball Finals",
+        "event_description": "Witness the intensity of professional basketball as the top teams compete for the trophy.",
+        "event_city": "Chicago",
+        "event_address": "1901 W Madison St, Chicago, IL 60612",
+        "event_category": "sports",
+        "event_gener": "Basketball",
+        "image_location": "/images/basketball.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "84bf2c7e-bc54-4662-816c-f00c08ba214b",
+                "show_date": "2026-05-10",
+                "show_time": "19:00",
+                "show_language": "English",
+                "total_tickets": 5000,
+                "available_tickets": 5000,
+                "ticket_price": 120
+            },
+            {
+                "show_id": "86755ae0-bb60-46e9-8571-997306edc124",
+                "show_date": "2026-05-12",
+                "show_time": "19:00",
+                "show_language": "English",
+                "total_tickets": 5000,
+                "available_tickets": 5000,
+                "ticket_price": 120
+            },
+            {
+                "show_id": "284843bd-0674-4db7-b77b-6e3b61e02551",
+                "show_date": "2026-05-14",
+                "show_time": "19:00",
+                "show_language": "Spanish",
+                "total_tickets": 5000,
+                "available_tickets": 5000,
+                "ticket_price": 130
+            },
+            {
+                "show_id": "616a84d8-0501-402c-be3c-dd6e9ea4116e",
+                "show_date": "2026-05-16",
+                "show_time": "18:00",
+                "show_language": "English",
+                "total_tickets": 5000,
+                "available_tickets": 5000,
+                "ticket_price": 150
+            }
+        ],
+        "date_created": "2026-01-21T03:08:07.583Z"
+    },
+    {
+        "event_id": "c02c07f1-3221-48b1-a82a-f9e5e56ecec5",
+        "event_name": "Boston Ice Hockey Invitational",
+        "event_description": "Fast-paced hockey action featuring regional and national rivalries.",
+        "event_city": "Boston",
+        "event_address": "100 Legends Way, Boston, MA 02114",
+        "event_category": "sports",
+        "event_gener": "Ice Hockey",
+        "image_location": "/images/hockey.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "15e126e4-3118-40f9-9947-66e378aaf11a",
+                "show_date": "2026-01-25",
+                "show_time": "18:00",
+                "show_language": "English",
+                "total_tickets": 2500,
+                "available_tickets": 2500,
+                "ticket_price": 70
+            },
+            {
+                "show_id": "25871f79-9176-449b-aea4-894de9e71a56",
+                "show_date": "2026-01-26",
+                "show_time": "18:00",
+                "show_language": "English",
+                "total_tickets": 2500,
+                "available_tickets": 2500,
+                "ticket_price": 70
+            },
+            {
+                "show_id": "c45f44fc-a888-4415-977e-4a53f9739a2b",
+                "show_date": "2026-01-27",
+                "show_time": "19:00",
+                "show_language": "French",
+                "total_tickets": 2000,
+                "available_tickets": 2000,
+                "ticket_price": 75
+            },
+            {
+                "show_id": "1cefcaf3-abaa-4735-b93b-e9e443fe4a5e",
+                "show_date": "2026-01-28",
+                "show_time": "19:00",
+                "show_language": "English",
+                "total_tickets": 2500,
+                "available_tickets": 2500,
+                "ticket_price": 85
+            }
+        ],
+        "date_created": "2026-01-21T03:08:14.233Z"
+    },
+    {
+        "event_id": "7577abef-0be3-4718-9839-38dc28c22bb5",
+        "event_name": "Texas Pro Rodeo",
+        "event_description": "The ultimate Texas experience—bull riding, barrel racing, and more.",
+        "event_city": "Dallas",
+        "event_address": "1010 N Central Expy, Dallas, TX 75206",
+        "event_category": "sports",
+        "event_gener": "Rodeo",
+        "image_location": "/images/rodeo.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "19d756c3-825c-4fb8-ba54-738a8e343905",
+                "show_date": "2026-11-10",
+                "show_time": "15:00",
+                "show_language": "English",
+                "total_tickets": 1000,
+                "available_tickets": 1000,
+                "ticket_price": 35
+            },
+            {
+                "show_id": "5ddd96d7-40c7-455a-9552-1ef5449f1d46",
+                "show_date": "2026-11-11",
+                "show_time": "15:00",
+                "show_language": "English",
+                "total_tickets": 1000,
+                "available_tickets": 1000,
+                "ticket_price": 35
+            },
+            {
+                "show_id": "b43094a7-d3a6-4498-a918-1bc1736c0a83",
+                "show_date": "2026-11-12",
+                "show_time": "18:00",
+                "show_language": "Spanish",
+                "total_tickets": 1000,
+                "available_tickets": 1000,
+                "ticket_price": 40
+            },
+            {
+                "show_id": "02ecc305-6c0b-4be9-bbbb-d288c38d1661",
+                "show_date": "2026-11-13",
+                "show_time": "18:00",
+                "show_language": "English",
+                "total_tickets": 1200,
+                "available_tickets": 1200,
+                "ticket_price": 50
+            }
+        ],
+        "date_created": "2026-01-21T03:08:31.307Z"
+    },
+    {
+        "event_id": "4d1a5847-75dc-4b74-86a7-b3a11eb964b4",
+        "event_name": "NYC Marathon Prep Race",
+        "event_description": "A professional 10k race serving as a warm-up for marathon season.",
+        "event_city": "New York City",
+        "event_address": "W 72nd St, New York, NY 10023",
+        "event_category": "sports",
+        "event_gener": "Track",
+        "image_location": "/images/marathon.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "04dad79c-289e-4331-b71b-4b166c89a0c4",
+                "show_date": "2026-10-05",
+                "show_time": "07:00",
+                "show_language": "English",
+                "total_tickets": 2000,
+                "available_tickets": 2000,
+                "ticket_price": 25
+            },
+            {
+                "show_id": "e6a93f9e-728f-429f-9e05-47dc54c2019b",
+                "show_date": "2026-10-06",
+                "show_time": "07:00",
+                "show_language": "English",
+                "total_tickets": 2000,
+                "available_tickets": 2000,
+                "ticket_price": 25
+            },
+            {
+                "show_id": "27779e1e-2f80-47c7-9fdb-346fe864d557",
+                "show_date": "2026-10-07",
+                "show_time": "07:00",
+                "show_language": "English",
+                "total_tickets": 2000,
+                "available_tickets": 2000,
+                "ticket_price": 25
+            },
+            {
+                "show_id": "99a0847b-8d26-4fff-aa4d-be82bc73c4b7",
+                "show_date": "2026-10-08",
+                "show_time": "07:00",
+                "show_language": "English",
+                "total_tickets": 2000,
+                "available_tickets": 2000,
+                "ticket_price": 25
+            }
+        ],
+        "date_created": "2026-01-21T03:08:39.931Z"
+    },
+    {
+        "event_id": "f947e826-c63c-47cd-876f-43aa45875d7e",
+        "event_name": "Hollywood Insider Live",
+        "event_description": "A live recording session with celebrity guests and directors discussing upcoming projects.",
+        "event_city": "Los Angels",
+        "event_address": "6215 Sunset Blvd, Los Angeles, CA 90028",
+        "event_category": "talk show",
+        "event_gener": "Entertainment",
+        "image_location": "/images/hollywood.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "a1a4a7e6-2afb-46ea-a6bf-4bb9e10a310d",
+                "show_date": "2026-04-10",
+                "show_time": "19:00",
+                "show_language": "English",
+                "total_tickets": 300,
+                "available_tickets": 300,
+                "ticket_price": 65
+            },
+            {
+                "show_id": "31f8f757-f2fe-47e6-a6b7-86eae9598ef8",
+                "show_date": "2026-04-11",
+                "show_time": "19:00",
+                "show_language": "Spanish",
+                "total_tickets": 300,
+                "available_tickets": 300,
+                "ticket_price": 65
+            },
+            {
+                "show_id": "0d49dd20-a659-492d-918a-af22fd170f85",
+                "show_date": "2026-04-12",
+                "show_time": "14:00",
+                "show_language": "English",
+                "total_tickets": 300,
+                "available_tickets": 300,
+                "ticket_price": 50
+            },
+            {
+                "show_id": "c96188dd-1829-4550-9390-5effbe1dd440",
+                "show_date": "2026-04-13",
+                "show_time": "19:00",
+                "show_language": "Japanese",
+                "total_tickets": 300,
+                "available_tickets": 300,
+                "ticket_price": 65
+            }
+        ],
+        "date_created": "2026-01-21T03:09:02.690Z"
+    },
+    {
+        "event_id": "37d0f399-fb8a-4cc5-904c-f7bdcc9db8fc",
+        "event_name": "Tech Future Live",
+        "event_description": "Experts from the Silicon Prairie discuss the impact of AI on our daily lives.",
+        "event_city": "Chicago",
+        "event_address": "2301 S Lake Shore Dr, Chicago, IL 60616",
+        "event_category": "talk show",
+        "event_gener": "Technology",
+        "image_location": "/images/tech.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "a7798b1b-0a82-4e32-8bb8-9576b44b4eca",
+                "show_date": "2026-02-15",
+                "show_time": "10:00",
+                "show_language": "English",
+                "total_tickets": 500,
+                "available_tickets": 500,
+                "ticket_price": 30
+            },
+            {
+                "show_id": "17a85e4c-99fb-4600-829c-96ac151b3d61",
+                "show_date": "2026-02-16",
+                "show_time": "10:00",
+                "show_language": "English",
+                "total_tickets": 500,
+                "available_tickets": 500,
+                "ticket_price": 30
+            },
+            {
+                "show_id": "1dd000ab-c110-4280-a293-759baf4736a6",
+                "show_date": "2026-02-17",
+                "show_time": "14:00",
+                "show_language": "Hindi",
+                "total_tickets": 400,
+                "available_tickets": 400,
+                "ticket_price": 25
+            },
+            {
+                "show_id": "d5336a47-9ed9-4867-887e-f7b36d08f539",
+                "show_date": "2026-02-18",
+                "show_time": "14:00",
+                "show_language": "Mandarin",
+                "total_tickets": 400,
+                "available_tickets": 400,
+                "ticket_price": 25
+            }
+        ],
+        "date_created": "2026-01-21T03:09:10.213Z"
+    },
+    {
+        "event_id": "a192dd4b-4ad5-45e2-9abf-84044b61a527",
+        "event_name": "Political Pulse Weekend",
+        "event_description": "An in-depth debate between leading analysts regarding the upcoming election cycle.",
+        "event_city": "Washington DC",
+        "event_address": "1300 Pennsylvania Avenue NW, Washington, DC 20004",
+        "event_category": "talk show",
+        "event_gener": "Politics",
+        "image_location": "/images/politics.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "e5839dd5-1875-4964-869f-aca2105858ee",
+                "show_date": "2026-11-15",
+                "show_time": "18:00",
+                "show_language": "English",
+                "total_tickets": 400,
+                "available_tickets": 400,
+                "ticket_price": 20
+            },
+            {
+                "show_id": "29185ed8-c5a3-4a9a-82d7-44261d6c35d4",
+                "show_date": "2026-11-16",
+                "show_time": "18:00",
+                "show_language": "Spanish",
+                "total_tickets": 400,
+                "available_tickets": 400,
+                "ticket_price": 20
+            },
+            {
+                "show_id": "534e72a5-d8ea-405d-a06d-934a34c16cad",
+                "show_date": "2026-11-17",
+                "show_time": "18:00",
+                "show_language": "English",
+                "total_tickets": 400,
+                "available_tickets": 400,
+                "ticket_price": 20
+            },
+            {
+                "show_id": "50bdc22b-e29f-42c8-bab1-27fa548b360b",
+                "show_date": "2026-11-18",
+                "show_time": "18:00",
+                "show_language": "German",
+                "total_tickets": 400,
+                "available_tickets": 400,
+                "ticket_price": 20
+            }
+        ],
+        "date_created": "2026-01-21T03:09:16.730Z"
+    },
+    {
+        "event_id": "931f5a38-f645-43d9-916a-28fda1346d63",
+        "event_name": "Literary Lounge Boston",
+        "event_description": "Famous authors and poets gather to read and discuss modern literature.",
+        "event_city": "Boston",
+        "event_address": "700 Boylston St, Boston, MA 02116",
+        "event_category": "talk show",
+        "event_gener": "Literature",
+        "image_location": "/images/books.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "453c8512-0731-4556-a619-d5bdb7110a24",
+                "show_date": "2026-04-01",
+                "show_time": "19:00",
+                "show_language": "English",
+                "total_tickets": 150,
+                "available_tickets": 150,
+                "ticket_price": 10
+            },
+            {
+                "show_id": "55b9c40d-df25-4bf8-a878-4f142638518f",
+                "show_date": "2026-04-02",
+                "show_time": "19:00",
+                "show_language": "English",
+                "total_tickets": 150,
+                "available_tickets": 150,
+                "ticket_price": 10
+            },
+            {
+                "show_id": "68d3a0fb-3d74-4169-8d47-30a7eb284e9f",
+                "show_date": "2026-04-03",
+                "show_time": "14:00",
+                "show_language": "Spanish",
+                "total_tickets": 100,
+                "available_tickets": 100,
+                "ticket_price": 8
+            },
+            {
+                "show_id": "7f293c56-9b6d-4eb9-8752-6ae95f58067e",
+                "show_date": "2026-04-04",
+                "show_time": "14:00",
+                "show_language": "Italian",
+                "total_tickets": 100,
+                "available_tickets": 100,
+                "ticket_price": 8
+            }
+        ],
+        "date_created": "2026-01-21T03:09:26.272Z"
+    },
+    {
+        "event_id": "8da5e6f5-22d6-4405-a7ec-4d508a1ad36a",
+        "event_name": "Culinary Masters Live",
+        "event_description": "Watch world-renowned chefs discuss the chemistry behind their signature dishes.",
+        "event_city": "Dallas",
+        "event_address": "1310 S Griffin St, Dallas, TX 75202",
+        "event_category": "talk show",
+        "event_gener": "Cooking",
+        "image_location": "/images/chef.jpg",
+        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "show_dates": [
+            {
+                "show_id": "1d02c04e-3ece-4b7c-875e-b31bd7c4dcb7",
+                "show_date": "2026-12-05",
+                "show_time": "12:00",
+                "show_language": "English",
+                "total_tickets": 500,
+                "available_tickets": 500,
+                "ticket_price": 50
+            },
+            {
+                "show_id": "13666e88-f546-49ca-a581-013520423b3a",
+                "show_date": "2026-12-06",
+                "show_time": "12:00",
+                "show_language": "English",
+                "total_tickets": 500,
+                "available_tickets": 500,
+                "ticket_price": 50
+            },
+            {
+                "show_id": "5c95a0a6-463d-4534-af64-68a38b00b10f",
+                "show_date": "2026-12-07",
+                "show_time": "18:00",
+                "show_language": "Spanish",
+                "total_tickets": 400,
+                "available_tickets": 400,
+                "ticket_price": 55
+            },
+            {
+                "show_id": "95a85e5f-db5d-406e-a9d8-2c5abb44d708",
+                "show_date": "2026-12-08",
+                "show_time": "18:00",
+                "show_language": "English",
+                "total_tickets": 500,
+                "available_tickets": 500,
+                "ticket_price": 55
+            }
+        ],
+        "date_created": "2026-01-21T03:09:34.370Z"
+    }
+]

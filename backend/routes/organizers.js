@@ -5,10 +5,7 @@ const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var fetchuser = require('../fetchuser/fetchuser');
 const JWT_SECRET = 'ThisEndsRightHere^71364andNow'
-const Admin = require('../models/Admin');
-const Organizers = require('../models/Organizers');
 const fs = require('fs');
-const Events = require('../models/Events');
 const {loadData, saveData} = require('../jsonStore')
 const crypto = require('crypto');
 
@@ -60,6 +57,7 @@ router.post('/createorganizer', [
       organizer_email:      email,
       organizer_name:       name,
       organizer_password:   hashedPassword,
+      admin_verification:   0,
       date_created:         new Date().toISOString()
     }
     organizers.push(newOrganizer)
@@ -128,26 +126,97 @@ router.post('/organizerlogin', [
   }
 });
 
-router.post('/createEvent',[
-  body('eventName','Enter a Event Name')
-])
+router.post('/createEvent',fetchuser,[
+  body('eventName','Enter a Event Name').isString({min: 1}),
+  body('eventCategory','Enter a Valid event category'),
+  body('eventGener','Enter a valid Gener'),
+  body('eventDescription','This event needs to be Described'),
+  body('eventCity', 'Enter a valid City'),
+  body('eventAddress','Enter a Valid address'),
+  body('imageAddress','Enter a valid image location'),
+  body('show_dates', 'Show dates must be an array').isArray({ min: 1 }),
+  body('show_dates.*.show_language','Enter the language').isString(),
+  body('show_dates.*.show_date', 'Enter a valid date (YYYY-MM-DD)').isDate().custom((value) => {
+    const today = new Date().toISOString().split('T')[0];    
+    if (value < today) {
+      throw new Error('Show date cannot be in the past');
+    }
+    return true;
+  }),
+  body('show_dates.*.show_time', 'Enter a valid time (HH:mm)')
+        .matches(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/),
+  body('show_dates.*.totalTickets', 'Total seats must be at least 1').isInt({ min: 1 }),
+  body('show_dates.*.price', 'Price must be 0 or greater').isFloat({ min: 0 }),
+], async(req,res)=>{
+  const errors = validationResult(req)
+  let success = false
+  if(!errors.isEmpty())return res.status(401).json({success, errors: errors.array()});  
+  try {
+    if(req.user.verified === 0) return res.status(401).json({error: "Admin Authentication Required"});
+    const cities = loadData('city');
+    const categories = loadData('category');
+    const categoryExists = categories.some(c => (typeof c === 'string' ? c : c.name) === req.body.eventCategory);
+    const cityExists = cities.some(c => (typeof c === 'string' ? c : c.name) === req.body.eventCity);
+    if(!(categoryExists && cityExists)) return res.status(401).json({success,error:"Enter a Valid City or Category"})
+    let events = loadData('events')
+    let nameCheck = events.find(e=>e.event_name === req.body.eventName)
+    if(nameCheck) return res.status(401).json({error: "Event Name already Taken"});
+    let newEvent = {
+      event_id:               crypto.randomUUID(),
+      event_name:             req.body.eventName,
+      event_description:      req.body.eventDescription,
+      event_city:             req.body.eventCity,
+      event_address:          req.body.eventAddress,
+      event_category:         req.body.eventCategory,
+      event_gener:            req.body.eventGener,
+      image_location:         req.body.imageAddress,
+      organizer_id:           req.user.id,
+      show_dates:             req.body.show_dates.map(show => ({
+        show_id:              crypto.randomUUID(),
+        show_date:            show.show_date,     // Use 'show', not 'req.body.show_dates'
+        show_time:            show.show_time,     // Use 'show'
+        show_language:        show.show_language,
+        total_tickets:        parseInt(show.totalTickets),
+        available_tickets:    parseInt(show.totalTickets),
+        ticket_price:         parseFloat(show.price)
+      })),
+      date_created:           new Date().toISOString()
+    };
+    events.push(newEvent)
+    saveData('events',events)
+    const data = {
+      newEvent      
+    }
+    success = true
+    res.json({success,data})
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Internal server error');
+  }
+}
+)
 
 router.delete('/deleteevent/:id', fetchuser, async (req, res) => {
   try {
-    let event = await Events.findById(req.params.id);
+    let success = false
+    let events = loadData('events')
+    let event = events.find(e=>e.event_id == req.params.id)
     if (!event) {
       return res.status(400).json({ error: 'Event not Found!' })
     }
-    if (req.params.id !== req.user.id) {
-      return res.status(400).json({ error: 'Not Allowed!' })
+    if(!(event.organizer_id == req.user.id)){
+      return res.status(401).json({error: "Not Allowed! You are not the event organizer"})
     }
-
-    event = await Events.findByIdAndDelete(req.params.id);
-    res.json({ "Success": "Data has been deleted", event: event });
+    let updatedEvents = events.filter(e=>e.event_id !== req.params.id)
+    saveData('events',updatedEvents)
+    success = true
+    res.json({ success, message: "Event has been deleted", event: event });
   } catch (error) {
     console.error(error.message);
     res.status(500).send('Internal server error');
   }
 });
+
+//router.put('/cancelshow/:id',fetchuser, asy)
 
 module.exports = router;

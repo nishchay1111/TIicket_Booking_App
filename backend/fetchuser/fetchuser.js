@@ -32,7 +32,7 @@ const fetchuser = (req, res, next) => {
             req.user = { ...rest, id: userRecord.user_id }; 
         } else if (orgRecord) {
             const { organizer_password, ...rest } = orgRecord;
-            req.user = { ...rest, id: orgRecord.organizer_id, verified: orgRecord.verified };
+            req.user = { ...rest, id: orgRecord.organizer_id, verified: orgRecord.admin_verification };
         }
         
         next();

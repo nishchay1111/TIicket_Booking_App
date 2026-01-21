@@ -1,0 +1,37 @@
+[
+    {
+        "user_id": "235989eb-cf84-4f21-b042-1c2d9464ae9e",
+        "user_name": "Nishchay1",
+        "user_password": "$2a$10$XGruPJf/JNKf9qHAKJqgS.2c/ooWnPOIqW4IroyxRgbGNkF6ECifO",
+        "user_email": "nishchay1@gmail.com",
+        "date_created": "2026-01-20T23:35:47.795Z"
+    },
+    {
+        "user_id": "65071877-a00b-4d9d-9ada-e7f5598d71a7",
+        "user_name": "Nishchay2",
+        "user_password": "$2a$10$8t8VsOPtpGKJRGkB43sP0.jRK/afIDPx5nVml/VGbZTEo1MykXqcy",
+        "user_email": "nishchay2@gmail.com",
+        "date_created": "2026-01-20T23:36:01.113Z"
+    },
+    {
+        "user_id": "7ace324b-30e8-4966-babb-98f3055f47be",
+        "user_name": "Nishchay3",
+        "user_password": "$2a$10$mq2S4iMN3D4rvkz2qbgycOtoixEYoP0Ycto9CSmGWRJV7w81OHqXe",
+        "user_email": "nishchay3@gmail.com",
+        "date_created": "2026-01-20T23:36:11.343Z"
+    },
+    {
+        "user_id": "fb157714-a02c-4dce-a424-5d092cc23a9e",
+        "user_name": "Nishchay4",
+        "user_password": "$2a$10$l6YiqwKfUyEJw3HJa/9WNuZxjUSA2wk8PPZX5xi0c0YqASig7zafa",
+        "user_email": "nishchay4@gmail.com",
+        "date_created": "2026-01-20T23:37:13.363Z"
+    },
+    {
+        "user_id": "573886e6-ce53-4f7c-85cb-f12b18a6abe1",
+        "user_name": "Nishchay5",
+        "user_password": "$2a$10$QsYKepIjqlqS4cpwckGyOugRQSExKpaKmNGOkhlBdfwkHnUGukyqC",
+        "user_email": "nishchay5@gmail.com",
+        "date_created": "2026-01-20T23:37:23.313Z"
+    }
+]
