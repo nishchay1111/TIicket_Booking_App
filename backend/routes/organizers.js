@@ -178,7 +178,8 @@ router.post('/createEvent',fetchuser,[
         show_language:        show.show_language,
         total_tickets:        parseInt(show.totalTickets),
         available_tickets:    parseInt(show.totalTickets),
-        ticket_price:         parseFloat(show.price)
+        ticket_price:         parseFloat(show.price),
+        active:               true
       })),
       date_created:           new Date().toISOString()
     };
@@ -217,6 +218,84 @@ router.delete('/deleteevent/:id', fetchuser, async (req, res) => {
   }
 });
 
-//router.put('/cancelshow/:id',fetchuser, asy)
+router.put('/cancelshow/:id',fetchuser, async(req,res)=>{
+  try {
+    let success = false
+    const events = loadData('events')
+    const event = events.find(e=>e.show_dates?.some(show => show.show_id?.toString() === req.params.id?.toString()));
+    if(!event) return res.status(401).json({error: "Event does not Exist"})
+    if(event.organizer_id?.toString() !== req.user.id?.toString()) return res.status(401).json({success,error: "Not Allowed"});
+    const show = event.show_dates.find(s=>s.show_id?.toString() === req.params.id)
+    if(!show) return res.status(401).json({error: "Show does not Exist", success});
+    show.active = false
+    saveData('events',events)
+    success = true
+    res.json({
+      success,
+      message: "Show cancelled successfully",
+      show
+    })
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Internal server error');
+  }
+})
 
+router.post('/addshows/:id',fetchuser,[
+  body('show_date','Invalid Show Date').isDate().custom((value) => {
+    const today = new Date().toISOString().split('T')[0];    
+    if (value < today) {
+      throw new Error('Show date cannot be in the past');
+    }
+    return true;
+  }),
+  body('show_time','Show time is required').matches(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/),
+  body('show_language','Language is Reuired').isString({min:1}),
+  body('total_tickets','Show needs to have atleast one ticket').isInt({min:1}),
+  body('ticket_price','Ticket price must be atleast $1').isFloat({min:1})
+],async(req,res)=>{
+  let success = false
+  const errors = validationResult(req)
+  if(!errors.isEmpty()) return res.status(401).json({});
+  try {
+    const events = loadData('events')
+    const event = events.find(e=>e.event_id?.toString() === req.params.id)
+    if(!event) return res.status(401).json({success,error:"Event dos not exist"});
+    if(event.organizer_id !== req.user.id) return res.status(401).json({success,error:"Not Allowed!"});
+    const {
+        show_date,
+        show_time,
+        show_language,
+        total_tickets,
+        ticket_price
+      } = req.body;
+    const conflict = event.show_dates.some(
+        show =>
+          show.show_date === show_date &&
+          show.show_time === show_time &&
+          show.active === true
+      );
+    if(conflict) return res.status(401).json({success,error:"Same show on same date and time already exist"});
+    const newShow = {
+        show_id: crypto.randomUUID(),
+        show_date,
+        show_time,
+        show_language,
+        total_tickets: Number(total_tickets),
+        available_tickets: Number(total_tickets),
+        ticket_price: Number(ticket_price),
+        active: true
+    };
+    event.show_dates.push(newShow);
+    saveData('events', events);
+    success = true
+    res.json({
+      success,
+      newShow
+    })
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Internal server error');
+  }
+})
 module.exports = router;

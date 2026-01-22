@@ -17,7 +17,8 @@
                 "show_language": "English",
                 "total_tickets": 200,
                 "available_tickets": 200,
-                "ticket_price": 45.5
+                "ticket_price": 45.5,
+                "active": true
             },
             {
                 "show_id": "a17d2942-2f25-4b2e-b792-3e3672b025d6",
@@ -26,7 +27,8 @@
                 "show_language": "Hindi",
                 "total_tickets": 150,
                 "available_tickets": 150,
-                "ticket_price": 50
+                "ticket_price": 50,
+                "active": true
             },
             {
                 "show_id": "757ac4c9-6b6d-43fe-8134-f2e3d5741b69",
@@ -35,7 +37,8 @@
                 "show_language": "Spanish",
                 "total_tickets": 250,
                 "available_tickets": 250,
-                "ticket_price": 50
+                "ticket_price": 50,
+                "active": true
             },
             {
                 "show_id": "82181424-64f4-462a-b39b-ba17d73eac1c",
@@ -44,7 +47,8 @@
                 "show_language": "German",
                 "total_tickets": 350,
                 "available_tickets": 350,
-                "ticket_price": 50
+                "ticket_price": 50,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T02:32:22.264Z"
@@ -66,8 +70,9 @@
                 "show_time": "18:00",
                 "show_language": "English",
                 "total_tickets": 300,
-                "available_tickets": 300,
-                "ticket_price": 18.5
+                "available_tickets": 245,
+                "ticket_price": 18.5,
+                "active": true
             },
             {
                 "show_id": "bdfcb4a5-dfb3-4399-b096-108de311f395",
@@ -76,7 +81,8 @@
                 "show_language": "English",
                 "total_tickets": 300,
                 "available_tickets": 300,
-                "ticket_price": 18.5
+                "ticket_price": 18.5,
+                "active": true
             },
             {
                 "show_id": "fab924b4-1e63-4640-8342-51470914640c",
@@ -85,7 +91,8 @@
                 "show_language": "Spanish",
                 "total_tickets": 200,
                 "available_tickets": 200,
-                "ticket_price": 15
+                "ticket_price": 15,
+                "active": true
             },
             {
                 "show_id": "db4d6393-5ada-46c2-b421-90f37e8fd3b4",
@@ -94,7 +101,8 @@
                 "show_language": "French",
                 "total_tickets": 200,
                 "available_tickets": 200,
-                "ticket_price": 15
+                "ticket_price": 15,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T03:04:28.961Z"
@@ -117,7 +125,8 @@
                 "show_language": "English",
                 "total_tickets": 400,
                 "available_tickets": 400,
-                "ticket_price": 22
+                "ticket_price": 22,
+                "active": true
             },
             {
                 "show_id": "5e5005f7-c23c-457b-aeef-88acb72dffa7",
@@ -126,7 +135,8 @@
                 "show_language": "English",
                 "total_tickets": 400,
                 "available_tickets": 400,
-                "ticket_price": 22
+                "ticket_price": 22,
+                "active": true
             },
             {
                 "show_id": "96bb2065-5797-4cb1-9f57-bb282a7847ba",
@@ -135,7 +145,8 @@
                 "show_language": "Japanese",
                 "total_tickets": 150,
                 "available_tickets": 150,
-                "ticket_price": 20
+                "ticket_price": 20,
+                "active": true
             },
             {
                 "show_id": "48009647-a05a-4967-a982-fb14e2806825",
@@ -144,7 +155,18 @@
                 "show_language": "German",
                 "total_tickets": 150,
                 "available_tickets": 150,
-                "ticket_price": 20
+                "ticket_price": 20,
+                "active": true
+            },
+            {
+                "show_id": "247c5fd9-696f-4173-b31f-1418c57c3a9a",
+                "show_date": "2026-06-15",
+                "show_time": "19:30",
+                "show_language": "English",
+                "total_tickets": 250,
+                "available_tickets": 250,
+                "ticket_price": 45,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T03:05:05.805Z"
@@ -167,7 +189,8 @@
                 "show_language": "English",
                 "total_tickets": 100,
                 "available_tickets": 100,
-                "ticket_price": 12
+                "ticket_price": 12,
+                "active": true
             },
             {
                 "show_id": "187e7906-f3c7-47d6-85a4-2d7099c1fa7f",
@@ -176,7 +199,8 @@
                 "show_language": "English",
                 "total_tickets": 100,
                 "available_tickets": 100,
-                "ticket_price": 12
+                "ticket_price": 12,
+                "active": true
             },
             {
                 "show_id": "b06535fc-66a5-4316-90a2-ce8ec9897621",
@@ -185,7 +209,8 @@
                 "show_language": "Spanish",
                 "total_tickets": 80,
                 "available_tickets": 80,
-                "ticket_price": 10
+                "ticket_price": 10,
+                "active": true
             },
             {
                 "show_id": "fdc3279b-9bb9-422f-b4e5-58e481af0838",
@@ -194,7 +219,8 @@
                 "show_language": "Italian",
                 "total_tickets": 80,
                 "available_tickets": 80,
-                "ticket_price": 10
+                "ticket_price": 10,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T03:05:31.244Z"
@@ -217,7 +243,8 @@
                 "show_language": "English",
                 "total_tickets": 500,
                 "available_tickets": 500,
-                "ticket_price": 25
+                "ticket_price": 25,
+                "active": true
             },
             {
                 "show_id": "b9d2b105-de24-4b0a-8eea-d346f1a620e0",
@@ -226,7 +253,8 @@
                 "show_language": "Hindi",
                 "total_tickets": 300,
                 "available_tickets": 300,
-                "ticket_price": 20
+                "ticket_price": 20,
+                "active": true
             },
             {
                 "show_id": "c3a25e9d-9e5d-4543-a6eb-58718c91d158",
@@ -235,7 +263,8 @@
                 "show_language": "Mandarin",
                 "total_tickets": 300,
                 "available_tickets": 300,
-                "ticket_price": 20
+                "ticket_price": 20,
+                "active": true
             },
             {
                 "show_id": "dbf83a8b-edfa-471f-87d2-58fc09cccaba",
@@ -244,7 +273,8 @@
                 "show_language": "English",
                 "total_tickets": 500,
                 "available_tickets": 500,
-                "ticket_price": 25
+                "ticket_price": 25,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T03:06:02.497Z"
@@ -267,7 +297,8 @@
                 "show_language": "English",
                 "total_tickets": 150,
                 "available_tickets": 150,
-                "ticket_price": 15
+                "ticket_price": 15,
+                "active": true
             },
             {
                 "show_id": "7f7f3fe2-04d9-4702-860a-7ee7430cf8b2",
@@ -276,7 +307,8 @@
                 "show_language": "Italian",
                 "total_tickets": 100,
                 "available_tickets": 100,
-                "ticket_price": 18
+                "ticket_price": 18,
+                "active": true
             },
             {
                 "show_id": "8e38eb96-8986-44a2-a390-b1b61e374196",
@@ -285,7 +317,8 @@
                 "show_language": "English",
                 "total_tickets": 150,
                 "available_tickets": 150,
-                "ticket_price": 15
+                "ticket_price": 15,
+                "active": true
             },
             {
                 "show_id": "209bcfb1-95ef-4cc6-aad6-0a0c70e770f0",
@@ -294,7 +327,8 @@
                 "show_language": "Spanish",
                 "total_tickets": 100,
                 "available_tickets": 100,
-                "ticket_price": 18
+                "ticket_price": 18,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T03:06:29.366Z"
@@ -317,7 +351,8 @@
                 "show_language": "English",
                 "total_tickets": 5000,
                 "available_tickets": 5000,
-                "ticket_price": 85
+                "ticket_price": 85,
+                "active": true
             },
             {
                 "show_id": "eac7e110-810d-424a-9bd6-f074f6fb57fe",
@@ -326,7 +361,8 @@
                 "show_language": "English",
                 "total_tickets": 5000,
                 "available_tickets": 5000,
-                "ticket_price": 85
+                "ticket_price": 85,
+                "active": true
             },
             {
                 "show_id": "be06c3d2-5199-49fe-8eaf-5d190cd5b9eb",
@@ -335,7 +371,8 @@
                 "show_language": "English",
                 "total_tickets": 5000,
                 "available_tickets": 5000,
-                "ticket_price": 95
+                "ticket_price": 95,
+                "active": true
             },
             {
                 "show_id": "234f40ec-9b41-40e5-8c66-efa5c7a121b7",
@@ -344,7 +381,8 @@
                 "show_language": "English",
                 "total_tickets": 5000,
                 "available_tickets": 5000,
-                "ticket_price": 95
+                "ticket_price": 95,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T03:06:48.566Z"
@@ -367,7 +405,8 @@
                 "show_language": "English",
                 "total_tickets": 200,
                 "available_tickets": 200,
-                "ticket_price": 40
+                "ticket_price": 40,
+                "active": true
             },
             {
                 "show_id": "f35f057c-8906-47c1-9a75-87ea17fd84ac",
@@ -376,7 +415,8 @@
                 "show_language": "French",
                 "total_tickets": 200,
                 "available_tickets": 200,
-                "ticket_price": 40
+                "ticket_price": 40,
+                "active": true
             },
             {
                 "show_id": "6b1059d0-8845-4dda-ad85-5d458b0396dc",
@@ -385,7 +425,8 @@
                 "show_language": "English",
                 "total_tickets": 200,
                 "available_tickets": 200,
-                "ticket_price": 45
+                "ticket_price": 45,
+                "active": true
             },
             {
                 "show_id": "bb49e384-3738-428d-a8a9-76b9fd7ebade",
@@ -394,7 +435,8 @@
                 "show_language": "German",
                 "total_tickets": 200,
                 "available_tickets": 200,
-                "ticket_price": 45
+                "ticket_price": 45,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T03:06:57.010Z"
@@ -417,7 +459,8 @@
                 "show_language": "English",
                 "total_tickets": 2000,
                 "available_tickets": 2000,
-                "ticket_price": 120
+                "ticket_price": 120,
+                "active": true
             },
             {
                 "show_id": "67a9f088-86ed-4a0d-a4a0-7b575443eda0",
@@ -426,7 +469,8 @@
                 "show_language": "Spanish",
                 "total_tickets": 2000,
                 "available_tickets": 2000,
-                "ticket_price": 120
+                "ticket_price": 120,
+                "active": true
             },
             {
                 "show_id": "9f49e486-664a-428f-968b-ef3a50a8f03c",
@@ -435,7 +479,8 @@
                 "show_language": "Japanese",
                 "total_tickets": 2000,
                 "available_tickets": 2000,
-                "ticket_price": 120
+                "ticket_price": 120,
+                "active": true
             },
             {
                 "show_id": "102a3827-632b-4d06-8518-563cf05314f2",
@@ -444,7 +489,8 @@
                 "show_language": "English",
                 "total_tickets": 2000,
                 "available_tickets": 2000,
-                "ticket_price": 150
+                "ticket_price": 150,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T03:07:09.584Z"
@@ -467,7 +513,8 @@
                 "show_language": "English",
                 "total_tickets": 3000,
                 "available_tickets": 3000,
-                "ticket_price": 110
+                "ticket_price": 110,
+                "active": true
             },
             {
                 "show_id": "5c9684bf-aa75-45d6-b628-150672f60a9b",
@@ -476,7 +523,8 @@
                 "show_language": "English",
                 "total_tickets": 3000,
                 "available_tickets": 3000,
-                "ticket_price": 110
+                "ticket_price": 110,
+                "active": true
             },
             {
                 "show_id": "0135b5b7-5316-46fa-aa3c-f2f695333a5b",
@@ -485,7 +533,8 @@
                 "show_language": "English",
                 "total_tickets": 3000,
                 "available_tickets": 3000,
-                "ticket_price": 110
+                "ticket_price": 110,
+                "active": true
             },
             {
                 "show_id": "67cc7859-93b7-4281-a821-5ef662716d85",
@@ -494,7 +543,8 @@
                 "show_language": "English",
                 "total_tickets": 3000,
                 "available_tickets": 3000,
-                "ticket_price": 110
+                "ticket_price": 110,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T03:07:20.932Z"
@@ -517,7 +567,8 @@
                 "show_language": "English",
                 "total_tickets": 1500,
                 "available_tickets": 1500,
-                "ticket_price": 60
+                "ticket_price": 60,
+                "active": true
             },
             {
                 "show_id": "7282d034-18cb-4186-802a-906e03fd68f5",
@@ -526,7 +577,8 @@
                 "show_language": "English",
                 "total_tickets": 1500,
                 "available_tickets": 1500,
-                "ticket_price": 60
+                "ticket_price": 60,
+                "active": true
             },
             {
                 "show_id": "5b46a27e-21e2-4724-9823-4ae3e613d5a2",
@@ -535,7 +587,8 @@
                 "show_language": "English",
                 "total_tickets": 1500,
                 "available_tickets": 1500,
-                "ticket_price": 75
+                "ticket_price": 75,
+                "active": true
             },
             {
                 "show_id": "9237f155-a333-40f9-a7b4-102e286c4365",
@@ -544,7 +597,8 @@
                 "show_language": "English",
                 "total_tickets": 1500,
                 "available_tickets": 1500,
-                "ticket_price": 75
+                "ticket_price": 75,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T03:07:38.148Z"
@@ -567,7 +621,8 @@
                 "show_language": "English",
                 "total_tickets": 800,
                 "available_tickets": 800,
-                "ticket_price": 55
+                "ticket_price": 55,
+                "active": true
             },
             {
                 "show_id": "82657295-08c5-41e4-a5f4-0ff660fba802",
@@ -576,7 +631,8 @@
                 "show_language": "English",
                 "total_tickets": 800,
                 "available_tickets": 800,
-                "ticket_price": 55
+                "ticket_price": 55,
+                "active": true
             },
             {
                 "show_id": "add5c439-d2f9-4ea6-afd0-7d44b8d1f8c3",
@@ -585,7 +641,8 @@
                 "show_language": "Spanish",
                 "total_tickets": 800,
                 "available_tickets": 800,
-                "ticket_price": 65
+                "ticket_price": 65,
+                "active": true
             },
             {
                 "show_id": "3a6958c8-eeba-4b04-9972-124a3406f326",
@@ -594,7 +651,8 @@
                 "show_language": "English",
                 "total_tickets": 1000,
                 "available_tickets": 1000,
-                "ticket_price": 85
+                "ticket_price": 85,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T03:07:49.332Z"
@@ -617,7 +675,8 @@
                 "show_language": "English",
                 "total_tickets": 5000,
                 "available_tickets": 5000,
-                "ticket_price": 120
+                "ticket_price": 120,
+                "active": true
             },
             {
                 "show_id": "86755ae0-bb60-46e9-8571-997306edc124",
@@ -626,7 +685,8 @@
                 "show_language": "English",
                 "total_tickets": 5000,
                 "available_tickets": 5000,
-                "ticket_price": 120
+                "ticket_price": 120,
+                "active": true
             },
             {
                 "show_id": "284843bd-0674-4db7-b77b-6e3b61e02551",
@@ -635,7 +695,8 @@
                 "show_language": "Spanish",
                 "total_tickets": 5000,
                 "available_tickets": 5000,
-                "ticket_price": 130
+                "ticket_price": 130,
+                "active": true
             },
             {
                 "show_id": "616a84d8-0501-402c-be3c-dd6e9ea4116e",
@@ -644,7 +705,8 @@
                 "show_language": "English",
                 "total_tickets": 5000,
                 "available_tickets": 5000,
-                "ticket_price": 150
+                "ticket_price": 150,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T03:08:07.583Z"
@@ -667,7 +729,8 @@
                 "show_language": "English",
                 "total_tickets": 2500,
                 "available_tickets": 2500,
-                "ticket_price": 70
+                "ticket_price": 70,
+                "active": true
             },
             {
                 "show_id": "25871f79-9176-449b-aea4-894de9e71a56",
@@ -676,7 +739,8 @@
                 "show_language": "English",
                 "total_tickets": 2500,
                 "available_tickets": 2500,
-                "ticket_price": 70
+                "ticket_price": 70,
+                "active": true
             },
             {
                 "show_id": "c45f44fc-a888-4415-977e-4a53f9739a2b",
@@ -685,7 +749,8 @@
                 "show_language": "French",
                 "total_tickets": 2000,
                 "available_tickets": 2000,
-                "ticket_price": 75
+                "ticket_price": 75,
+                "active": true
             },
             {
                 "show_id": "1cefcaf3-abaa-4735-b93b-e9e443fe4a5e",
@@ -694,7 +759,8 @@
                 "show_language": "English",
                 "total_tickets": 2500,
                 "available_tickets": 2500,
-                "ticket_price": 85
+                "ticket_price": 85,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T03:08:14.233Z"
@@ -717,7 +783,8 @@
                 "show_language": "English",
                 "total_tickets": 1000,
                 "available_tickets": 1000,
-                "ticket_price": 35
+                "ticket_price": 35,
+                "active": true
             },
             {
                 "show_id": "5ddd96d7-40c7-455a-9552-1ef5449f1d46",
@@ -726,7 +793,8 @@
                 "show_language": "English",
                 "total_tickets": 1000,
                 "available_tickets": 1000,
-                "ticket_price": 35
+                "ticket_price": 35,
+                "active": true
             },
             {
                 "show_id": "b43094a7-d3a6-4498-a918-1bc1736c0a83",
@@ -735,7 +803,8 @@
                 "show_language": "Spanish",
                 "total_tickets": 1000,
                 "available_tickets": 1000,
-                "ticket_price": 40
+                "ticket_price": 40,
+                "active": true
             },
             {
                 "show_id": "02ecc305-6c0b-4be9-bbbb-d288c38d1661",
@@ -744,309 +813,10 @@
                 "show_language": "English",
                 "total_tickets": 1200,
                 "available_tickets": 1200,
-                "ticket_price": 50
+                "ticket_price": 50,
+                "active": true
             }
         ],
         "date_created": "2026-01-21T03:08:31.307Z"
-    },
-    {
-        "event_id": "4d1a5847-75dc-4b74-86a7-b3a11eb964b4",
-        "event_name": "NYC Marathon Prep Race",
-        "event_description": "A professional 10k race serving as a warm-up for marathon season.",
-        "event_city": "New York City",
-        "event_address": "W 72nd St, New York, NY 10023",
-        "event_category": "sports",
-        "event_gener": "Track",
-        "image_location": "/images/marathon.jpg",
-        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
-        "show_dates": [
-            {
-                "show_id": "04dad79c-289e-4331-b71b-4b166c89a0c4",
-                "show_date": "2026-10-05",
-                "show_time": "07:00",
-                "show_language": "English",
-                "total_tickets": 2000,
-                "available_tickets": 2000,
-                "ticket_price": 25
-            },
-            {
-                "show_id": "e6a93f9e-728f-429f-9e05-47dc54c2019b",
-                "show_date": "2026-10-06",
-                "show_time": "07:00",
-                "show_language": "English",
-                "total_tickets": 2000,
-                "available_tickets": 2000,
-                "ticket_price": 25
-            },
-            {
-                "show_id": "27779e1e-2f80-47c7-9fdb-346fe864d557",
-                "show_date": "2026-10-07",
-                "show_time": "07:00",
-                "show_language": "English",
-                "total_tickets": 2000,
-                "available_tickets": 2000,
-                "ticket_price": 25
-            },
-            {
-                "show_id": "99a0847b-8d26-4fff-aa4d-be82bc73c4b7",
-                "show_date": "2026-10-08",
-                "show_time": "07:00",
-                "show_language": "English",
-                "total_tickets": 2000,
-                "available_tickets": 2000,
-                "ticket_price": 25
-            }
-        ],
-        "date_created": "2026-01-21T03:08:39.931Z"
-    },
-    {
-        "event_id": "f947e826-c63c-47cd-876f-43aa45875d7e",
-        "event_name": "Hollywood Insider Live",
-        "event_description": "A live recording session with celebrity guests and directors discussing upcoming projects.",
-        "event_city": "Los Angels",
-        "event_address": "6215 Sunset Blvd, Los Angeles, CA 90028",
-        "event_category": "talk show",
-        "event_gener": "Entertainment",
-        "image_location": "/images/hollywood.jpg",
-        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
-        "show_dates": [
-            {
-                "show_id": "a1a4a7e6-2afb-46ea-a6bf-4bb9e10a310d",
-                "show_date": "2026-04-10",
-                "show_time": "19:00",
-                "show_language": "English",
-                "total_tickets": 300,
-                "available_tickets": 300,
-                "ticket_price": 65
-            },
-            {
-                "show_id": "31f8f757-f2fe-47e6-a6b7-86eae9598ef8",
-                "show_date": "2026-04-11",
-                "show_time": "19:00",
-                "show_language": "Spanish",
-                "total_tickets": 300,
-                "available_tickets": 300,
-                "ticket_price": 65
-            },
-            {
-                "show_id": "0d49dd20-a659-492d-918a-af22fd170f85",
-                "show_date": "2026-04-12",
-                "show_time": "14:00",
-                "show_language": "English",
-                "total_tickets": 300,
-                "available_tickets": 300,
-                "ticket_price": 50
-            },
-            {
-                "show_id": "c96188dd-1829-4550-9390-5effbe1dd440",
-                "show_date": "2026-04-13",
-                "show_time": "19:00",
-                "show_language": "Japanese",
-                "total_tickets": 300,
-                "available_tickets": 300,
-                "ticket_price": 65
-            }
-        ],
-        "date_created": "2026-01-21T03:09:02.690Z"
-    },
-    {
-        "event_id": "37d0f399-fb8a-4cc5-904c-f7bdcc9db8fc",
-        "event_name": "Tech Future Live",
-        "event_description": "Experts from the Silicon Prairie discuss the impact of AI on our daily lives.",
-        "event_city": "Chicago",
-        "event_address": "2301 S Lake Shore Dr, Chicago, IL 60616",
-        "event_category": "talk show",
-        "event_gener": "Technology",
-        "image_location": "/images/tech.jpg",
-        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
-        "show_dates": [
-            {
-                "show_id": "a7798b1b-0a82-4e32-8bb8-9576b44b4eca",
-                "show_date": "2026-02-15",
-                "show_time": "10:00",
-                "show_language": "English",
-                "total_tickets": 500,
-                "available_tickets": 500,
-                "ticket_price": 30
-            },
-            {
-                "show_id": "17a85e4c-99fb-4600-829c-96ac151b3d61",
-                "show_date": "2026-02-16",
-                "show_time": "10:00",
-                "show_language": "English",
-                "total_tickets": 500,
-                "available_tickets": 500,
-                "ticket_price": 30
-            },
-            {
-                "show_id": "1dd000ab-c110-4280-a293-759baf4736a6",
-                "show_date": "2026-02-17",
-                "show_time": "14:00",
-                "show_language": "Hindi",
-                "total_tickets": 400,
-                "available_tickets": 400,
-                "ticket_price": 25
-            },
-            {
-                "show_id": "d5336a47-9ed9-4867-887e-f7b36d08f539",
-                "show_date": "2026-02-18",
-                "show_time": "14:00",
-                "show_language": "Mandarin",
-                "total_tickets": 400,
-                "available_tickets": 400,
-                "ticket_price": 25
-            }
-        ],
-        "date_created": "2026-01-21T03:09:10.213Z"
-    },
-    {
-        "event_id": "a192dd4b-4ad5-45e2-9abf-84044b61a527",
-        "event_name": "Political Pulse Weekend",
-        "event_description": "An in-depth debate between leading analysts regarding the upcoming election cycle.",
-        "event_city": "Washington DC",
-        "event_address": "1300 Pennsylvania Avenue NW, Washington, DC 20004",
-        "event_category": "talk show",
-        "event_gener": "Politics",
-        "image_location": "/images/politics.jpg",
-        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
-        "show_dates": [
-            {
-                "show_id": "e5839dd5-1875-4964-869f-aca2105858ee",
-                "show_date": "2026-11-15",
-                "show_time": "18:00",
-                "show_language": "English",
-                "total_tickets": 400,
-                "available_tickets": 400,
-                "ticket_price": 20
-            },
-            {
-                "show_id": "29185ed8-c5a3-4a9a-82d7-44261d6c35d4",
-                "show_date": "2026-11-16",
-                "show_time": "18:00",
-                "show_language": "Spanish",
-                "total_tickets": 400,
-                "available_tickets": 400,
-                "ticket_price": 20
-            },
-            {
-                "show_id": "534e72a5-d8ea-405d-a06d-934a34c16cad",
-                "show_date": "2026-11-17",
-                "show_time": "18:00",
-                "show_language": "English",
-                "total_tickets": 400,
-                "available_tickets": 400,
-                "ticket_price": 20
-            },
-            {
-                "show_id": "50bdc22b-e29f-42c8-bab1-27fa548b360b",
-                "show_date": "2026-11-18",
-                "show_time": "18:00",
-                "show_language": "German",
-                "total_tickets": 400,
-                "available_tickets": 400,
-                "ticket_price": 20
-            }
-        ],
-        "date_created": "2026-01-21T03:09:16.730Z"
-    },
-    {
-        "event_id": "931f5a38-f645-43d9-916a-28fda1346d63",
-        "event_name": "Literary Lounge Boston",
-        "event_description": "Famous authors and poets gather to read and discuss modern literature.",
-        "event_city": "Boston",
-        "event_address": "700 Boylston St, Boston, MA 02116",
-        "event_category": "talk show",
-        "event_gener": "Literature",
-        "image_location": "/images/books.jpg",
-        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
-        "show_dates": [
-            {
-                "show_id": "453c8512-0731-4556-a619-d5bdb7110a24",
-                "show_date": "2026-04-01",
-                "show_time": "19:00",
-                "show_language": "English",
-                "total_tickets": 150,
-                "available_tickets": 150,
-                "ticket_price": 10
-            },
-            {
-                "show_id": "55b9c40d-df25-4bf8-a878-4f142638518f",
-                "show_date": "2026-04-02",
-                "show_time": "19:00",
-                "show_language": "English",
-                "total_tickets": 150,
-                "available_tickets": 150,
-                "ticket_price": 10
-            },
-            {
-                "show_id": "68d3a0fb-3d74-4169-8d47-30a7eb284e9f",
-                "show_date": "2026-04-03",
-                "show_time": "14:00",
-                "show_language": "Spanish",
-                "total_tickets": 100,
-                "available_tickets": 100,
-                "ticket_price": 8
-            },
-            {
-                "show_id": "7f293c56-9b6d-4eb9-8752-6ae95f58067e",
-                "show_date": "2026-04-04",
-                "show_time": "14:00",
-                "show_language": "Italian",
-                "total_tickets": 100,
-                "available_tickets": 100,
-                "ticket_price": 8
-            }
-        ],
-        "date_created": "2026-01-21T03:09:26.272Z"
-    },
-    {
-        "event_id": "8da5e6f5-22d6-4405-a7ec-4d508a1ad36a",
-        "event_name": "Culinary Masters Live",
-        "event_description": "Watch world-renowned chefs discuss the chemistry behind their signature dishes.",
-        "event_city": "Dallas",
-        "event_address": "1310 S Griffin St, Dallas, TX 75202",
-        "event_category": "talk show",
-        "event_gener": "Cooking",
-        "image_location": "/images/chef.jpg",
-        "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
-        "show_dates": [
-            {
-                "show_id": "1d02c04e-3ece-4b7c-875e-b31bd7c4dcb7",
-                "show_date": "2026-12-05",
-                "show_time": "12:00",
-                "show_language": "English",
-                "total_tickets": 500,
-                "available_tickets": 500,
-                "ticket_price": 50
-            },
-            {
-                "show_id": "13666e88-f546-49ca-a581-013520423b3a",
-                "show_date": "2026-12-06",
-                "show_time": "12:00",
-                "show_language": "English",
-                "total_tickets": 500,
-                "available_tickets": 500,
-                "ticket_price": 50
-            },
-            {
-                "show_id": "5c95a0a6-463d-4534-af64-68a38b00b10f",
-                "show_date": "2026-12-07",
-                "show_time": "18:00",
-                "show_language": "Spanish",
-                "total_tickets": 400,
-                "available_tickets": 400,
-                "ticket_price": 55
-            },
-            {
-                "show_id": "95a85e5f-db5d-406e-a9d8-2c5abb44d708",
-                "show_date": "2026-12-08",
-                "show_time": "18:00",
-                "show_language": "English",
-                "total_tickets": 500,
-                "available_tickets": 500,
-                "ticket_price": 55
-            }
-        ],
-        "date_created": "2026-01-21T03:09:34.370Z"
     }
 ]

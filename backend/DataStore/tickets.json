@@ -1,0 +1,62 @@
+[
+    {
+        "ticket_id": "a21d3aa2-6e7b-4921-b26c-0c6ef6ef16e8",
+        "user_id": "235989eb-cf84-4f21-b042-1c2d9464ae9e",
+        "user_email": "nishchay1@gmail.com",
+        "event_id": "d75e1df1-5139-4dc1-b8af-be8b26cfde51",
+        "event_name": "The Dark Knight (2008)",
+        "show_id": "0d6a16b6-7fde-4c90-a210-5a2f587de7ef",
+        "show_date": "2026-06-10",
+        "number_of_tickets": 2,
+        "total_price": 37,
+        "date_booked": "2026-01-22T17:37:18.440Z"
+    },
+    {
+        "ticket_id": "16448aa9-0060-4ed1-91a0-9f336023916d",
+        "user_id": "235989eb-cf84-4f21-b042-1c2d9464ae9e",
+        "user_email": "nishchay1@gmail.com",
+        "event_id": "d75e1df1-5139-4dc1-b8af-be8b26cfde51",
+        "event_name": "The Dark Knight (2008)",
+        "show_id": "0d6a16b6-7fde-4c90-a210-5a2f587de7ef",
+        "show_date": "2026-06-10",
+        "number_of_tickets": 12,
+        "total_price": 222,
+        "date_booked": "2026-01-22T17:37:25.617Z"
+    },
+    {
+        "ticket_id": "c513eecc-ba4c-4fe1-9d6a-b56ed6c23c62",
+        "user_id": "235989eb-cf84-4f21-b042-1c2d9464ae9e",
+        "user_email": "nishchay1@gmail.com",
+        "event_id": "d75e1df1-5139-4dc1-b8af-be8b26cfde51",
+        "event_name": "The Dark Knight (2008)",
+        "show_id": "0d6a16b6-7fde-4c90-a210-5a2f587de7ef",
+        "show_date": "2026-06-10",
+        "number_of_tickets": 18,
+        "total_price": 333,
+        "date_booked": "2026-01-22T17:37:41.076Z"
+    },
+    {
+        "ticket_id": "7f8a1741-d7a5-436c-8e5d-5cc041506feb",
+        "user_id": "235989eb-cf84-4f21-b042-1c2d9464ae9e",
+        "user_email": "nishchay1@gmail.com",
+        "event_id": "d75e1df1-5139-4dc1-b8af-be8b26cfde51",
+        "event_name": "The Dark Knight (2008)",
+        "show_id": "0d6a16b6-7fde-4c90-a210-5a2f587de7ef",
+        "show_date": "2026-06-10",
+        "number_of_tickets": 2,
+        "total_price": 37,
+        "date_booked": "2026-01-22T17:37:47.855Z"
+    },
+    {
+        "ticket_id": "cb1d1346-1df3-477f-a281-20c0e4907ec1",
+        "user_id": "235989eb-cf84-4f21-b042-1c2d9464ae9e",
+        "user_email": "nishchay1@gmail.com",
+        "event_id": "d75e1df1-5139-4dc1-b8af-be8b26cfde51",
+        "event_name": "The Dark Knight (2008)",
+        "show_id": "0d6a16b6-7fde-4c90-a210-5a2f587de7ef",
+        "show_date": "2026-06-10",
+        "number_of_tickets": 21,
+        "total_price": 388.5,
+        "date_booked": "2026-01-22T17:37:55.324Z"
+    }
+]

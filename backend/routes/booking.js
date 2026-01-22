@@ -66,7 +66,7 @@ router.post('/bookticket/:id', fetchuser, [
         }
 
         // 4. Update memory (Subtraction)
-        selectedShow.availableSeats -= numberOfTickets;
+        selectedShow.available_tickets -= numberOfTickets;
 
         // 5. SAVE the entire updated events array
         saveData('events', events);
@@ -75,6 +75,7 @@ router.post('/bookticket/:id', fetchuser, [
         const newTicket = {
             ticket_id:          crypto.randomUUID(),
             user_id:            req.user.id,
+            user_email:         req.user.user_email,
             event_id:           fetchEvent.event_id,
             event_name:         fetchEvent.event_name,
             show_id:            selectedShow.show_id,
@@ -82,7 +83,7 @@ router.post('/bookticket/:id', fetchuser, [
             event_location:     fetchEvent.event_location,
             image_url:          fetchEvent.image_url,
             number_of_tickets:  numberOfTickets,
-            total_price:        (numberOfTickets * selectedShow.price),
+            total_price:        (numberOfTickets * selectedShow.ticket_price),
             date_booked:        new Date().toISOString()
         };
 
@@ -124,7 +125,7 @@ router.delete('/deleteticket/:id', fetchuser, async (req, res) => {
         if (event) {
             let show = event.show_dates.find(s => s.show_id === ticket.show_id);
             // Restore the seats: Add the number of tickets back to availableSeats
-            show.availableSeats += ticket.number_of_tickets;
+            show.available_tickets += ticket.number_of_tickets;
             
             // Save the updated events array
             saveData('events', events);
