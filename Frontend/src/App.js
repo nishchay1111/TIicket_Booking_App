@@ -1,100 +1,26 @@
-import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
-import Sidebar from "./components/Sidebar";
-import Navbar from "./components/Navbar";
-import TNavbar from "./components/TNavbar";
-import Mytickets from "./components/Mytickets";
-import OLogin from "./components/OrganizerLogin";
-import OSignup from "./components/OrganizerSignup";
-import ONavbar from "./components/ONavbar";
-import OrganizerHome from "./components/OrganizerHome";
-import { Alert } from "./components/Alert";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUser } from "./redux/slice/user"; // Assuming you've defined the user slice
+import { useSelector } from "react-redux";
+import Login from "./components/Login"; // Ensure this import exists
+// Only one import allowed! Use the relative path from App.js to your API file
+import { useGetUserQuery } from "./redux/slice/usersOperations"; 
 
 function App() {
-  const dispatch = useDispatch();
-  const alert = useSelector((state) => state.alert); // Access the alert state from Redux
-  const [user, setUser] = useState(null);
+  const alert = useSelector((state) => state.alert?.alert); 
+  
+  const { data, isLoading } = useGetUserQuery(undefined, {
+    skip: !localStorage.getItem("token"), 
+  });
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      fetch("http://localhost:5001/api/auth/getuser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": token,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success) {
-            setUser(data.user);
-          } else {
-            setUser(null);
-          }
-        })
-        .catch(() => setUser(null));
-    }
-  }, []);
+  if (isLoading) return <div>Loading Application...</div>;
 
   return (
     <Router>
       <div className="App">
-        {/* Pass alert state from Redux to the Alert component */}
-        <Alert alert={alert} />
-
+        {/* You can put your Alert component here if you have it */}
         <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Navbar user={user} />
-                <Home />
-              </>
-            }
-          />
-
-          <Route
-            path="/login"
-            element={
-              <>
-                <TNavbar />
-                <Login setUser={setUser} />
-              </>
-            }
-          />
-
-          <Route path="/signup" element={<Signup />} />
-
-          <Route
-            path="/MyTickets"
-            element={
-              <>
-                <Navbar user={user} />
-                <Mytickets />
-              </>
-            }
-          />
-
-          <Route path="/organizerssignup" element={<OSignup />} />
-
-          <Route path="/organizerslogin" element={<OLogin />} />
-
-          <Route
-            path="/organizershome"
-            element={
-              <>
-                <ONavbar />
-                <OrganizerHome />
-              </>
-            }
-          />
+          {/* Change the default path to show Login first */}
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
     </Router>

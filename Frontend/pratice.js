@@ -1,65 +1,43 @@
-import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
+import { createApi, fakeBaseQuery, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const verifyOrganizer = createAsyncThunk(
-    "verifyorganizer",
-    async (credentials, {rejectWithValue})=>{
-        try {
-            const response = await fetch(
-                "http://localhost:5001/api/organizers/loginorganizer",
-                {
-                    method: "POST",
-                    headers:{
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        email: credentials.email,
-                        password: credentials.password
-                    })
-                }
-            )
-            const json = response.json()
-            console.log("Response from reducer",json)
-            if(json.success){
-                localStorage.setItem("token",json.authtoken)
-                return json
-            }
-            else{
-                return rejectWithValue("Invalid Credentials")
-            }
-        } catch (error) {
-            return rejectWithValue(error.message)            
-        }
+export const usersApi = createApi({
+  reducerPath: "userApi",
+  tagTypes: ["User"],
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:5001/api/",
+    prepareHeaders: (headers)=>{
+      token = localStorage.getItem("token")
+      if(token){
+        headers.set("auth-token",token)
+      }
+      return token
     }
-)
+  }),
+  endpoints: (builder)=>({
+    createUser: builder.mutation({
+      query: (newUser)=>({
+        url: "auth/createuser",
+        method: "POST",
+        body: newUser
+      }),
+      invalidatesTags: ["User"]
+    }),
 
-const organizerLogin = createSlice({
-    name:"ologin",
-    initialState:{
-        isLoading: false,
-        ologin: false,
-        isError: false,
-        errorMessage: ""
-    },
-    extraReducers: (builder)=>{
-        builder
-        .addCase(verifyOrganizer.pending, (state)=>{
-            state.isLoading = true;
-            state.isError = false;
-            state.errorMessage = ""
-        })
-        .addCase(verifyOrganizer.fulfilled, (state)=>{
-            state.isLoading = false;
-            state.ologin = true;
-            state.isError = false;
-            state.errorMessage = '';
-        })
-        .addCase(verifyOrganizer.rejected, (state,action)=>{
-            state.isLoading = false,
-            state.isError = true,
-            state.errorMessage = action.payload || "Something went wrong!"
-        })
-    }
+    login: builder.mutation({
+      query: (credentials)=>({
+        url: "auth/login",
+        method: "POST",
+        body: credentials
+      }),
+      invalidatesTags: ["User"]
+    }),
+
+   getUser: builder.query({
+      query: () => ({
+        url: "auth/getuser",
+        method: "POST",
+      }),
+      providesTags: ["User"],
+    }),
+  })
 })
-export default organizerLogin.reducer
-
-// Jan 13th 2026

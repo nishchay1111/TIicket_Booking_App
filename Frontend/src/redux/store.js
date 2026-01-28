@@ -1,17 +1,14 @@
-// src/redux/store.js
-import { configureStore } from "@reduxjs/toolkit";
-import user from "./slice/user";
-import tickets from "./slice/ticket";
-import events from "./slice/events";
-import ologin from "./slice/organizerlogin";
-import alert from "./slice/alert"; // Import alert reducer
+import { configureStore } from '@reduxjs/toolkit';
+import { appApi } from './slice/usersOperations'; // Ensure this path is correct!
+import alertReducer from './slice/alert';
 
 export const store = configureStore({
   reducer: {
-    currentUser: user,
-    allTickets: tickets,
-    alert: alert, // Add alert reducer to the store
-    allEvents: events,
-    ologin: ologin
+    // This connects the RTK Query cache to your store
+    [appApi.reducerPath]: appApi.reducer,
+    alert: alertReducer,
   },
+  // This middleware is required for RTK Query to work
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(appApi.middleware),
 });
