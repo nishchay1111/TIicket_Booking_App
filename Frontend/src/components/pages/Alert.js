@@ -1,7 +1,7 @@
 // src/components/Alert.js
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { clearAlert } from '../redux/slice/alert'; // Import clearAlert action
+import { clearAlert } from '../../redux/slice/alert'; // Import clearAlert action
 import alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 

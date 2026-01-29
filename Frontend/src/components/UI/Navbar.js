@@ -4,7 +4,7 @@ import Avatar from "@mui/material/Avatar";
 import { useNavigate } from "react-router-dom";
 import { fetchUser } from "../redux/slice/user";
 import { useSelector, useDispatch } from "react-redux";
-import { setAlert } from "../redux/slice/alert"; // Import the setAlert action
+import { setAlert } from "../../redux/slice/alert"; // Import the setAlert action
 
 const Navbar = () => {
   const dispatch = useDispatch();

@@ -1,6 +1,6 @@
 import { React, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchEvents } from "../redux/slice/events"; // Import the setAlert action
+import { fetchEvents } from "../../redux/slice/events"; // Import the setAlert action
 import sampleImage from "../images/9.jpg";
 
 const Home = () => {

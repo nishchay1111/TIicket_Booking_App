@@ -74,42 +74,60 @@ router.post('/createuser', [
 
 router.post('/login', [   
     body('email', 'Enter a valid E-Mail').isEmail().exists(),    
-    body('password', 'password cannot be blank').exists()   
+    body('password', 'Password cannot be blank').exists()   
 ], async (req, res) => {
-    let success = false
+
+    let success = false;
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    const {email, password} = req.body;
+
+    const { email, password } = req.body;
+
     try {
-        const users = loadData('users')
-        const userCheck = users.find(u=>u.user_email === email)
+        const users = loadData('users');
+
+        const userCheck = users.find(u => u.user_email === email);
+
         if (!userCheck) {
-            success=false;
-            return res.status(400).json({ success,
-                                          error: "No user found with this E-Mail" });
+            return res.status(400).json({
+                success: false,
+                error: "No user found with this E-Mail"
+            });
         }
-        const passwordCheck = await bcrypt.compare(password,userCheck.user_password)
+
+        const passwordCheck = await bcrypt.compare(password, userCheck.user_password);
+
         if (!passwordCheck) {
-            success=false;
-            return res.status(400).json({ success,error: "Invalid password" });
+            return res.status(400).json({
+                success: false,
+                error: "Invalid password"
+            });
         }
+
+        // ✅ FIXED LOG LINE
+        console.log(`✅ LOGIN SUCCESS: ${userCheck.user_email} (${userCheck.user_id}) at ${new Date().toISOString()}`);
+
         const data = {
-            user:{
+            user: {
                 id: userCheck.user_id
             }
-        }
+        };
+
         const authtoken = jwt.sign(data, JWT_SECRET);
+
         success = true;
-        res.json({success, authtoken})    
-        // Rest of your authentication code...
+
+        res.json({ success, authtoken });
+
     } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Server Error");
+        console.error("LOGIN ERROR:", error);
+        res.status(500).json({ success: false, error: "Internal Server Error" });
     }
-    
-})
+});
+
 
 //Route 3: Get loggedin User Details using: POST "/api/auth/getuser". Login required
 router.post('/getuser', fetchuser, async (req, res) => {

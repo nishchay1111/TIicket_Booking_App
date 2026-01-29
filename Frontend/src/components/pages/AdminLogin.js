@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { verifyOrganizer } from '../redux/slice/organizerlogin'; // Redux action for login
-import { setAlert, clearAlert } from '../redux/slice/alert'; // Redux action for alerts
+import { verifyAdmin } from '../../redux/slice/adminlogin'; // Redux action for login
+import { setAlert, clearAlert } from '../../redux/slice/alert'; // Redux action for alerts
 
 const Login = () => {
     const [credentials, setCredentials] = useState({ email: "", password: "" });
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { isLoading, isError, errorMessage } = useSelector(state => state.ologin);
+    const { isLoading, isError, errorMessage } = useSelector(state => state.alogin);
     const alert = useSelector(state => state.alert.alert); // Get alert from Redux store
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const resultAction = await dispatch(verifyOrganizer(credentials));
+        const resultAction = await dispatch(verifyAdmin(credentials));
 
-        if (verifyOrganizer.fulfilled.match(resultAction)) {
+        if (verifyAdmin.fulfilled.match(resultAction)) {
             dispatch(setAlert({ type: "success", message: "Logged in Successfully" })); // Dispatch success alert
             navigate("/organizershome");
         } else {
@@ -82,7 +82,7 @@ const Login = () => {
                         </button>
                     </div>
                     <div className="py-3">
-                        <a href="/organizerssignup" className="text-blue-500 underline hover:text-blue-700">Not an Organizer? Click Here to Sign Up</a>
+                        <a href="/organizerssignup" className="text-blue-500 underline hover:text-blue-700">Not an Admin? Click Here to Sign Up</a>
                     </div>
                 </form>
             </div>

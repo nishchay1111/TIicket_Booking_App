@@ -1,43 +1,34 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { setAlert } from '../redux/slice/alert'; // Import setAlert action
-import { useDispatch } from "react-redux"; // Use dispatch hook
+import { useCreateUserMutation } from "../../redux/slice/usersOperations";
 
-const Signup = (props) => {
+const UserSignup = (props) => {
   const [credentials, setCredentials] = useState({ name: "", email: "", password: "", cpassword: "" });
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // Get dispatch function
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { name, email, password,cpassword } = credentials;
-    if(credentials.cpassword!=credentials.password){
-      return props.showAlert("Error", "Password Does not Match", "red");
-    }
-    const response = await fetch("http://localhost:5001/api/auth/createuser", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ name, email, password })
-    });
-    const json = await response.json();
-    console.log(json);
-
-    if (json.success) {
-      // Save the auth token and redirect
-      dispatch(setAlert({ type: 'success', title: 'Success', msg: 'Logged in Successfully' }));
-      localStorage.setItem('token', json.authtoken);
-      navigate("/");
-    }
-    else{
-      dispatch(setAlert({ type: 'error', title: 'Error', msg: 'Invalid Credentials' }));
-    }
-  };
+  const [signup, { isLoading }] = useCreateUserMutation();
 
   const onChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await signup(credentials).unwrap()
+      if(response.success && response.authtoken){
+        localStorage.setItem("token",response.authtoken)
+        console.log("🎉 USER LOGGED IN SUCCESSFULLY")
+        console.log("Auth Token", response.authtoken);
+        navigate("/")        
+      } else{
+        console.log("⚠️ Signup response received but missing token", response);
+      }     
+    } catch (err) {
+      const errorMsg = err?.data?.error || "TRY DIFFERNT E-MAIL";
+      console.error("❌ SIGNUP FAILED:", errorMsg);
+    }
+  };
+
 
   // Check if all fields are filled
   const isFormValid = credentials.name && credentials.email && credentials.password && credentials.cpassword;
@@ -74,7 +65,7 @@ const Signup = (props) => {
               type="submit" 
               className={`w-full py-3 px-4 text-sm tracking-wider font-semibold rounded-md text-white 
                 ${isFormValid ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"}`}
-              disabled={!isFormValid} 
+              disabled={!isFormValid && isLoading} 
             >
               Create an account
             </button>
@@ -88,4 +79,4 @@ const Signup = (props) => {
   );
 };
 
-export default Signup;
+export default UserSignup;

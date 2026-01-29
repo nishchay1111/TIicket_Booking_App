@@ -1,12 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Login from "./components/Login"; // Ensure this import exists
+import UserLogin from "./components/pages/userLogin"; // Ensure this import exists
 // Only one import allowed! Use the relative path from App.js to your API file
 import { useGetUserQuery } from "./redux/slice/usersOperations"; 
+import UserSignup from "./components/pages/userSignup";
 
-function App() {
-  const alert = useSelector((state) => state.alert?.alert); 
-  
+function App() {  
   const { data, isLoading } = useGetUserQuery(undefined, {
     skip: !localStorage.getItem("token"), 
   });
@@ -19,8 +18,11 @@ function App() {
         {/* You can put your Alert component here if you have it */}
         <Routes>
           {/* Change the default path to show Login first */}
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<UserLogin/>} />
+        </Routes>
+        <Routes>
+          {/* Change the default path to show Login first */}
+          <Route path="/userSignup" element={<UserSignup/>} />
         </Routes>
       </div>
     </Router>

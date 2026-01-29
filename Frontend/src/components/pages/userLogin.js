@@ -1,14 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { setAlert } from '../redux/slice/alert'; 
-import { useDispatch } from "react-redux"; 
-import { useLoginMutation } from "../redux/slice/usersOperations";
+import { useNavigate } from "react-router-dom"; 
+import { useLoginMutation } from "../../redux/slice/usersOperations";
 
-const Login = () => {
+const UserLogin = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  
+
   const [login, { isLoading }] = useLoginMutation();
 
   const onChange = (e) => {
@@ -17,33 +14,29 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
-      // .unwrap() allows us to catch the 400 errors from your auth.js
+      // unwrap lets us catch backend 4xx errors
       const response = await login(credentials).unwrap();
 
-      // MATCHING BACKEND: your auth.js sends 'authtoken' (lowercase)
+      // Backend returns: { success: true, authtoken: "..." }
       if (response.success && response.authtoken) {
         localStorage.setItem("token", response.authtoken);
-        
-        dispatch(setAlert({ 
-          type: "success", 
-          title: "Success", 
-          msg: "Logged in successfully!" 
-        }));
-        
-        navigate("/"); 
+
+        console.log("🎉 USER LOGGED IN SUCCESSFULLY");
+        console.log("Auth Token:", response.authtoken);
+
+        navigate("/");
+      } else {
+        console.log("⚠️ Login response received but missing token", response);
       }
     } catch (err) {
-      // Backend returns errors in err.data.error (e.g., "No user found with this E-Mail")
-      const errorMsg = err.data?.error || "Invalid Credentials";
-      dispatch(setAlert({ 
-        type: "danger", 
-        title: "Login Failed", 
-        msg: errorMsg 
-      }));
+      const errorMsg = err?.data?.error || "Invalid Credentials";
+      console.error("❌ LOGIN FAILED:", errorMsg);
     }
   };
+
+  const isFormValid = credentials.email && credentials.password;
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -92,19 +85,26 @@ const Login = () => {
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading && !isFormValid}
             className="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-400"
           >
             {isLoading ? "Signing in..." : "Sign in"}
           </button>
 
           <div className="py-3">
-            <a href="/organizerslogin" className="text-blue-500 underline hover:text-blue-700 text-sm">
+            <a
+              href="/organizerslogin"
+              className="text-blue-500 underline hover:text-blue-700 text-sm"
+            >
               Are you an Organizer? Click Here to Log In
             </a>
           </div>
+
           <div className="py-0">
-            <a href="/signup" className="text-blue-500 underline hover:text-blue-700 text-sm">
+            <a
+              href="/signup"
+              className="text-blue-500 underline hover:text-blue-700 text-sm"
+            >
               Not a User? Click Here to Sign Up
             </a>
           </div>
@@ -114,4 +114,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default UserLogin;

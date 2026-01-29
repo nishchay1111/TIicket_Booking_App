@@ -30,7 +30,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "both": "concurrently \"npm run start\" \"nodemon backend/index.js\""
+    "frontend": "PORT=3001 npm run start",
+    "backend": "npx nodemon index.js",
+    "both": "concurrently \"npm run frontend\" \"npm run backend\""
   },
   "eslintConfig": {
     "extends": [
