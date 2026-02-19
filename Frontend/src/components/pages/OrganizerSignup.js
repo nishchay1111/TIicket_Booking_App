@@ -1,35 +1,33 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCreateOrganizerMutation } from '../../redux/slice/organizerOperations';
+import ticketIcon from '../../assets/icons/1.png';
 
-const Signup = (props) => {
+const OrganizerSignup = (props) => {
   const [credentials, setCredentials] = useState({ name: "", email: "", password: "", cpassword: "" });
   const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { name, email, password, cpassword } = credentials;
-    if(credentials.cpassword!=credentials.password){
-      return props.showAlert("Error", "Password Does not Match", "red");
-    }
-    const response = await fetch("http://localhost:5000/api/organizers/createorganizer", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ name, email, password })
-    });
-    const json = await response.json();
-    console.log(json);
-
-    if (json.success) {
-      // Save the auth token and redirect
-      localStorage.setItem('token', json.authtoken);
-      navigate("/OrganizerHome");
-    }
-  };
+  const [signup, { isLoading }] = useCreateOrganizerMutation();
 
   const onChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await signup(credentials).unwrap()
+      if(response.success && response.authtoken){
+        localStorage.setItem("token",response.authtoken)
+        console.log("🎉 USER LOGGED IN SUCCESSFULLY")
+        console.log("Auth Token", response.authtoken);
+        navigate("/")        
+      } else{
+        console.log("⚠️ Signup response received but missing token", response);
+      }     
+    } catch (err) {
+      const errorMsg = err?.data?.error || "TRY DIFFERNT E-MAIL";
+      console.error("❌ SIGNUP FAILED:", errorMsg);
+    }
   };
 
   // Check if all fields are filled
@@ -39,7 +37,7 @@ const Signup = (props) => {
     <div className="flex flex-col justify-center font-[sans-serif] sm:h-screen p-4">
       <div className="max-w-md w-full mx-auto border border-gray-300 rounded-2xl p-8">
         <div className="text-center mb-12">
-          <img src="/" alt="logo" className="w-40 inline-block" />
+          <img className="w-80 h-25" src={ticketIcon}/>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -81,4 +79,4 @@ const Signup = (props) => {
   );
 };
 
-export default Signup;
+export default OrganizerSignup;

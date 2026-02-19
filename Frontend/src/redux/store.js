@@ -1,14 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { appApi } from './slice/usersOperations'; // Ensure this path is correct!
+import { appApi } from './slice/usersOperations'; 
+import { organizerApi } from './slice/organizerOperations'; 
 import alertReducer from './slice/alert';
 
 export const store = configureStore({
   reducer: {
-    // This connects the RTK Query cache to your store
+    // Connects both RTK Query caches to your store
     [appApi.reducerPath]: appApi.reducer,
+    [organizerApi.reducerPath]: organizerApi.reducer, // Added this
     alert: alertReducer,
   },
-  // This middleware is required for RTK Query to work
+  // Middleware is essential for caching, invalidation (Tags), and polling
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(appApi.middleware),
+    getDefaultMiddleware()
+      .concat(appApi.middleware)
+      .concat(organizerApi.middleware), // Added this
 });

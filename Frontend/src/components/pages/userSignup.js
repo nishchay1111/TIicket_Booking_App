@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreateUserMutation } from "../../redux/slice/usersOperations";
+import ticketIcon from '../../assets/icons/1.png';
 
 const UserSignup = (props) => {
   const [credentials, setCredentials] = useState({ name: "", email: "", password: "", cpassword: "" });
@@ -37,7 +38,10 @@ const UserSignup = (props) => {
     <div className="flex flex-col justify-center font-[sans-serif] sm:h-screen p-4">
       <div className="max-w-md w-full mx-auto border border-gray-300 rounded-2xl p-8">
         <div className="text-center mb-12">
-          <img src="/" alt="logo" className="w-40 inline-block" />
+          <img
+          className="w-80 h-25" 
+          src={ticketIcon}
+        />
         </div>
 
         <form onSubmit={handleSubmit}>

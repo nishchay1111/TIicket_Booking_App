@@ -38,5 +38,13 @@
         "organizer_password": "$2a$10$q9VNzR/xbhcCBxj8GhNynO5zHmAiJ0SqkWVL9oBkILNQ6/DJnjcTG",
         "admin_verification": 1,
         "date_created": "2026-01-20T23:41:57.024Z"
+    },
+    {
+        "organizer_id": "8c613f2a-ec7e-4905-bc3c-c37876b3716d",
+        "organizer_email": "nishchayO6@gmail.com",
+        "organizer_name": "NishchayO6",
+        "organizer_password": "$2a$10$QrD3ppfdyV1m54bNsZZxeOVUIhSly4p/PWqa4SDyLiHEyaxrfdDdK",
+        "admin_verification": 0,
+        "date_created": "2026-02-18T23:31:58.579Z"
     }
 ]

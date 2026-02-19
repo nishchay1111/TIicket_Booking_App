@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import { useLoginMutation } from "../../redux/slice/usersOperations";
+import ticketIcon from '../../assets/icons/1.png';
 
 const UserLogin = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
@@ -42,9 +43,8 @@ const UserLogin = () => {
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
-          className="mx-auto h-10 w-auto"
-          src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-          alt="Your Company"
+          className="w-80 h-25" 
+          src={ticketIcon}
         />
         <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">
           Log Into Your Account
@@ -93,7 +93,7 @@ const UserLogin = () => {
 
           <div className="py-3">
             <a
-              href="/organizerslogin"
+              href="/organizerLogin"
               className="text-blue-500 underline hover:text-blue-700 text-sm"
             >
               Are you an Organizer? Click Here to Log In
@@ -102,7 +102,7 @@ const UserLogin = () => {
 
           <div className="py-0">
             <a
-              href="/signup"
+              href="/userSignup"
               className="text-blue-500 underline hover:text-blue-700 text-sm"
             >
               Not a User? Click Here to Sign Up

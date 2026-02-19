@@ -1,43 +1,46 @@
-import { createApi, fakeBaseQuery, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const usersApi = createApi({
-  reducerPath: "userApi",
+export const appApi = createApi({
+  reducerPath: "appApi",
   tagTypes: ["User"],
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5001/api/",
     prepareHeaders: (headers)=>{
-      token = localStorage.getItem("token")
+      const token = localStorage.getItem("token")
       if(token){
         headers.set("auth-token",token)
       }
-      return token
+      return headers
     }
   }),
-  endpoints: (builder)=>({
+  endpoints: (builder)=> ({
     createUser: builder.mutation({
       query: (newUser)=>({
-        url: "auth/createuser",
+        url: "api/createuser",
         method: "POST",
         body: newUser
       }),
       invalidatesTags: ["User"]
     }),
-
     login: builder.mutation({
-      query: (credentials)=>({
-        url: "auth/login",
+      query: (credentials)=({
+        url: "api/login",
         method: "POST",
         body: credentials
-      }),
-      invalidatesTags: ["User"]
+      })
     }),
-
-   getUser: builder.query({
-      query: () => ({
-        url: "auth/getuser",
-        method: "POST",
+    getUser: builder.query({
+      query: ()=>({
+        url: "api/getuser",
+        method: "POST"
       }),
-      providesTags: ["User"],
-    }),
+      providesTags: ["User"]
+    })
   })
 })
+
+export const {
+  useCreateUserMutation, 
+  useLoginMutation, 
+  useGetUserQuery
+} = appApi
