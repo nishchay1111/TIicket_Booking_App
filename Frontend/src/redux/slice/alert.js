@@ -1,20 +1,23 @@
-// src/redux/slice/alert.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const alertSlice = createSlice({
   name: 'alert',
   initialState: {
-    alert: null, // Store the alert object (type, title, msg)
+    open: false,
+    message: '',
+    severity: 'info', // success, info, warning, error
   },
   reducers: {
-    setAlert: (state, action) => {
-      state.alert = action.payload;
+    showAlert: (state, action) => {
+      state.open = true;
+      state.message = action.payload.message;
+      state.severity = action.payload.severity || 'info';
     },
-    clearAlert: (state) => {
-      state.alert = null;
+    hideAlert: (state) => {
+      state.open = false;
     },
   },
 });
 
-export const { setAlert, clearAlert } = alertSlice.actions;
+export const { showAlert, hideAlert } = alertSlice.actions;
 export default alertSlice.reducer;

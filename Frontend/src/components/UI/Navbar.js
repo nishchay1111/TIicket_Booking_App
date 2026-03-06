@@ -1,118 +1,209 @@
-import React, { useState, useRef, useEffect } from "react";
-import { AiOutlineCaretUp, AiOutlineCaretDown } from "react-icons/ai";
-import Avatar from "@mui/material/Avatar";
-import { useNavigate } from "react-router-dom";
-import { fetchUser } from "../redux/slice/user";
-import { useSelector, useDispatch } from "react-redux";
-import { setAlert } from "../../redux/slice/alert"; // Import the setAlert action
+import * as React from 'react';
+import { useState } from "react";
+import { Outlet, useLocation } from 'react-router-dom';
+import { styled, alpha } from '@mui/material/styles';
+import {
+  AppBar, Box, Toolbar, IconButton, Typography, InputBase,
+  Badge, MenuItem, Menu, Button
+} from '@mui/material';
+import {
+  Menu as MenuIcon, Search as SearchIcon, AccountCircle,
+  Mail as MailIcon, Notifications as NotificationsIcon, MoreVert as MoreIcon
+} from '@mui/icons-material';
+import LocalActivityRoundedIcon from '@mui/icons-material/LocalActivityRounded';
+import { useDispatch } from 'react-redux';
+import { showAlert } from '../../redux/store';
 
-const Navbar = () => {
-  const dispatch = useDispatch();
-  const Cuser = useSelector((state) => state.currentUser?.user || null);
-  const navigate = useNavigate();
+// --- Styled Components ---
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(3),
+    width: 'auto',
+  },
+}));
 
-  useEffect(() => {
-    dispatch(fetchUser());
-  }, []); 
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
 
-  console.log(Cuser)
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+}));
 
-  const [city, setCity] = useState(false);
-  const [event, setEvent] = useState(false);
-  const [icon, setIcon] = useState(false);
-  const cityTimeout = useRef(null);
-  const eventTimeout = useRef(null);
-  const iconTimeout = useRef(null);
+const NavBar = () => {
+  const location = useLocation();
 
-  const handleCityHover = (isHovering) => {
-    clearTimeout(cityTimeout.current);
-    cityTimeout.current = isHovering ? setCity(true) : setTimeout(() => setCity(false), 40);
+  // --- 1. State for Menus ---
+  const [ucircle, setUcircle] = useState(null);
+  const [mobileUcirlce, setmobileUcirlce] = useState(null);
+
+  const isUcircleOpen = Boolean(ucircle);
+  const isMobileUcircleOpen = Boolean(mobileUcirlce);
+
+  // --- 2. Menu Handlers ---
+  const handleUcircleMenuOpen = (event) => setUcircle(event.currentTarget);
+  const handleMobileUcirlceClose = () => setmobileUcirlce(null);
+  const handleMenuClose = () => {
+    setUcircle(null);
+    handleMobileUcirlceClose ();
+  };
+  const handleMobileMenuOpen = (event) => setmobileUcirlce(event.currentTarget);
+
+  // --- 3. Dynamic Logic Variables ---
+  const isOrganizerPage = location.pathname.includes('organizer');
+  const isHomePage = location.pathname === '/userHome' || location.pathname === '/organizerHome';
+
+  const getPageTitle = () => {
+    switch (location.pathname) {
+      case '/userHome': return 'User Dashboard';
+      case '/organizerHome': return 'Admin Panel';
+      case '/userSignup': return 'Create Account';
+      case '/userLogin': return 'User Login';
+      case '/organizerLogin': return 'Organizer Login';
+      default: return 'Ticket App';
+    }
   };
 
-  const handleEventHover = (isHovering) => {
-    clearTimeout(eventTimeout.current);
-    eventTimeout.current = isHovering ? setEvent(true) : setTimeout(() => setEvent(false), 40);
-  };
+  const menuId = 'primary-search-account-menu';
+  const mobileMenuId = 'primary-search-account-menu-mobile';
 
-  const handleIconHover = (isHovering) => {
-    clearTimeout(iconTimeout.current);
-    iconTimeout.current = isHovering ? setIcon(true) : setTimeout(() => setIcon(false), 40);
-  };
+  // --- 4. Sub-Components for Menus ---
+  const renderMenu = (
+    <Menu
+      ucircle={ucircle}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isUcircleOpen}
+      onClose={handleMenuClose}>
+      <MenuItem onClick={handleMenuClose} sx={{ color: 'error.main' }}>Sign In</MenuItem>
+    </Menu>
+  );
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    dispatch(setAlert({ type: "success", title: "Success", msg: "You've Logged Out Successfully" }));
-    navigate("/login");
-  };
+  const renderMobileMenu = (
+    <Menu
+      mobileUcirlce={mobileUcirlce}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={mobileMenuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMobileUcircleOpen}
+      onClose={handleMobileUcirlceClose}
+    >
+      <MenuItem>
+        <IconButton size="large" color="inherit">
+          <Badge badgeContent={4} color="error"><MailIcon /></Badge>
+        </IconButton>
+        <p>Messages</p>
+      </MenuItem>
+      <MenuItem>
+        <IconButton size="large" color="inherit">
+          <Badge badgeContent={0} color="error"><NotificationsIcon /></Badge>
+        </IconButton>
+        <p>Notifications</p>
+      </MenuItem>
+      <MenuItem onClick={handleUcircleMenuOpen}>
+        <IconButton size="large" color="inherit"><AccountCircle /></IconButton>
+        <p>Profile</p>
+      </MenuItem>
+    </Menu>
+  );
 
   return (
-    <nav className="sticky top-0 z-50">
-      <div className="flex items-center justify-between py-3 px-3 bg-gray-100 relative">
-        <div className="flex items-center space-x-3">
-          <button className="px-5 py-2 text-black rounded hover:bg-zinc-300 font-semibold">
-            Book My Show
-          </button>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar 
+        position="static" 
+        sx={{ 
+          backgroundColor: isOrganizerPage ? '#37474f' : 'primary.main',
+          transition: 'background-color 0.3s ease' 
+        }}
+      >
+        <Toolbar>          
+          <Button color="inherit" startIcon={<LocalActivityRoundedIcon />}>
+            <Typography variant="h6" noWrap component="div" sx={{ textTransform: 'none' }}>
+              Ticket App
+            </Typography>
+          </Button>
 
-          <div className="relative" onMouseEnter={() => handleCityHover(true)} onMouseLeave={() => handleCityHover(false)}>
-            <button className="flex items-center px-4 py-2 text-black rounded hover:bg-zinc-300">
-              <span className="mr-2">City</span>
-              {!city ? <AiOutlineCaretDown className="h-5 w-5" /> : <AiOutlineCaretUp className="h-5 w-5" />}
-            </button>
-            {city && (
-              <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded shadow-md w-40 z-10">
-                {["Any", "Boston", "New York", "Philadelphia", "Washington DC", "Alexandria"].map((city, index) => (
-                  <button key={index} className="block w-full px-4 py-2 text-left hover:bg-gray-200">
-                    {city}
-                  </button>
-                ))}
-              </div>
+          {isHomePage && (
+            <Search>
+              <SearchIconWrapper><SearchIcon /></SearchIconWrapper>
+              <StyledInputBase placeholder="Search..." />
+            </Search>
+          )}
+
+          <Box sx={{ flexGrow: 1 }} />
+          
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            {isHomePage && (
+              <>
+                <IconButton size="large" color="inherit">
+                  <Badge badgeContent={4} color="error"><MailIcon /></Badge>
+                </IconButton>
+                <IconButton size="large" color="inherit">
+                  <Badge badgeContent={0} color="error"><NotificationsIcon /></Badge>
+                </IconButton>
+              </>
             )}
-          </div>
+            <IconButton
+              size="large"
+              edge="end"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleUcircleMenuOpen}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+          </Box>
 
-          <div className="relative" onMouseEnter={() => handleEventHover(true)} onMouseLeave={() => handleEventHover(false)}>
-            <button className="flex items-center px-4 py-2 text-black rounded hover:bg-zinc-300">
-              <span className="mr-2">Event</span>
-              {!event ? <AiOutlineCaretDown className="h-5 w-5" /> : <AiOutlineCaretUp className="h-5 w-5" />}
-            </button>
-            {event && (
-              <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded shadow-md w-40 z-10">
-                {["Movies", "Concerts", "Sports"].map((event, index) => (
-                  <button key={index} className="block w-full px-4 py-2 text-left hover:bg-gray-200">
-                    {event}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MoreIcon />
+            </IconButton>
+          </Box>
+        </Toolbar>
+      </AppBar>
 
-        {Cuser ? (
-          <div className="relative" onMouseEnter={() => handleIconHover(true)} onMouseLeave={() => handleIconHover(false)}>
-            <button className="px-4 py-2 text-black rounded-full hover:bg-zinc-300">
-              <Avatar>{Cuser?.user?.name?.charAt(0).toUpperCase() || "?"}</Avatar>
-            </button>
-            {icon && (
-              <div className="absolute top-full right-0 mt-1 bg-white border border-gray-300 rounded shadow-md w-40 z-10">
-                <button className="block w-full px-4 py-2 text-left hover:bg-gray-200" onClick={() => navigate("/MyTickets")}>
-                  My Tickets
-                </button>
-                <button className="block w-full px-4 py-2 text-left hover:bg-gray-200">Profile</button>
-                <button className="block w-full px-4 py-2 text-left hover:bg-gray-200">Settings</button>
-                <button className="block w-full px-4 py-2 text-left hover:bg-red-500 text-red-600" onClick={handleLogout}>
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
-        ) : (
-          <button className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-500" onClick={() => navigate("/login")}>
-            Login
-          </button>
-        )}
+      {renderMobileMenu}
+      {renderMenu}
 
-      </div>
-    </nav>
+      <Box component="main" sx={{ p: 3 }}>
+        <Outlet /> 
+      </Box>
+    </Box>
   );
 };
 
-export default Navbar;
+export default NavBar;

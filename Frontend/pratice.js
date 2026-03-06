@@ -1,46 +1,23 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createSlice } from "@reduxjs/toolkit";
 
-export const appApi = createApi({
-  reducerPath: "appApi",
-  tagTypes: ["User"],
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5001/api/",
-    prepareHeaders: (headers)=>{
-      const token = localStorage.getItem("token")
-      if(token){
-        headers.set("auth-token",token)
-      }
-      return headers
+const alertSlice = createSlice({
+  name: 'alert',
+  initialState: {
+    open: false,
+    message: '',
+    severity: 'info'
+  },
+  reducers:{
+    showAlert:(state,action)=>{
+      state.open = true;
+      state.message = action.payload.message;
+      state.severity = action.payload.severity||'info';
+    },
+    hideAlert: (state)=>{
+      state.open = false;
     }
-  }),
-  endpoints: (builder)=> ({
-    createUser: builder.mutation({
-      query: (newUser)=>({
-        url: "api/createuser",
-        method: "POST",
-        body: newUser
-      }),
-      invalidatesTags: ["User"]
-    }),
-    login: builder.mutation({
-      query: (credentials)=({
-        url: "api/login",
-        method: "POST",
-        body: credentials
-      })
-    }),
-    getUser: builder.query({
-      query: ()=>({
-        url: "api/getuser",
-        method: "POST"
-      }),
-      providesTags: ["User"]
-    })
-  })
-})
+  }
+});
 
-export const {
-  useCreateUserMutation, 
-  useLoginMutation, 
-  useGetUserQuery
-} = appApi
+export const {showAlert,hideAlert}=alert.actions
+export default alertSlice.reducer

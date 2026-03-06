@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import { useLoginMutation } from "../../redux/slice/usersOperations";
 import ticketIcon from '../../assets/icons/1.png';
+import { useDispatch } from "react-redux";
+import { showAlert } from '../../redux/slice/alert';
 
 const UserLogin = () => {
+  const dispatch = useDispatch()
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const navigate = useNavigate();
 
@@ -19,13 +22,17 @@ const UserLogin = () => {
     try {
       // unwrap lets us catch backend 4xx errors
       const response = await login(credentials).unwrap();
-
+      
       // Backend returns: { success: true, authtoken: "..." }
       if (response.success && response.authtoken) {
         localStorage.setItem("token", response.authtoken);
 
         console.log("🎉 USER LOGGED IN SUCCESSFULLY");
         console.log("Auth Token:", response.authtoken);
+        dispatch(showAlert({
+          message:"Login Successful",
+          severity: "success"
+        }))
 
         navigate("/");
       } else {
@@ -34,6 +41,10 @@ const UserLogin = () => {
     } catch (err) {
       const errorMsg = err?.data?.error || "Invalid Credentials";
       console.error("❌ LOGIN FAILED:", errorMsg);
+      dispatch(showAlert({
+          message:"Login Failed: Invalid Credentials",
+          severity: "error"
+        }))
     }
   };
 
@@ -42,12 +53,8 @@ const UserLogin = () => {
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          className="w-80 h-25" 
-          src={ticketIcon}
-        />
         <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">
-          Log Into Your Account
+          Sign In
         </h2>
       </div>
 
@@ -83,13 +90,16 @@ const UserLogin = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={isLoading && !isFormValid}
-            className="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-400"
-          >
-            {isLoading ? "Signing in..." : "Sign in"}
+          <div className="!mt-12">
+            <button 
+              type="submit" 
+              className={`w-full py-3 px-4 text-sm tracking-wider font-semibold rounded-md text-white 
+                ${isFormValid ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"}`}
+              disabled={!isFormValid && isLoading} 
+            >
+              Sign In
           </button>
+          </div>
 
           <div className="py-3">
             <a
