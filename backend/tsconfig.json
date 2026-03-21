@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    /* ========================
+       BASIC SETTINGS
+    ======================== */
+    "target": "ES6",
+    "module": "commonjs",
+
+    /* ========================
+       PROJECT STRUCTURE
+    ======================== */
+    "rootDir": "./",
+    "outDir": "./dist",
+
+    /* ========================
+       TYPE SAFETY
+    ======================== */
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* ========================
+       NODE COMPATIBILITY
+    ======================== */
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "types": ["node"],
+
+    /* ========================
+       PERFORMANCE
+    ======================== */
+    "skipLibCheck": true,
+
+    /* ========================
+       DEBUGGING
+    ======================== */
+    "sourceMap": true
+  },
+
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -1,0 +1,11 @@
+// jest-dom adds custom jest matchers for asserting on DOM nodes.
+// allows you to do things like:
+// expect(element).toHaveTextContent(/react/i)
+// learn more: https://github.com/testing-library/jest-dom
+import '@testing-library/jest-dom';
+
+/**
+ * Note: If you encounter type errors in your *.test.tsx files regarding 
+ * "Property 'toBeInTheDocument' does not exist on type 'Matchers<any>'",
+ * ensure you have @types/jest and @types/testing-library__jest-dom installed.
+ */
