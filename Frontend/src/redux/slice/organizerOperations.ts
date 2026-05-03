@@ -1,6 +1,34 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import type { BaseQueryFn } from "@reduxjs/toolkit/query/react";
+import axiosInstance from "../../api/axiosInstance"; // Adjust path as needed
+import type { AxiosRequestConfig, AxiosError } from "axios";
 
-// --- 1. Define Interfaces for your Organizer Data ---
+// --- 1. The Axios Base Query Wrapper ---
+const axiosBaseQuery = (): BaseQueryFn<
+  {
+    url: string;
+    method: AxiosRequestConfig["method"];
+    data?: AxiosRequestConfig["data"];
+    params?: AxiosRequestConfig["params"];
+  },
+  unknown,
+  unknown
+> => async ({ url, method, data, params }) => {
+  try {
+    const result = await axiosInstance({ url, method, data, params });
+    return { data: result.data };
+  } catch (axiosError) {
+    const err = axiosError as AxiosError;
+    return {
+      error: {
+        status: err.response?.status,
+        data: err.response?.data || err.message,
+      },
+    };
+  }
+};
+
+// --- 2. Interfaces ---
 export interface ShowData {
   show_id?: string;
   show_date: string;
@@ -27,26 +55,18 @@ export interface OrganizerEventsResponse {
   orgEvents: OrganizerEvent[];
 }
 
+// --- 3. The API Definition ---
 export const organizerApi = createApi({
   reducerPath: "organizerApi",
   tagTypes: ["Organizer", "Event", "User"], 
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5001/api/",
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        headers.set("auth-token", token);
-      }
-      return headers;
-    },
-  }),
+  baseQuery: axiosBaseQuery(),
   endpoints: (builder) => ({
     // --- Organizer Endpoints ---
     createOrganizer: builder.mutation<any, any>({
       query: (newOrganizer) => ({
         url: "organizers/createorganizer",
         method: "POST",
-        body: newOrganizer,
+        data: newOrganizer,
       }),
       invalidatesTags: ["Organizer"],
     }),
@@ -54,7 +74,7 @@ export const organizerApi = createApi({
       query: (credentials) => ({
         url: "organizers/organizerlogin",
         method: "POST",
-        body: credentials,
+        data: credentials,
       }),
       invalidatesTags: ["Organizer"], 
     }),
@@ -68,7 +88,10 @@ export const organizerApi = createApi({
 
     // --- Event Endpoints ---
     fetchOrganizerEvents: builder.query<OrganizerEventsResponse, void>({
-      query: () => "organizers/fetchorganizersevents",
+      query: () => ({ 
+        url: "organizers/fetchorganizersevents", 
+        method: "GET" 
+      }),
       providesTags: (result) =>
         result && result.orgEvents
           ? [
@@ -82,7 +105,7 @@ export const organizerApi = createApi({
       query: (newEvent) => ({
         url: "organizers/createEvent",
         method: "POST",
-        body: newEvent,
+        data: newEvent,
       }),
       invalidatesTags: [{ type: "Event", id: "LIST" }],
     }),
@@ -107,7 +130,7 @@ export const organizerApi = createApi({
       query: ({ eventId, showData }) => ({
         url: `organizers/addshows/${eventId}`,
         method: "POST",
-        body: showData
+        data: showData
       }),
       invalidatesTags: (result, error, { eventId }) => [{ type: "Event", id: eventId }],
     })

@@ -1,6 +1,37 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+// Add the 'type' keyword here
+import type { BaseQueryFn } from "@reduxjs/toolkit/query/react";
+import axiosInstance from "../../api/axiosInstance"; 
+// Add the 'type' keyword here as well
+import type { AxiosRequestConfig, AxiosError } from "axios";
 
-// --- 1. Define Interfaces for your Data ---
+// --- 1. The Axios Base Query Wrapper ---
+// This tells RTK Query: "Don't use fetch, use my Axios instance instead"
+const axiosBaseQuery = (): BaseQueryFn<
+  {
+    url: string;
+    method: AxiosRequestConfig["method"];
+    data?: AxiosRequestConfig["data"];
+    params?: AxiosRequestConfig["params"];
+  },
+  unknown,
+  unknown
+> => async ({ url, method, data, params }) => {
+  try {
+    const result = await axiosInstance({ url, method, data, params });
+    return { data: result.data };
+  } catch (axiosError) {
+    let err = axiosError as AxiosError;
+    return {
+      error: {
+        status: err.response?.status,
+        data: err.response?.data || err.message,
+      },
+    };
+  }
+};
+
+// --- 2. Interfaces ---
 export interface Ticket {
   ticket_id: string;
   event_name: string;
@@ -15,60 +46,36 @@ export interface UserTicketsResponse {
   message?: string;
 }
 
-// Define the shape of your User object
 export interface User {
   id: string;
   name: string;
   email: string;
 }
 
+// --- 3. The API Definition ---
 export const appApi = createApi({
   reducerPath: "appApi",
   tagTypes: ["User", "Ticket"],
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5001/api/",
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        // Match the header name your backend expects (usually 'auth-token' or 'Authorization')
-        headers.set("auth-token", token);
-      }
-      return headers;
-    },
-  }),
+  // Now using our custom Axios-backed base query
+  baseQuery: axiosBaseQuery(),
   endpoints: (builder) => ({
-    // 1. CREATE USER (Register)
     createUser: builder.mutation<any, any>({
-      query: (newUser) => ({
-        url: "auth/createuser",
-        method: "POST",
-        body: newUser,
-      }),
+      query: (newUser) => ({ url: "auth/createuser", method: "POST", data: newUser }),
       invalidatesTags: ["User"],
     }),
 
-    // 2. LOGIN
     login: builder.mutation<{ success: boolean; authtoken: string }, any>({
-      query: (credentials) => ({
-        url: "auth/login",
-        method: "POST",
-        body: credentials,
-      }),
+      query: (credentials) => ({ url: "auth/login", method: "POST", data: credentials }),
       invalidatesTags: ["User"],
     }),
 
-    // 3. GET USER - This replaces your old 'fetchUser' logic
     getUser: builder.query<User, void>({
-      query: () => ({
-        url: "auth/getuser",
-        method: "GET",
-      }),
+      query: () => ({ url: "auth/getuser", method: "GET" }),
       providesTags: ["User"],
     }),
 
-    // 4. Get All User Tickets
     getUserTickets: builder.query<UserTicketsResponse, void>({
-      query: () => "booking/fetchalltickets",
+      query: () => ({ url: "booking/fetchalltickets", method: "POST" }), // Changed to match your backend route
       providesTags: (result) =>
         result && result.userTickets
           ? [
@@ -78,16 +85,15 @@ export const appApi = createApi({
           : [{ type: "Ticket" as const, id: "LIST" }],
     }),
 
-    // 5. Book Ticket
-    bookTicket: builder.mutation<any, { showId: string }>({
-      query: ({ showId }) => ({
+    bookTicket: builder.mutation<any, { showId: string, numberOfTickets: number }>({
+      query: ({ showId, numberOfTickets }) => ({
         url: `booking/bookticket/${showId}`,
-        method: "PUT", 
+        method: "POST", // Changed to POST to match your backend logic
+        data: { numberOfTickets }
       }),
       invalidatesTags: () => [{ type: "Ticket", id: "LIST" }],
     }),
 
-    // 6. Delete Ticket
     cancelTicket: builder.mutation<any, { ticket_id: string }>({
       query: ({ ticket_id }) => ({
         url: `booking/deleteticket/${ticket_id}`,
@@ -101,11 +107,10 @@ export const appApi = createApi({
   }),
 });
 
-// These are the ONLY things you should export from this file
 export const {
   useCreateUserMutation,
   useLoginMutation,
-  useGetUserQuery, // Use this in your Profile component!
+  useGetUserQuery,
   useGetUserTicketsQuery,
   useBookTicketMutation,
   useCancelTicketMutation

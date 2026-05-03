@@ -7,7 +7,30 @@ import { loadData, saveData } from '../jsonStore';
 import fetchuser, { CustomRequest } from '../fetchuser/fetchuser';
 
 const router: Router = express.Router();
+
+// Professional Practice: Use the same secrets as your auth.ts for system consistency
 const JWT_SECRET = 'ThisEndsRightHere^71364andNow';
+const REFRESH_SECRET = 'AnotherSuperSecretStringForRefreshOnly';
+
+// --- Helper: Generate Tokens & Set Cookie ---
+// This ensures Organizers follow the same "Soft Timeout" strategy as Users
+const generateAndSendTokens = (res: Response, organizerId: string) => {
+    // 1. Generate short-lived Access Token (15 min)
+    const authtoken = jwt.sign({ user: { id: organizerId } }, JWT_SECRET, { expiresIn: '15m' });
+
+    // 2. Generate long-lived Refresh Token (7 days)
+    const refreshToken = jwt.sign({ id: organizerId }, REFRESH_SECRET, { expiresIn: '7d' });
+
+    // 3. Set Refresh Token as an HttpOnly Cookie
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true, 
+        secure: process.env.NODE_ENV === 'production', 
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    return authtoken;
+};
 
 // --- Route 1: Fetch Organizer's Events ---
 router.get('/fetchorganizersevents', fetchuser, async (req: CustomRequest, res: Response) => {
@@ -66,8 +89,8 @@ router.post('/createorganizer', [
         organizers.push(newOrganizer);
         saveData('organizers', organizers);
 
-        const data = { user: { id: newOrganizer.organizer_id } };
-        const authtoken = jwt.sign(data, JWT_SECRET);
+        // UPDATED: Generate both tokens for the new organizer
+        const authtoken = generateAndSendTokens(res, newOrganizer.organizer_id);
         
         success = true;
         res.json({ success, authtoken });
@@ -103,8 +126,8 @@ router.post('/organizerlogin', [
             return res.status(400).json({ success, error: 'Please try to login with correct credentials' });
         }
 
-        const data = { user: { id: organizer.organizer_id } };
-        const authToken = jwt.sign(data, JWT_SECRET);
+        // UPDATED: Generate both tokens for the existing organizer
+        const authToken = generateAndSendTokens(res, organizer.organizer_id);
 
         success = true;
         res.json({ success, authToken });
@@ -115,7 +138,7 @@ router.post('/organizerlogin', [
     }
 });
 
-// --- Route 4: Create Event (Restricted to Verified Organizers) ---
+// --- Route 4: Create Event ---
 router.post('/createEvent', fetchuser, [
     body('eventName','Enter a Event Name').isString(),
     body('show_dates', 'Show dates must be an array').isArray({ min: 1 }),
@@ -125,7 +148,8 @@ router.post('/createEvent', fetchuser, [
 
     try {
         if (!req.user) return res.status(401).json({ error: "Unauthorized" });
-        // Check verification (Admin level or verified organizer)
+        
+        // This check remains for restricted organizers
         if (req.user.verified === 0) return res.status(401).json({ error: "Admin Authentication Required" });
 
         const cities = loadData('city');
@@ -172,7 +196,7 @@ router.post('/createEvent', fetchuser, [
 
     } catch (error: any) {
         console.error(error.message);
-        res.status(500).send('Internal server error');
+        res.status(500).json({ success: false, error: 'Internal server error' });
     }
 });
 
@@ -183,9 +207,9 @@ router.delete('/deleteevent/:id', fetchuser, async (req: CustomRequest, res: Res
         let events = loadData('events');
         let event = events.find((e: any) => e.event_id === req.params.id);
 
-        if (!event) return res.status(400).json({ error: 'Event not Found!' });
+        if (!event) return res.status(404).json({ error: 'Event not Found!' });
         if (event.organizer_id !== req.user.id) {
-            return res.status(401).json({ error: "Not Allowed! You are not the event organizer" });
+            return res.status(403).json({ error: "Not Allowed! You are not the event organizer" });
         }
 
         let updatedEvents = events.filter((e: any) => e.event_id !== req.params.id);
@@ -193,7 +217,7 @@ router.delete('/deleteevent/:id', fetchuser, async (req: CustomRequest, res: Res
         res.json({ success: true, message: "Event has been deleted", event });
     } catch (error: any) {
         console.error(error.message);
-        res.status(500).send('Internal server error');
+        res.status(500).json({ success: false, error: 'Internal server error' });
     }
 });
 
@@ -204,18 +228,18 @@ router.put('/cancelshow/:id', fetchuser, async (req: CustomRequest, res: Respons
         const events = loadData('events');
         const event = events.find((e: any) => e.show_dates?.some((show: any) => show.show_id?.toString() === req.params.id));
 
-        if (!event) return res.status(401).json({ error: "Event does not Exist" });
-        if (event.organizer_id !== req.user.id) return res.status(401).json({ error: "Not Allowed" });
+        if (!event) return res.status(404).json({ error: "Event does not Exist" });
+        if (event.organizer_id !== req.user.id) return res.status(403).json({ error: "Not Allowed" });
 
         const show = event.show_dates.find((s: any) => s.show_id === req.params.id);
-        if (!show) return res.status(401).json({ error: "Show does not Exist" });
+        if (!show) return res.status(404).json({ error: "Show does not Exist" });
 
         show.active = false;
         saveData('events', events);
         res.json({ success: true, message: "Show cancelled successfully", show });
     } catch (error: any) {
         console.error(error.message);
-        res.status(500).send('Internal server error');
+        res.status(500).json({ success: false, error: 'Internal server error' });
     }
 });
 
