@@ -1,29 +1,24 @@
-import {createSlice, type PayloadAction} from '@reduxjs/toolkit'
+import {createApi,BaseQueryFn} from '@reduxjs/toolkit/query/react'
+import axiosInstance from './src/api/axiosInstance'
+import type {AxiosRequestConfig,AxiosError} from 'axios'
 
-export interface AlertState{
-    open: boolean,
-    message: string,
-    severity: 'info'|'warning'|'error'|'success'
-}
-
-const initialState: AlertState={
-    open: false,
-    message: '',
-    severity: 'info'
-}
-
-const alertSlice=createSlice({
-    name: 'alert',
-    initialState,
-    reducers:{
-        showAlert:(state,action: PayloadAction<{message:string; severity?: AlertState['severity']}>)=>{
-            state.open = true;
-            state.message = action.payload.message;
-            state.severity = action.payload.severity || 'info'
-        },
-        hideAlert: (state) => {
-            state.open = false;
-            state.message = ''; // Good practice to clear message on hide
-        },
+const axiosBaseQuery=():BaseQueryFn<{
+    url: string,
+    method: AxiosRequestConfig['method'],
+    data?: AxiosRequestConfig['data'],
+    params?: AxiosRequestConfig['params']
+},unknown,unknown>=>async({url,method,data,params})=>{
+    try {
+        const result = await axiosInstance({url,method,data,params})
+        return {data: result.data}        
+    } catch (axiosError) {
+        const err = axiosError as AxiosError
+        return{
+            error:{
+                status: err.response?.status,
+                message: err.response?.data||err.message
+            }
+        }        
     }
-})
+}
+
