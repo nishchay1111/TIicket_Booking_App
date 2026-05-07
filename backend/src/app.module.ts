@@ -7,31 +7,18 @@ import { AuthModule } from './auth/auth.module';
 import { BookingModule } from './booking/booking.module';
 import { AdminModule } from './admin/admin.module';
 import { OrganizersModule } from './organizers/organizers.module';
+import { TicketsModule } from './tickets/tickets.module';
 
 // Shared Services and Guards
 import { JsonStoreService } from './common/json-store.service';
 import { UserGuard } from './user.guard';
 
 @Module({
-  imports: [
-    // Registering all your feature modules
-    AuthModule,
-    BookingModule,
-    AdminModule,
-    OrganizersModule,
-  ],
+  imports: [AuthModule,BookingModule,AdminModule,OrganizersModule,TicketsModule],
   controllers: [AppController],
-  providers: [
-    AppService,
-    JsonStoreService, // Shared data logic
-    UserGuard,        // Shared security logic
-  ],
+  providers: [AppService,JsonStoreService,UserGuard],
 })
 export class AppModule implements NestModule {
-  /**
-   * We use the configure method to apply global-level logic 
-   * similar to your original Express middleware.
-   */
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply((req: any, res: any, next: () => void) => {
