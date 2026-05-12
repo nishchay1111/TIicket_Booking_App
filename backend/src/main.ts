@@ -1,29 +1,30 @@
-import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { BookingModule } from './booking/booking.module';
-import { AdminModule } from './admin/admin.module';
-import { OrganizersModule } from './organizers/organizers.module';
-import { JsonStoreService } from './common/json-store.service';
-import { UserGuard } from './user.guard';
-import type  {Request,Response,NextFunction} from 'express'
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import cookieParser from 'cookie-parser';
+import { ValidationPipe } from '@nestjs/common';
 
-@Module({
-  imports: [AuthModule,BookingModule,AdminModule,OrganizersModule],
-  controllers: [AppController],
-  providers: [AppService,JsonStoreService,UserGuard],
-})
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply((req:Request, res:Response, next:NextFunction) => {
-        const isHttps = req.secure || req.headers['x-forwarded-proto'] === 'https';
-        if (!isHttps && process.env.NODE_ENV === 'production') {
-          return res.redirect(301, `https://${req.headers.host}${req.url}`);
-        }
-        next();
-      })
-      .forRoutes('*');
-  }
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  // 1. Enable Cookie Parser
+  app.use(cookieParser());
+
+  // 2. Global Validation Pipe
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
+  }));
+
+  // 3. Corrected Method Name: enableCors
+  app.enableCors({
+    origin: true, 
+    credentials: true, 
+  });
+
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
+  
+  console.log(`🚀 Application is running on: http://localhost:${port}`);
 }
+bootstrap();

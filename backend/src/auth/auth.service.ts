@@ -2,22 +2,33 @@ import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/
 import { JsonStoreService } from '../common/json-store.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt'; // 👈 Use NestJS JwtService
 import * as bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
 import { Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AuthService {
-  private readonly JWT_SECRET = 'ThisEndsRightHere^71364andNow';
+  // Use a separate secret for refresh if desired, or use the same for simplicity
   private readonly REFRESH_SECRET = 'AnotherSuperSecretStringForRefreshOnly';
 
-  constructor(private readonly jsonStore: JsonStoreService) {}
+  constructor(
+    private readonly jsonStore: JsonStoreService,
+    private readonly jwtService: JwtService, // 👈 Injecting the service
+  ) {}
 
   // Helper: Generate Tokens & Set Cookie
   generateAndSendTokens(res: Response, userId: string) {
-    const authtoken = jwt.sign({ user: { id: userId } }, this.JWT_SECRET, { expiresIn: '15m' });
-    const refreshToken = jwt.sign({ id: userId }, this.REFRESH_SECRET, { expiresIn: '7d' });
+    // Note: We keep the structure { user: { id: userId } } to match your Strategy
+    const payload = { user: { id: userId } };
+    
+    const authtoken = this.jwtService.sign(payload);
+    
+    // Refresh tokens often use a separate expiration
+    const refreshToken = this.jwtService.sign({ id: userId }, {
+      secret: this.REFRESH_SECRET,
+      expiresIn: '7d'
+    });
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
@@ -70,8 +81,9 @@ export class AuthService {
 
   refresh(refreshToken: string) {
     try {
-      const decoded: any = jwt.verify(refreshToken, this.REFRESH_SECRET);
-      const authtoken = jwt.sign({ user: { id: decoded.id } }, this.JWT_SECRET, { expiresIn: '15m' });
+      // Manual verify for the refresh token since it uses a unique secret
+      const decoded: any = this.jwtService.verify(refreshToken, { secret: this.REFRESH_SECRET });
+      const authtoken = this.jwtService.sign({ user: { id: decoded.id } });
       return { success: true, authtoken };
     } catch {
       throw new UnauthorizedException('Invalid refresh token');
