@@ -1,22 +1,23 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core'; // 👈 Added Reflector
 import { AppModule } from './app.module';
 import cookieParser from 'cookie-parser';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common'; // 👈 Added ClassSerializerInterceptor
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // 1. Enable Cookie Parser
   app.use(cookieParser());
 
-  // 2. Global Validation Pipe
+  // 1. Global Serialization (This makes @Exclude work globally)
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
+  // 2. Global Validation & Transformation
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
-    transform: true,
+    transform: true, // 👈 Critical for Class Transformer
   }));
 
-  // 3. Corrected Method Name: enableCors
   app.enableCors({
     origin: true, 
     credentials: true, 

@@ -1,31 +1,30 @@
 import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JsonStoreService } from '../common/json-store.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { LoginDto } from './dto/login.dto';
-import { JwtService } from '@nestjs/jwt'; // 👈 Use NestJS JwtService
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
-import { Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
+import { Role } from '../RBAC/role.enum';
+import { UserEntity } from './entities/user.entity'; // 👈 Import Entity
+import { plainToInstance } from 'class-transformer'; // 👈 Import Transformer utility
+
+import type { CreateUserDto } from './dto/create-user.dto';
+import type { LoginDto } from './dto/login.dto';
+import type { Response } from 'express';
 
 @Injectable()
 export class AuthService {
-  // Use a separate secret for refresh if desired, or use the same for simplicity
   private readonly REFRESH_SECRET = 'AnotherSuperSecretStringForRefreshOnly';
 
   constructor(
     private readonly jsonStore: JsonStoreService,
-    private readonly jwtService: JwtService, // 👈 Injecting the service
+    private readonly jwtService: JwtService,
   ) {}
 
-  // Helper: Generate Tokens & Set Cookie
-  generateAndSendTokens(res: Response, userId: string) {
-    // Note: We keep the structure { user: { id: userId } } to match your Strategy
-    const payload = { user: { id: userId } };
-    
+  generateAndSendTokens(res: Response, userId: string, role: string) {
+    const payload = { user: { id: userId, role: role } };
     const authtoken = this.jwtService.sign(payload);
     
-    // Refresh tokens often use a separate expiration
-    const refreshToken = this.jwtService.sign({ id: userId }, {
+    const refreshToken = this.jwtService.sign({ id: userId, role: role }, {
       secret: this.REFRESH_SECRET,
       expiresIn: '7d'
     });
@@ -56,14 +55,21 @@ export class AuthService {
       user_name: name,
       user_password: hashedPassword,
       user_email: email,
+      role: Role.USER,
       date_created: new Date().toISOString(),
     };
 
     users.push(newUser);
     this.jsonStore.saveData('users', users);
 
-    const authtoken = this.generateAndSendTokens(res, newUser.user_id);
-    return { success: true, authtoken };
+    const authtoken = this.generateAndSendTokens(res, newUser.user_id, newUser.role);
+    
+    // 👈 Wrap the response in the Entity
+    return { 
+      success: true, 
+      authtoken, 
+      user: plainToInstance(UserEntity, newUser) 
+    };
   }
 
   async login(loginDto: LoginDto, res: Response) {
@@ -75,15 +81,22 @@ export class AuthService {
       throw new BadRequestException('Invalid credentials');
     }
 
-    const authtoken = this.generateAndSendTokens(res, user.user_id);
-    return { success: true, authtoken };
+    const authtoken = this.generateAndSendTokens(res, user.user_id, user.role || Role.USER);
+    
+    // 👈 Wrap the response in the Entity
+    return { 
+      success: true, 
+      authtoken, 
+      user: plainToInstance(UserEntity, user) 
+    };
   }
 
   refresh(refreshToken: string) {
     try {
-      // Manual verify for the refresh token since it uses a unique secret
       const decoded: any = this.jwtService.verify(refreshToken, { secret: this.REFRESH_SECRET });
-      const authtoken = this.jwtService.sign({ user: { id: decoded.id } });
+      const authtoken = this.jwtService.sign({ 
+        user: { id: decoded.id, role: decoded.role } 
+      });
       return { success: true, authtoken };
     } catch {
       throw new UnauthorizedException('Invalid refresh token');
@@ -95,7 +108,8 @@ export class AuthService {
     const user = users.find((u) => u.user_id === userId);
     if (!user) throw new BadRequestException('User not found');
 
-    const { user_password, ...userWithoutPassword } = user;
-    return { success: true, user: userWithoutPassword };
+    // 👈 No more manual 'delete' or destructuring!
+    // The Interceptor in main.ts + UserEntity @Exclude does the work.
+    return { success: true, user: plainToInstance(UserEntity, user) };
   }
 }

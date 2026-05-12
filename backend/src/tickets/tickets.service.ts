@@ -6,10 +6,9 @@ export class TicketsService {
   constructor(private readonly jsonStore: JsonStoreService) {}
 
   async findTicketsByUser(userId: string) {
-    // Load all tickets from your JSON storage
     const allTickets = this.jsonStore.loadData('tickets');
     
-    // Filter tickets belonging to the logged-in user
+    // Passport ensures userId and role are valid before this runs
     const userTickets = allTickets.filter(ticket => ticket.user_id === userId);
     
     return {

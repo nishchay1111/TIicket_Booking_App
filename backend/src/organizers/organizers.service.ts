@@ -1,21 +1,36 @@
-import { Injectable, BadRequestException, UnauthorizedException, ForbiddenException } from '@nestjs/common';
+import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { JsonStoreService } from '../common/json-store.service';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
-import { Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
+import { Role } from '../RBAC/role.enum';
+import { OrganizerEntity } from './entities/organizer.entity'; // 👈 Import Entity
+import { plainToInstance } from 'class-transformer'; // 👈 Import Transformer
+
+import type { Response } from 'express';
 
 @Injectable()
 export class OrganizersService {
-  private readonly JWT_SECRET = 'ThisEndsRightHere^71364andNow';
   private readonly REFRESH_SECRET = 'AnotherSuperSecretStringForRefreshOnly';
 
-  constructor(private readonly jsonStore: JsonStoreService) {}
+  constructor(
+    private readonly jsonStore: JsonStoreService,
+    private readonly jwtService: JwtService,
+  ) {}
 
-  // Helper: Token generation
-  generateTokens(res: Response, organizerId: string) {
-    const authtoken = jwt.sign({ user: { id: organizerId } }, this.JWT_SECRET, { expiresIn: '15m' });
-    const refreshToken = jwt.sign({ id: organizerId }, this.REFRESH_SECRET, { expiresIn: '7d' });
+  generateTokens(res: Response, organizerId: string, role: string) {
+    const payload = { 
+      user: { 
+        id: organizerId,
+        role: role 
+      } 
+    };
+    
+    const authtoken = this.jwtService.sign(payload);
+    const refreshToken = this.jwtService.sign({ id: organizerId, role: role }, {
+      secret: this.REFRESH_SECRET,
+      expiresIn: '7d',
+    });
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
@@ -41,6 +56,7 @@ export class OrganizersService {
       organizer_email: body.email,
       organizer_name: body.name,
       organizer_password: hashedPassword,
+      role: Role.ORGANIZER,
       admin_verification: 0,
       date_created: new Date().toISOString(),
     };
@@ -48,8 +64,14 @@ export class OrganizersService {
     organizers.push(newOrganizer);
     this.jsonStore.saveData('organizers', organizers);
 
-    const authtoken = this.generateTokens(res, newOrganizer.organizer_id);
-    return { success: true, authtoken };
+    const authtoken = this.generateTokens(res, newOrganizer.organizer_id, newOrganizer.role);
+    
+    // 👈 Wrap in Entity to trigger @Exclude()
+    return { 
+      success: true, 
+      authtoken, 
+      organizer: plainToInstance(OrganizerEntity, newOrganizer) 
+    };
   }
 
   async login(body: any, res: Response) {
@@ -60,8 +82,14 @@ export class OrganizersService {
       throw new BadRequestException('Invalid credentials');
     }
 
-    const authToken = this.generateTokens(res, org.organizer_id);
-    return { success: true, authToken };
+    const authToken = this.generateTokens(res, org.organizer_id, org.role || Role.ORGANIZER);
+    
+    // 👈 Wrap in Entity
+    return { 
+      success: true, 
+      authToken, 
+      organizer: plainToInstance(OrganizerEntity, org) 
+    };
   }
 
   async getMyEvents(organizerId: string) {
@@ -71,22 +99,27 @@ export class OrganizersService {
   }
 
   async createEvent(body: any, user: any) {
-    if (user.verified === 0) throw new UnauthorizedException('Admin Authentication Required');
+    if (user.verified === 0) {
+      throw new UnauthorizedException('Admin Verification Pending: You cannot create events yet.');
+    }
 
-    // Validation for City/Category
     const cities = this.jsonStore.loadData('city');
     const categories = this.jsonStore.loadData('category');
     
     const categoryExists = categories.some(c => (typeof c === 'string' ? c : c.name) === body.eventCategory);
     const cityExists = cities.some(c => (typeof c === 'string' ? c : c.name) === body.eventCity);
 
-    if (!categoryExists || !cityExists) throw new BadRequestException('Valid City or Category required');
+    if (!categoryExists || !cityExists) {
+      throw new BadRequestException('Valid City or Category required');
+    }
 
     const events = this.jsonStore.loadData('events');
     const newEvent = {
       event_id: uuidv4(),
       event_name: body.eventName,
       organizer_id: user.id,
+      event_city: body.eventCity,
+      event_category: body.eventCategory,
       show_dates: body.show_dates.map(show => ({
         show_id: uuidv4(),
         ...show,

@@ -1,18 +1,13 @@
 import { Module } from '@nestjs/common';
 import { BookingController } from './booking.controller';
-import { AdminController } from '../admin/admin.controller';
 import { BookingService } from './booking.service';
-import { AdminService } from '../admin/admin.service';
 import { JsonStoreService } from '../common/json-store.service';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [],
-  controllers: [AdminController],
-  providers: [AdminService, JsonStoreService],
-})
-export class AdminModule {}
-
-@Module({
+  imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+  ],
   controllers: [BookingController],
   providers: [BookingService, JsonStoreService],
 })
