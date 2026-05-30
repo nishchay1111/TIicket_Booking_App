@@ -41,19 +41,9 @@ import { RolesGuard } from './RBAC/roles.guard';
     JwtModule.register({
       secret: 'ThisEndsRightHere^71364andNow',
       signOptions: { expiresIn: '1h' },
-    }),
-    AuthModule,
-    BookingModule,
-    AdminModule,
-    OrganizersModule,
-    TicketsModule,
-  ],
+    }),AuthModule,BookingModule,AdminModule,OrganizersModule,TicketsModule,],
   controllers: [AppController],
-  providers: [
-    AppService,
-    JsonStoreService,
-    JwtStrategy,
-    UserGuard,
+  providers: [AppService,JsonStoreService,JwtStrategy,UserGuard,
     // 2. Register Custom Throttler Guard Globally
     {
       provide: APP_GUARD,

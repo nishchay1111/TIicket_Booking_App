@@ -27,3 +27,4 @@ build/
 dist/
 .env
 *.log
+updates.txt
