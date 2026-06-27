@@ -3,24 +3,27 @@ import { AuthService } from './auth.service';
 import { UserGuard } from '../user.guard';
 import { Roles } from '../RBAC/roles.decorator';
 import { Role } from '../RBAC/role.enum';
-import { Throttle } from '@nestjs/throttler'; // 👈 Import Throttle
+import { Throttle } from '@nestjs/throttler'; 
 
-import type { CreateUserDto } from './dto/create-user.dto';
-import type { LoginDto } from './dto/login.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { LoginDto } from './dto/login.dto';
 import type { Request, Response } from 'express';
+import {Public} from '../RBAC/public.decorator'
 
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
-  @Throttle({ default: { limit: 3, ttl: 60000 } }) // 👈 3 signups per minute per IP/User
+  
+  @Public()
+  @Throttle({ default: { limit: 3, ttl: 60000 } }) 
   @Post('createuser')
   async createUser(@Body() createUserDto: CreateUserDto, @Res({ passthrough: true }) res: Response) {
     return this.authService.createUser(createUserDto, res);
   }
 
-  @Throttle({ default: { limit: 5, ttl: 60000 } }) // 👈 5 login attempts per minute
+  @Public()
+  @Throttle({ default: { limit: 5, ttl: 60000 } }) 
   @Post('login')
   async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
     return this.authService.login(loginDto, res);
@@ -34,13 +37,12 @@ export class AuthController {
   }
 
   @Post('logout')
-  async logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('refreshToken');
-    return { success: true, message: 'Logged out successfully' };
+  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) { // 👈 1. Added @Req() parameter
+    return this.authService.logout(req, res); // 👈 2. Delegated extraction and file tracking to AuthService
   }
 
   @UseGuards(UserGuard)
-  @Roles(Role.USER, Role.ADMIN)
+  @Roles(Role.USER)
   @Post('getuser')
   async getUser(@Req() req: any) {
     return this.authService.getUser(req.user.id);

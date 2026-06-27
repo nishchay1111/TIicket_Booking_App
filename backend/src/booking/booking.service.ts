@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { JsonStoreService } from '../common/json-store.service';
 import { v4 as uuidv4 } from 'uuid';
-import type { BookTicketDto } from './dto/book-ticket.dto';
+import { BookTicketDto } from './dto/book-ticket.dto';
 
 @Injectable()
 export class BookingService {

@@ -1,21 +1,24 @@
 import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { JsonStoreService } from '../common/json-store.service';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config'; 
+import { TokenBlacklistService } from '../common/token-blacklist.service'; // 👈 1. Import the blacklist service
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import { Role } from '../RBAC/role.enum';
-import { OrganizerEntity } from './entities/organizer.entity'; // 👈 Import Entity
-import { plainToInstance } from 'class-transformer'; // 👈 Import Transformer
+import { OrganizerEntity } from './entities/organizer.entity'; 
+import { plainToInstance } from 'class-transformer'; 
 
-import type { Response } from 'express';
+import type { Response, Request } from 'express'; // 👈 2. Import Request type here
 
 @Injectable()
 export class OrganizersService {
-  private readonly REFRESH_SECRET = 'AnotherSuperSecretStringForRefreshOnly';
 
   constructor(
     private readonly jsonStore: JsonStoreService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService, 
+    private readonly tokenBlacklist: TokenBlacklistService, // 👈 3. Inject TokenBlacklistService
   ) {}
 
   generateTokens(res: Response, organizerId: string, role: string) {
@@ -27,14 +30,15 @@ export class OrganizersService {
     };
     
     const authtoken = this.jwtService.sign(payload);
+
     const refreshToken = this.jwtService.sign({ id: organizerId, role: role }, {
-      secret: this.REFRESH_SECRET,
+      secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
       expiresIn: '7d',
     });
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: this.configService.get<string>('NODE_ENV') === 'production',
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -66,7 +70,6 @@ export class OrganizersService {
 
     const authtoken = this.generateTokens(res, newOrganizer.organizer_id, newOrganizer.role);
     
-    // 👈 Wrap in Entity to trigger @Exclude()
     return { 
       success: true, 
       authtoken, 
@@ -84,12 +87,38 @@ export class OrganizersService {
 
     const authToken = this.generateTokens(res, org.organizer_id, org.role || Role.ORGANIZER);
     
-    // 👈 Wrap in Entity
     return { 
       success: true, 
       authToken, 
       organizer: plainToInstance(OrganizerEntity, org) 
     };
+  }
+
+  /**
+   * Stateful Logout for Organizers
+   */
+  async logout(req: Request, res: Response) { // 👈 4. Added stateful logout method
+    const authToken = req.headers['auth-token'] as string;
+    const refreshToken = req.cookies?.['refreshToken'];
+
+    // Blacklist the incoming active auth header token
+    if (authToken) {
+      await this.tokenBlacklist.revokeToken(authToken);
+    }
+
+    // Blacklist the cookie refresh token if it exists
+    if (refreshToken) {
+      await this.tokenBlacklist.revokeToken(refreshToken);
+    }
+
+    // Clear cookie from the organizer's browser
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: this.configService.get<string>('NODE_ENV') === 'production',
+      sameSite: 'strict',
+    });
+
+    return { success: true, message: 'Organizer logged out and tokens revoked successfully.' };
   }
 
   async getMyEvents(organizerId: string) {

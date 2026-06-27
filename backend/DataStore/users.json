@@ -35,10 +35,11 @@
         "date_created": "2026-01-20T23:37:23.313Z"
     },
     {
-        "user_id": "42b57eb4-22f5-493a-80ed-e4d79cb9beb8",
-        "user_name": "nishchay6",
-        "user_password": "$2a$10$/IZagYyULgmRKtZxjLNFVOYmnYksqXe6o3qeg6S/qrg5ZmNkTb.wq",
+        "user_id": "fbdb62aa-ef97-40c6-b599-8b88715c3432",
+        "user_name": "Nishchay6",
+        "user_password": "$2b$10$CAdhNpaCQqhEsx1px2dIsuoVW0KAordzgAY8r4SPAJ8lJ0PLfjJUW",
         "user_email": "nishchay6@gmail.com",
-        "date_created": "2026-01-29T17:08:26.528Z"
+        "role": "user",
+        "date_created": "2026-06-27T22:31:07.046Z"
     }
 ]

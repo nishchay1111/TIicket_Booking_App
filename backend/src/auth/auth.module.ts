@@ -1,33 +1,37 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
 import { JwtStrategy } from '../jwt.strategy';
 import { JsonStoreService } from '../common/json-store.service';
 import { UserGuard } from '../user.guard';
-import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from '../RBAC/roles.guard'; // 👈 Import your new guard
+import { RolesGuard } from '../RBAC/roles.guard';
+import { TokenBlacklistService } from '../common/token-blacklist.service';
+// 👆 Remove the AppModule import entirely
 
 @Module({
   imports: [
+    // 👈 Remove AppModule from here
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: 'ThisEndsRightHere^71364andNow',
-      signOptions: { expiresIn: '15m' },
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_ACCESS_SECRET'),
+        signOptions: { expiresIn: '15m' },
+      }),
     }),
   ],
   controllers: [AuthController],
   providers: [
-    AuthService, 
-    JsonStoreService, 
-    JwtStrategy, 
+    AuthService,
+    JsonStoreService,
+    JwtStrategy,
     UserGuard,
-    {
-      provide: APP_GUARD, // 👈 This makes RBAC work globally
-      useClass: RolesGuard,
-    },
+    RolesGuard,
+    TokenBlacklistService,
   ],
-  exports: [AuthService],
+  exports: [AuthService, TokenBlacklistService],
 })
 export class AuthModule {}

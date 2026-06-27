@@ -6,8 +6,8 @@ import { Roles } from '../RBAC/roles.decorator';  // 👈 Updated path
 import { Role } from '../RBAC/role.enum';          // 👈 Added Enum import
 
 // Type-only imports for strict TS compliance on your Mac
-import type { BookTicketDto } from './dto/book-ticket.dto';
-import type { Request } from 'express';
+import { BookTicketDto } from './dto/book-ticket.dto';
+import { Request } from 'express';
 
 @Controller('booking')
 @UseGuards(UserGuard, RolesGuard) 

@@ -2,7 +2,13 @@ import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Request, Response, NextFunction } from 'express';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, Reflector } from '@nestjs/core';
+
+// Configuration
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
+// Task Scheduling (Cron Job Engine)
+import { ScheduleModule } from '@nestjs/schedule';
 
 // Rate Limiting
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -27,35 +33,53 @@ import { RolesGuard } from './RBAC/roles.guard';
 
 @Module({
   imports: [
-    // 1. Configure the Sliding Window Throttler
+    ConfigModule.forRoot({ isGlobal: true }),
+    ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([{
       name: 'short',
-      ttl: 60000,   // 1 minute
-      limit: 20,    // General limit: 20 requests per minute
+      ttl: 60000,
+      limit: 20,
     }, {
       name: 'long',
-      ttl: 3600000, // 1 hour
-      limit: 500,   // General limit: 500 requests per hour
+      ttl: 3600000,
+      limit: 500,
     }]),
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: 'ThisEndsRightHere^71364andNow',
-      signOptions: { expiresIn: '1h' },
-    }),AuthModule,BookingModule,AdminModule,OrganizersModule,TicketsModule,],
+    PassportModule.register({ defaultStrategy: 'jwt' }), // 👈 added back
+    JwtModule.registerAsync({                             // 👈 added back
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_ACCESS_SECRET'),
+        signOptions: { expiresIn: '15m' },
+      }),
+    }),
+    AuthModule,
+    BookingModule,
+    AdminModule,
+    OrganizersModule,
+    TicketsModule,
+  ],
   controllers: [AppController],
-  providers: [AppService,JsonStoreService,JwtStrategy,UserGuard,
-    // 2. Register Custom Throttler Guard Globally
+  providers: [
+    Reflector,
+    AppService,
+    JsonStoreService,
+    JwtStrategy,
+    UserGuard,
+    RolesGuard,
     {
       provide: APP_GUARD,
       useClass: CustomThrottlerGuard,
     },
-    // 3. Register RolesGuard Globally
+    {
+      provide: APP_GUARD,
+      useClass: UserGuard,
+    },
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
   ],
-  exports: [PassportModule, JwtStrategy, UserGuard],
+  exports: [PassportModule, JwtModule, JwtStrategy, UserGuard, RolesGuard],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

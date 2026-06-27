@@ -40,11 +40,12 @@
         "date_created": "2026-01-20T23:41:57.024Z"
     },
     {
-        "organizer_id": "8c613f2a-ec7e-4905-bc3c-c37876b3716d",
+        "organizer_id": "70e52fe5-d26f-426c-aca5-c7581fa3b0ad",
         "organizer_email": "nishchayO6@gmail.com",
         "organizer_name": "NishchayO6",
-        "organizer_password": "$2a$10$QrD3ppfdyV1m54bNsZZxeOVUIhSly4p/PWqa4SDyLiHEyaxrfdDdK",
+        "organizer_password": "$2b$10$6cLB1M0r3jqi5UqbHKOBB.U46KJeFbXtu9cGkAfZjj4SFU8M9qbHK",
+        "role": "organizer",
         "admin_verification": 0,
-        "date_created": "2026-02-18T23:31:58.579Z"
+        "date_created": "2026-06-27T23:50:11.763Z"
     }
 ]
