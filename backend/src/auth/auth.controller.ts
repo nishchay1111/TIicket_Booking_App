@@ -36,6 +36,7 @@ export class AuthController {
     return this.authService.refresh(token);
   }
 
+  @Public()
   @Post('logout')
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) { // 👈 1. Added @Req() parameter
     return this.authService.logout(req, res); // 👈 2. Delegated extraction and file tracking to AuthService

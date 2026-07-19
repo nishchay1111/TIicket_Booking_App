@@ -1,7 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 // Add the 'type' keyword here
 import type { BaseQueryFn } from "@reduxjs/toolkit/query/react";
-import axiosInstance from "../../api/axiosInstance"; 
+import axiosInstance from "../../api/axiosInstance";
 // Add the 'type' keyword here as well
 import type { AxiosRequestConfig, AxiosError } from "axios";
 
@@ -47,9 +47,14 @@ export interface UserTicketsResponse {
 }
 
 export interface User {
-  id: string;
-  name: string;
-  email: string;
+  success: boolean;
+  user: {
+    user_id: string;
+    user_name: string;
+    user_email: string;
+    role: string;
+    date_created: string;
+  }
 }
 
 // --- 3. The API Definition ---
@@ -70,8 +75,11 @@ export const appApi = createApi({
     }),
 
     getUser: builder.query<User, void>({
-      query: () => ({ url: "auth/getuser", method: "GET" }),
-      providesTags: ["User"],
+      query: () => ({
+        url: 'auth/getuser',
+        method: 'POST',  // 👈 must be POST
+      }),
+      providesTags: ['User'],
     }),
 
     getUserTickets: builder.query<UserTicketsResponse, void>({
@@ -100,8 +108,8 @@ export const appApi = createApi({
         method: "DELETE"
       }),
       invalidatesTags: (result, error, { ticket_id }) => [
-        { type: "Ticket", id: ticket_id }, 
-        { type: "Ticket", id: "LIST" }     
+        { type: "Ticket", id: ticket_id },
+        { type: "Ticket", id: "LIST" }
       ]
     })
   }),

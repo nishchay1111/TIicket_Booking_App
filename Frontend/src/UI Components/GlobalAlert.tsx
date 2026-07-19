@@ -1,8 +1,8 @@
 import React from 'react';
 import { Snackbar, Alert as MuiAlert } from '@mui/material';
 import type { AlertColor } from '@mui/material';
-import { useAppSelector, useAppDispatch } from '../../redux/hooks'; 
-import { hideAlert } from '../../redux/slice/alert'; 
+import { useAppSelector, useAppDispatch } from '../redux/hooks'; 
+import { hideAlert, showAlert } from '../redux/slice/alert'; 
 
 export default function GlobalAlert() {
   const dispatch = useAppDispatch();

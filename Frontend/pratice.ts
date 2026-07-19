@@ -1,24 +1,19 @@
-import {createApi,BaseQueryFn} from '@reduxjs/toolkit/query/react'
-import axiosInstance from './src/api/axiosInstance'
-import type {AxiosRequestConfig,AxiosError} from 'axios'
+import {configureStore} from '@reduxjs/toolkit'
+import alertReducer from './src/redux/slice/alert'
+import {appApi} from './src/redux/slice/usersOperations'
+import {organizerApi} from './src/redux/slice/organizerOperations'
+import {injectStore} from './src/api/axiosInstance'
 
-const axiosBaseQuery=():BaseQueryFn<{
-    url: string,
-    method: AxiosRequestConfig['method'],
-    data?: AxiosRequestConfig['data'],
-    params?: AxiosRequestConfig['params']
-},unknown,unknown>=>async({url,method,data,params})=>{
-    try {
-        const result = await axiosInstance({url,method,data,params})
-        return {data: result.data}        
-    } catch (axiosError) {
-        const err = axiosError as AxiosError
-        return{
-            error:{
-                status: err.response?.status,
-                message: err.response?.data||err.message
-            }
-        }        
-    }
-}
+export const store = configureStore({
+    reducer:{
+        alert: alertReducer,
+        [appApi.reducerPath]: appApi.reducer,
+        [organizerApi.reducerPath]: organizerApi.reducer
+    },
+    middleware:(getDefaultMiddleware)=>getDefaultMiddleware().concat(appApi.middleware,organizerApi.middleware)
+})
 
+injectStore(store)
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch

@@ -47,5 +47,14 @@
         "role": "organizer",
         "admin_verification": 0,
         "date_created": "2026-06-27T23:50:11.763Z"
+    },
+    {
+        "organizer_id": "bc9cda49-32fb-4ed8-a716-cf1c6824da69",
+        "organizer_email": "nishchayO7@gmail.com",
+        "organizer_name": "Nishchay O7",
+        "organizer_password": "$2b$10$Oklf/7vF1Htx7PPWBfkPIuDAX/3kGSSyrUzWIzS2R/vFJbAk.XNQO",
+        "role": "organizer",
+        "admin_verification": 0,
+        "date_created": "2026-07-12T16:41:18.807Z"
     }
 ]

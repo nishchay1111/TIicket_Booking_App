@@ -12,7 +12,7 @@ export const injectStore = (_store: any) => {
 };
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5001/api',
+  baseURL: 'http://localhost:5001',
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true, 
 });
@@ -47,7 +47,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         // Corrected port to 5001 to match your system
-        const response = await axios.post('http://localhost:5001/api/auth/refresh-token', {}, { withCredentials: true });
+        const response = await axios.post('http://localhost:3001/api/auth/refresh-token', {}, { withCredentials: true });
         const { authtoken } = response.data;
 
         localStorage.setItem('token', authtoken);

@@ -41,5 +41,13 @@
         "user_email": "nishchay6@gmail.com",
         "role": "user",
         "date_created": "2026-06-27T22:31:07.046Z"
+    },
+    {
+        "user_id": "59512262-396c-4784-a37a-a9df65ef6a25",
+        "user_name": "Nishchay 7",
+        "user_password": "$2b$10$rV5csGucfdTqrMNwZQaoJ.lxMbAlzKHTfqMfcZ74EwZpZAAjBu4R6",
+        "user_email": "nishchay7@gmail.com",
+        "role": "user",
+        "date_created": "2026-07-12T15:59:43.219Z"
     }
 ]
