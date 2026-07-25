@@ -14,16 +14,26 @@ export interface EventItem {
   event_city: string;
   show_date: string;
   show_onwards: boolean;
-  emoji: string;
+  emoji?: string;
+  image_url?: string | null;
 }
 
 // ─── Event Card Component ─────────────────────────────────────────────────────
-export function EventCard({ event }: { event: EventItem }) {
+export function EventCard({
+  event,
+  onClick,
+}: {
+  event: EventItem;
+  onClick?: (eventId: string) => void;
+}) {
+  const [imageError, setImageError] = useState(false);
+
   return (
     <Box
+      onClick={() => onClick?.(event.event_id)}
       sx={{
-        minWidth: 180,
-        maxWidth: 180,
+        minWidth: 260,
+        maxWidth: 260,
         cursor: 'pointer',
         flexShrink: 0,
         '&:hover .card-image': {
@@ -32,20 +42,37 @@ export function EventCard({ event }: { event: EventItem }) {
       }}
     >
       <Box sx={{ position: 'relative', borderRadius: 2, overflow: 'hidden', mb: 1 }}>
-        <Box
-          className="card-image"
-          sx={{
-            height: 260,
-            background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '64px',
-            transition: 'transform 0.3s ease',
-          }}
-        >
-          {event.emoji}
-        </Box>
+        {event.image_url && !imageError ? (
+          <Box
+            component="img"
+            className="card-image"
+            src={event.image_url}
+            alt={event.event_name}
+            onError={() => setImageError(true)}
+            sx={{
+              height: 380,
+              width: '100%',
+              objectFit: 'cover',
+              display: 'block',
+              transition: 'transform 0.3s ease',
+            }}
+          />
+        ) : (
+          <Box
+            className="card-image"
+            sx={{
+              height: 380,
+              background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '90px',
+              transition: 'transform 0.3s ease',
+            }}
+          >
+            {event.emoji || '🎬'}
+          </Box>
+        )}
 
         <Box
           sx={{
@@ -56,8 +83,8 @@ export function EventCard({ event }: { event: EventItem }) {
             background: 'rgba(0,0,0,0.65)',
             color: '#fff',
             px: 1.5,
-            py: 0.5,
-            fontSize: '12px',
+            py: 0.75,
+            fontSize: '13px',
             fontWeight: 500,
           }}
         >
@@ -66,18 +93,18 @@ export function EventCard({ event }: { event: EventItem }) {
       </Box>
 
       <Typography
-        variant="body2"
+        variant="body1"
         fontWeight="bold"
         sx={{
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
-          fontSize: '13px',
+          fontSize: '15px',
         }}
       >
         {event.event_name}
       </Typography>
-      <Typography variant="caption" color="text.secondary" fontSize="12px">
+      <Typography variant="body2" color="text.secondary" fontSize="14px">
         {event.event_city}
       </Typography>
     </Box>
@@ -85,7 +112,15 @@ export function EventCard({ event }: { event: EventItem }) {
 }
 
 // ─── Carousel Component ───────────────────────────────────────────────────────
-export function EventCarousel({ title, events }: { title: string; events: EventItem[] }) {
+export function EventCarousel({
+  title,
+  events,
+  onCardClick,
+}: {
+  title: string;
+  events: EventItem[];
+  onCardClick?: (eventId: string) => void;
+}) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const [showLeft, setShowLeft]   = useState(false);
@@ -116,7 +151,7 @@ export function EventCarousel({ title, events }: { title: string; events: EventI
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
       scrollRef.current.scrollBy({
-        left: direction === 'right' ? 600 : -600,
+        left: direction === 'right' ? 800 : -800,
         behavior: 'smooth',
       });
     }
@@ -167,7 +202,7 @@ export function EventCarousel({ title, events }: { title: string; events: EventI
           ref={scrollRef}
           sx={{
             display: 'flex',
-            gap: 2,
+            gap: 3,
             overflowX: 'auto',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': { display: 'none' },
@@ -175,7 +210,7 @@ export function EventCarousel({ title, events }: { title: string; events: EventI
           }}
         >
           {events.map((event) => (
-            <EventCard key={event.event_id} event={event} />
+            <EventCard key={event.event_id} event={event} onClick={onCardClick} />
           ))}
         </Box>
 

@@ -40,6 +40,23 @@ export interface Ticket {
   number_of_tickets: number;
 }
 
+export interface Event {
+  event_id: string;
+  event_name: string;
+  event_city?: string;
+  event_location?: string;
+  image_url?: string | null;
+  show_dates: {
+    show_id: string;
+    show_date: string;
+    show_time: string;
+    ticket_price?: number;
+    price?: number;
+    available_tickets: number;
+    cancelled?: boolean;
+  }[];
+}
+
 export interface UserTicketsResponse {
   success: boolean;
   userTickets: Ticket[];
@@ -60,7 +77,7 @@ export interface User {
 // --- 3. The API Definition ---
 export const appApi = createApi({
   reducerPath: "appApi",
-  tagTypes: ["User", "Ticket"],
+  tagTypes: ["User", "Ticket", "Event"],
   // Now using our custom Axios-backed base query
   baseQuery: axiosBaseQuery(),
   endpoints: (builder) => ({
@@ -102,6 +119,21 @@ export const appApi = createApi({
       invalidatesTags: () => [{ type: "Ticket", id: "LIST" }],
     }),
 
+    fetchEventById: builder.query<Event, string>({
+      query: (eventId) => ({ url: `booking/fetchevent/${eventId}`, method: "GET" }),
+      providesTags: (result, error, eventId) => [{ type: "Event", id: eventId }],
+    }),
+
+    fetchAllEvents: builder.query<Event[], void>({
+      query: () => ({ url: "booking/fetchallevents", method: "GET" }),
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ event_id }) => ({ type: "Event" as const, id: event_id })),
+            { type: "Event" as const, id: "LIST" },
+          ]
+          : [{ type: "Event" as const, id: "LIST" }],
+    }),
     cancelTicket: builder.mutation<any, { ticket_id: string }>({
       query: ({ ticket_id }) => ({
         url: `booking/deleteticket/${ticket_id}`,
@@ -121,5 +153,7 @@ export const {
   useGetUserQuery,
   useGetUserTicketsQuery,
   useBookTicketMutation,
-  useCancelTicketMutation
+  useCancelTicketMutation,
+  useFetchAllEventsQuery,
+  useFetchEventByIdQuery
 } = appApi;

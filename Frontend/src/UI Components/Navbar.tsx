@@ -8,13 +8,15 @@ import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import NotificationsIcon from '@mui/icons-material/Notifications'; // 👈 added
-import Badge from '@mui/material/Badge';                            // 👈 added
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Avatar from '@mui/material/Avatar';
 import { useNavigate } from 'react-router-dom';
 import { useGetUserQuery } from '../redux/slice/usersOperations';
+import LoginModal from './LoginModal';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -24,10 +26,10 @@ const Search = styled('div')(({ theme }) => ({
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   width: '100%',
-  maxWidth: '400px',
+  maxWidth: '550px',
   [theme.breakpoints.up('sm')]: {
     width: 'auto',
-    minWidth: '450px',
+    minWidth: '550px',
   },
 }));
 
@@ -69,6 +71,7 @@ export default function SearchAppBar() {
   const firstLetter = userData?.user?.user_name?.charAt(0)?.toUpperCase() || null;
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [loginModalOpen, setLoginModalOpen] = React.useState(false);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -81,12 +84,21 @@ export default function SearchAppBar() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     handleClose();
-    navigate('/user_login');
+    navigate('/user_home');
   };
 
-  const handleLogin = () => {
+  const handleLoginClick = () => {
     handleClose();
-    navigate('/user_login');
+    setLoginModalOpen(true);
+  };
+
+  const handleMyTicketsClick = () => {
+    navigate('/user_tickets');
+    handleClose();
+  };
+
+  const handleLogoClick = () => {
+    navigate('/user_home');
   };
 
   return (
@@ -94,15 +106,16 @@ export default function SearchAppBar() {
       <AppBar position="static">
         <Toolbar>
 
-          {/* ── Left — Logo ──────────────────────────────────────── */}
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
+          {/* ── Left — Ticket Icon ────────────────────────────────── */}
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            onClick={handleLogoClick}
+            sx={{ mr: 1 }}
           >
-            MUI
-          </Typography>
+            <LocalActivityIcon />
+          </IconButton>
 
           {/* ── Center — Search Bar ──────────────────────────────── */}
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
@@ -120,7 +133,7 @@ export default function SearchAppBar() {
           {/* ── Right — Notification Bell + User Icon ────────────── */}
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
-            {/* 👈 Notification Bell */}
+            {/* Notification Bell */}
             <IconButton
               size="large"
               aria-label="show notifications"
@@ -131,7 +144,7 @@ export default function SearchAppBar() {
               </Badge>
             </IconButton>
 
-            {/* 👈 User Icon */}
+            {/* User Icon */}
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -158,6 +171,7 @@ export default function SearchAppBar() {
               )}
             </IconButton>
 
+            {/* Dropdown Menu */}
             <Menu
               id="menu-appbar"
               anchorEl={anchorEl}
@@ -167,6 +181,7 @@ export default function SearchAppBar() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
+              {/* ── Always visible ───────────────────────────────── */}
               <MenuItem
                 onClick={handleClose}
                 disabled={!isLoggedIn}
@@ -175,19 +190,20 @@ export default function SearchAppBar() {
                 My Profile
               </MenuItem>
               <MenuItem
-                onClick={handleClose}
+                onClick={handleMyTicketsClick}
                 disabled={!isLoggedIn}
                 sx={{ opacity: isLoggedIn ? 1 : 0.4 }}
               >
                 My Tickets
               </MenuItem>
 
+              {/* ── Login / Logout ───────────────────────────────── */}
               {isLoggedIn ? (
                 <MenuItem onClick={handleLogout} sx={{ color: 'error.main' }}>
                   Logout
                 </MenuItem>
               ) : (
-                <MenuItem onClick={handleLogin}>
+                <MenuItem onClick={handleLoginClick}>
                   Login
                 </MenuItem>
               )}
@@ -196,6 +212,13 @@ export default function SearchAppBar() {
 
         </Toolbar>
       </AppBar>
+
+      {/* ── Login Modal ──────────────────────────────────────────────── */}
+      <LoginModal
+        open={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+      />
+
     </Box>
   );
 }

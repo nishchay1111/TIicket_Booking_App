@@ -6,10 +6,13 @@ import {
   createTheme,
   Typography,
   IconButton,
+  CircularProgress,
 } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { useNavigate } from 'react-router-dom';
 import { EventCarousel, type EventItem } from '../UI Components/HorizontalScrollCarousel';
+import { useFetchAllEventsQuery } from '../redux/slice/usersOperations';
 
 // ─── 🌙 Toggle Dark Mode Here ────────────────────────────────────────────────
 const DARK_MODE = false;
@@ -55,7 +58,6 @@ function HeroBanner() {
     setCurrent((prev) => (prev - 1 + HERO_BANNERS.length) % HERO_BANNERS.length);
   };
 
-  // ── Auto-rotate ───────────────────────────────────────────────────────
   useEffect(() => {
     if (paused) return;
     const timer = setInterval(() => {
@@ -74,9 +76,8 @@ function HeroBanner() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* ── Banner Content ──────────────────────────────────────────── */}
       <Box
-        key={current}  // 👈 forces re-render on every slide change
+        key={current}
         sx={{
           height: { xs: 180, sm: 240, md: 300 },
           background: banner.gradient,
@@ -84,8 +85,6 @@ function HeroBanner() {
           alignItems: 'center',
           justifyContent: 'space-between',
           px: { xs: 3, md: 8 },
-
-          // 👈 Slide in from right transition
           animation: 'slideIn 0.5s ease-in-out',
           '@keyframes slideIn': {
             from: { transform: 'translateX(100%)', opacity: 0 },
@@ -93,7 +92,6 @@ function HeroBanner() {
           },
         }}
       >
-        {/* ── Text ──────────────────────────────────────────────────── */}
         <Box>
           <Typography
             variant="h3"
@@ -127,13 +125,11 @@ function HeroBanner() {
           </Box>
         </Box>
 
-        {/* ── Emoji ─────────────────────────────────────────────────── */}
         <Box sx={{ fontSize: { xs: '60px', md: '100px' }, userSelect: 'none' }}>
           {banner.emoji}
         </Box>
       </Box>
 
-      {/* ── Left Arrow ──────────────────────────────────────────────── */}
       <IconButton
         onClick={prev}
         sx={{
@@ -149,7 +145,6 @@ function HeroBanner() {
         <ChevronLeftIcon />
       </IconButton>
 
-      {/* ── Right Arrow ─────────────────────────────────────────────── */}
       <IconButton
         onClick={next}
         sx={{
@@ -165,7 +160,6 @@ function HeroBanner() {
         <ChevronRightIcon />
       </IconButton>
 
-      {/* ── Dot Indicators ──────────────────────────────────────────── */}
       <Box
         sx={{
           position: 'absolute',
@@ -195,35 +189,114 @@ function HeroBanner() {
   );
 }
 
-// ─── Sample Events Data ───────────────────────────────────────────────────────
-const SAMPLE_EVENTS: EventItem[] = [
-  { event_id: '1', event_name: 'Stand-Up Comedy Night',  event_city: 'Hyderabad', show_date: 'Sun, 12 Jul', show_onwards: false, emoji: '🎤' },
-  { event_id: '2', event_name: 'Bhajan Jamming 4.0',     event_city: 'Hyderabad', show_date: 'Sun, 12 Jul', show_onwards: true,  emoji: '🎵' },
-  { event_id: '3', event_name: 'The Jam Room Special',   event_city: 'Hyderabad', show_date: 'Sun, 12 Jul', show_onwards: false, emoji: '🎸' },
-  { event_id: '4', event_name: 'Comedy Standup Nights',  event_city: 'Hyderabad', show_date: 'Sun, 12 Jul', show_onwards: true,  emoji: '😂' },
-  { event_id: '5', event_name: 'Live Music Festival',    event_city: 'Hyderabad', show_date: 'Mon, 13 Jul', show_onwards: true,  emoji: '🎶' },
-  { event_id: '6', event_name: 'Gautham Govindan Live',  event_city: 'Hyderabad', show_date: 'Sat, 1 Aug',  show_onwards: false, emoji: '🎙️' },
-  { event_id: '7', event_name: 'Masoom Vichar',          event_city: 'Hyderabad', show_date: 'Sun, 12 Jul', show_onwards: true,  emoji: '🃏' },
-  { event_id: '8', event_name: 'Aakash Mehta Live',      event_city: 'Hyderabad', show_date: 'Fri, 18 Jul', show_onwards: false, emoji: '🌟' },
-];
+// ─── Helper — map API event data to EventItem shape ──────────────────────────
+const mapEventToEventItem = (event: any): EventItem => {
+  const firstShow = event.show_dates?.[0];
+  return {
+    event_id:     event.event_id,
+    event_name:   event.event_name,
+    event_city:   event.event_city || event.event_location || 'N/A',
+    show_date:    firstShow
+                    ? new Date(firstShow.show_date).toLocaleDateString('en-IN', {
+                        weekday: 'short', day: '2-digit', month: 'short',
+                      })
+                    : 'TBA',
+    show_onwards: (event.show_dates?.length || 0) > 1,
+    image_url:    event.image_url || null,
+  };
+};
+
+// ─── Helper — normalize category name for display ────────────────────────────
+const formatCategoryTitle = (category: string): string => {
+  const normalized = category.trim().toLowerCase();
+  const titleCased  = normalized.charAt(0).toUpperCase() + normalized.slice(1);
+  if (titleCased === 'Movie')  return 'Movies';
+  if (titleCased === 'Sport')  return 'Sports';
+  return titleCased;
+};
+
+// ─── Helper — group raw events by category ───────────────────────────────────
+const groupEventsByCategory = (rawEvents: any[]) => {
+  const groups: Record<string, EventItem[]> = {};
+
+  rawEvents.forEach((event) => {
+    const rawCategory = event.event_category || 'Other';
+    const categoryKey = rawCategory.trim().toLowerCase();
+
+    if (!groups[categoryKey]) {
+      groups[categoryKey] = [];
+    }
+    groups[categoryKey].push(mapEventToEventItem(event));
+  });
+
+  return Object.entries(groups)
+    .map(([categoryKey, events]) => ({
+      title:  formatCategoryTitle(categoryKey),
+      events,
+    }))
+    .sort((a, b) => a.title.localeCompare(b.title));
+};
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function User_Home_Page() {
+  const navigate = useNavigate(); // 👈 added
+
   const theme = React.useMemo(
     () => createTheme({ palette: { mode: DARK_MODE ? 'dark' : 'light' } }),
     []
   );
 
+  const { data: events, isLoading, isError } = useFetchAllEventsQuery();
+
+  const categorizedEvents = groupEventsByCategory(events || []);
+
+  const handleEventClick = (eventId: string) => { // 👈 added
+    navigate(`/show_details/${eventId}`);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ minHeight: '100vh', px: 5, py: 4 }}>
+      <Box sx={{
+        minHeight: '100vh',
+        px: 5,
+        py: 4,
+        bgcolor: DARK_MODE ? '#121212' : '#ffffff',
+      }}>
 
         {/* ── Hero Banner ─────────────────────────────────────────── */}
         <HeroBanner />
 
-        {/* ── Event Carousel ──────────────────────────────────────── */}
-        <EventCarousel title="Popular Events" events={SAMPLE_EVENTS} />
+        {/* ── Loading State ────────────────────────────────────────── */}
+        {isLoading && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
+            <CircularProgress />
+          </Box>
+        )}
+
+        {/* ── Error State ──────────────────────────────────────────── */}
+        {isError && (
+          <Typography color="error" textAlign="center" sx={{ mt: 5 }}>
+            Failed to load events. Please try again later.
+          </Typography>
+        )}
+
+        {/* ── Empty State ──────────────────────────────────────────── */}
+        {!isLoading && !isError && categorizedEvents.length === 0 && (
+          <Typography textAlign="center" color="text.secondary" sx={{ mt: 5 }}>
+            No events available right now. Check back soon!
+          </Typography>
+        )}
+
+        {/* ── One Carousel per Category ────────────────────────────── */}
+        {!isLoading && categorizedEvents.map((group) => (
+          <EventCarousel
+            key={group.title}
+            title={group.title}
+            events={group.events}
+            onCardClick={handleEventClick} // 👈 added
+          />
+        ))}
 
       </Box>
     </ThemeProvider>

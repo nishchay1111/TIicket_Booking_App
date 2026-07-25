@@ -5,7 +5,8 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 
 interface BlacklistedToken {
   token: string;
-  expiresAt: number; // UTC Epoch timestamp in milliseconds
+  expiresAt: number;
+  type?: 'access' | 'refresh'; // 👈 added
 }
 
 @Injectable()
@@ -15,57 +16,39 @@ export class TokenBlacklistService implements OnModuleInit {
     private readonly jwtService: JwtService,
   ) {}
 
-  // Automatically purges old records when the server boots up
   onModuleInit() {
     this.clearExpiredLogs();
   }
 
-  /**
-   * Adds a token to the blacklist JSON file if it hasn't expired yet
-   */
-  async revokeToken(token: string) {
+  async revokeToken(token: string, type: 'access' | 'refresh' = 'access') { // 👈 added type param
     const blacklisted: BlacklistedToken[] = this.jsonStore.loadData('token_blacklist') || [];
-    
+
     try {
-      const decoded = this.jwtService.decode(token) as { exp: number };
-      const now = Date.now();
-      
-      // Calculate exact expiration time in milliseconds
+      const decoded   = this.jwtService.decode(token) as { exp: number };
+      const now       = Date.now();
       const expiresAt = decoded?.exp ? decoded.exp * 1000 : now;
 
-      // 🛑 Core rule: Only log it if its natural expiration is still in the future!
       if (expiresAt > now) {
         if (!blacklisted.some(t => t.token === token)) {
-          blacklisted.push({ token, expiresAt });
+          blacklisted.push({ token, expiresAt, type }); // 👈 store type
           this.jsonStore.saveData('token_blacklist', blacklisted);
         }
       }
     } catch {
-      // If the token is completely mangled or unparseable, ignore it safely
       return;
     }
   }
 
-  /**
-   * Checks if an incoming token exists in our active blacklist log
-   */
   isTokenRevoked(token: string): boolean {
     const blacklisted: BlacklistedToken[] = this.jsonStore.loadData('token_blacklist') || [];
     return blacklisted.some(t => t.token === token);
   }
 
-  /**
-   * Automated Helper: Automatically runs every hour to remove tokens 
-   * that have naturally expired past the current time.
-   */
   @Cron(CronExpression.EVERY_10_MINUTES)
   clearExpiredLogs() {
     const blacklisted: BlacklistedToken[] = this.jsonStore.loadData('token_blacklist') || [];
-    const now = Date.now();
-
-    // Filters out and keeps ONLY tokens whose expiration date is still in the future
+    const now             = Date.now();
     const activeBlacklist = blacklisted.filter(t => t.expiresAt > now);
-
     this.jsonStore.saveData('token_blacklist', activeBlacklist);
   }
 }

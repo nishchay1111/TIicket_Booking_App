@@ -8,6 +8,8 @@ import Organizer_Login from "./Webpages/Organizer_Login";
 import User_Signup from "./Webpages/User_Signup";
 import Organizer_Signup from "./Webpages/Organizer_Signup";
 import User_Home from "./Webpages/User_Home_Page";
+import Show_Details from "./Webpages/Show_Details";
+import User_Tickets from './Webpages/User_Tickets';
 
 // ─── Layout with Navbar ───────────────────────────────────────────────────────
 const NavbarLayout = () => (
@@ -38,17 +40,16 @@ const App: React.FC = () => {
         <Routes>
 
           {/* ── Public Routes (no Navbar) ──────────────────────────── */}
-          <Route path="/user_login"       element={<User_Login />} />
-          <Route path="/organizer_login"  element={<Organizer_Login />} />
-          <Route path="/user_signup"      element={<User_Signup />} />
+          <Route path="/user_login" element={<User_Login />} />
+          <Route path="/organizer_login" element={<Organizer_Login />} />
+          <Route path="/user_signup" element={<User_Signup />} />
           <Route path="/organizer_signup" element={<Organizer_Signup />} />
 
           {/* ── Protected Routes (with Navbar) ─────────────────────── */}
           <Route element={<NavbarLayout />}>
             <Route path="/user_home" element={<User_Home />} />
-            {/* 👈 Add more protected pages here as you build them:   */}
-            {/* <Route path="/mytickets"  element={<MyTickets />} />   */}
-            {/* <Route path="/profile"    element={<Profile />} />     */}
+            <Route path="/show_details/:eventId" element={<Show_Details />} />
+            <Route path="/user_tickets" element={<User_Tickets />} />
           </Route>
 
           {/* ── Fallback ───────────────────────────────────────────── */}

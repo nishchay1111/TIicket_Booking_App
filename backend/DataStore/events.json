@@ -5,10 +5,10 @@
         "event_description": "Frank Abagnale, Jr. works as a doctor, a lawyer and as a co-pilot for a major airline, all before his 18th birthday. A master of deception, he is a brilliant forger, whose skill gives him his first real claim to fame. At the age of 17, Frank Abagnale, Jr. becomes the most successful bank robber in the history of the U.S. FBI Agent Carl Hanratty makes it his prime mission to capture Frank and bring him to justice, but Frank is always one step ahead of him.",
         "event_city": "New York City",
         "event_address": "145 W 47th St, New York, NY 10036",
-        "event_category": "Movie",
+        "event_category": "movie",
         "event_gener": "Thriller",
-        "image_location": "/images/symphony_banner.jpg",
         "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
+        "image_url": "http://localhost:5001/posters/1.jpg",
         "show_dates": [
             {
                 "show_id": "5062f324-5f68-4f8a-9acd-74fb9e2adb23",
@@ -61,7 +61,7 @@
         "event_address": "234 W 42nd St, New York, NY 10036",
         "event_category": "movie",
         "event_gener": "Action",
-        "image_location": "/images/dark_knight.jpg",
+        "image_url": "http://localhost:5001/posters/2.jpg",
         "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
         "show_dates": [
             {
@@ -115,7 +115,7 @@
         "event_address": "6925 Hollywood Blvd, Hollywood, CA 90028",
         "event_category": "movie",
         "event_gener": "Sci-Fi",
-        "image_location": "/images/inception.jpg",
+        "image_url": "http://localhost:5001/posters/3.jpg",
         "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
         "show_dates": [
             {
@@ -179,7 +179,7 @@
         "event_address": "700 N Michigan Ave, Chicago, IL 60611",
         "event_category": "movie",
         "event_gener": "Crime",
-        "image_location": "/images/pulp_fiction.jpg",
+        "image_url": "http://localhost:5001/posters/4.jpg",
         "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
         "show_dates": [
             {
@@ -233,7 +233,7 @@
         "event_address": "11816 N Central Expy, Dallas, TX 75243",
         "event_category": "movie",
         "event_gener": "Adventure",
-        "image_location": "/images/interstellar.jpg",
+        "image_url": "http://localhost:5001/posters/5.jpg",
         "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
         "show_dates": [
             {
@@ -287,7 +287,7 @@
         "event_address": "3100 South St NW, Washington, DC 20007",
         "event_category": "movie",
         "event_gener": "Drama",
-        "image_location": "/images/godfather.jpg",
+        "image_url": "http://localhost:5001/posters/6.jpg",
         "organizer_id": "9910590d-6e61-4ef3-8617-ecd466d5eabb",
         "show_dates": [
             {

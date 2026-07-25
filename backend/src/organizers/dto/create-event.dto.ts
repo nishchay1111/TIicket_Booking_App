@@ -1,7 +1,6 @@
-import { IsString, IsArray, IsNotEmpty, ValidateNested, IsNumber, Min } from 'class-validator';
+import { IsString, IsArray, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-// Sub-DTO for the show_dates array objects
 export class ShowDateDto {
   @IsString()
   @IsNotEmpty()
@@ -16,37 +15,44 @@ export class ShowDateDto {
   show_language!: string;
 
   @IsNotEmpty()
-  totalTickets!: string | number; // Handling both since your logic uses parseInt
+  totalTickets!: string | number;
 
   @IsNotEmpty()
-  price!: string | number; // Handling both since your logic uses parseFloat
+  price!: string | number;
 }
 
 export class CreateEventDto {
   @IsString()
   @IsNotEmpty({ message: 'Enter an Event Name' })
-  eventName!: string;
+  event_name!: string;           // 👈 renamed from eventName
 
   @IsString()
-  eventDescription!: string;
+  @IsOptional()
+  event_description?: string;    // 👈 renamed from eventDescription
 
   @IsString()
-  eventCity!: string;
+  @IsOptional()
+  event_city?: string;           // 👈 renamed from eventCity
 
   @IsString()
-  eventAddress!: string;
+  @IsOptional()
+  event_location?: string;       // 👈 renamed from eventAddress
 
   @IsString()
-  eventCategory!: string;
+  @IsOptional()
+  event_category?: string;       // 👈 renamed from eventCategory
 
   @IsString()
-  eventGener!: string;
+  @IsOptional()
+  event_genre?: string;          // 👈 renamed from eventGener
 
   @IsString()
-  imageAddress!: string;
+  @IsOptional()
+  image_url?: string;            // 👈 renamed from imageAddress
 
   @IsArray()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => ShowDateDto)
-  show_dates!: ShowDateDto[];
+  show_dates?: ShowDateDto[];
 }

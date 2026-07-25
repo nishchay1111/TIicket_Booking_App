@@ -1,19 +1,19 @@
 import { Injectable, NotFoundException, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { JsonStoreService } from '../common/json-store.service';
 import { v4 as uuidv4 } from 'uuid';
-import { BookTicketDto } from './dto/book-ticket.dto';
+import type { BookTicketDto } from './dto/book-ticket.dto';
 
 @Injectable()
 export class BookingService {
-  constructor(private readonly jsonStore: JsonStoreService) {}
+  constructor(private readonly jsonStore: JsonStoreService) { }
 
   async fetchAllTickets(userId: string) {
     const tickets = this.jsonStore.loadData('tickets');
     const userTickets = tickets.filter((t) => t.user_id === userId);
-    return { 
-      success: userTickets.length > 0, 
+    return {
+      success: userTickets.length > 0,
       userTickets,
-      message: userTickets.length === 0 ? "No tickets found" : undefined 
+      message: userTickets.length === 0 ? 'No tickets found' : undefined,
     };
   }
 
@@ -26,7 +26,9 @@ export class BookingService {
     const events = this.jsonStore.loadData('events');
 
     // Find event containing the show
-    const event = events.find((e) => e.show_dates.some((s) => s.show_id === showId));
+    const event = events.find((e) =>
+      e.show_dates.some((s) => s.show_id === showId)
+    );
     if (!event) throw new NotFoundException('Show does not exist');
 
     const selectedShow = event.show_dates.find((s) => s.show_id === showId);
@@ -41,16 +43,17 @@ export class BookingService {
 
     const newTicket = {
       ticket_id: uuidv4(),
-      user_id: user.id, 
+      user_id: user.id,
       user_email: user.email || user.user_email,
       event_id: event.event_id,
       event_name: event.event_name,
       show_id: selectedShow.show_id,
       show_date: selectedShow.show_date,
-      event_location: event.event_location,
-      image_url: event.image_url,
+      show_time: selectedShow.show_time || '',
+      event_location: event.event_location || '',
+      image_url: event.image_url || null, // 👈 copy from event
       number_of_tickets: numberOfTickets,
-      total_price: numberOfTickets * (selectedShow.ticket_price || 0),
+      total_price: numberOfTickets * (selectedShow.ticket_price || selectedShow.price || 0),
       date_booked: new Date().toISOString(),
     };
 
@@ -58,7 +61,22 @@ export class BookingService {
     tickets.push(newTicket);
     this.jsonStore.saveData('tickets', tickets);
 
-    return { success: true, message: 'Ticket booked successfully', ticket: newTicket };
+    return {
+      success: true,
+      message: 'Ticket booked successfully',
+      ticket: newTicket,
+    };
+  }
+
+  async fetchEventById(eventId: string) {
+    const events = this.jsonStore.loadData('events');
+    const event = events.find((e) => e.event_id === eventId);
+
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+
+    return event;
   }
 
   async deleteTicket(ticketId: string, userId: string) {
@@ -76,16 +94,25 @@ export class BookingService {
     const ticket = tickets[ticketIndex];
 
     // Restore ticket count to the event
-    const event = events.find((e) => e.show_dates.some((s) => s.show_id === ticket.show_id));
+    const event = events.find((e) =>
+      e.show_dates.some((s) => s.show_id === ticket.show_id)
+    );
+
     if (event) {
       const show = event.show_dates.find((s) => s.show_id === ticket.show_id);
-      show.available_tickets += ticket.number_of_tickets;
-      this.jsonStore.saveData('events', events);
+      if (show) {
+        show.available_tickets += ticket.number_of_tickets;
+        this.jsonStore.saveData('events', events);
+      }
     }
 
     const updatedTickets = tickets.filter((t) => t.ticket_id !== ticketId);
     this.jsonStore.saveData('tickets', updatedTickets);
 
-    return { success: true, message: 'Ticket deleted and seats restored', ticket };
+    return {
+      success: true,
+      message: 'Ticket deleted and seats restored',
+      ticket,
+    };
   }
 }
