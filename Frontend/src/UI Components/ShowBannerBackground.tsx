@@ -2,13 +2,20 @@ import React from 'react';
 import { Box } from '@mui/material';
 import type { EventDetail } from './ShowCard';
 
-// ─── Props ────────────────────────────────────────────────────────────────────
+/**
+ * Property interface definitions detailing the structural shape
+ * of required event details and layout rendering injection points.
+ */
 interface EventDetailHeroProps {
   event: EventDetail;
-  children?: React.ReactNode; // 👈 renders EventDetailCard inside
+  children?: React.ReactNode;
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
+/**
+ * EventDetailHero manages the hero presentation layer of the details viewport,
+ * generating a layered backdrop configuration that scales out edge artifacts
+ * while stabilizing foreground readability via linear opacity gradients.
+ */
 export default function EventDetailHero({
   event,
   children,
@@ -22,7 +29,6 @@ export default function EventDetailHero({
         overflow: 'hidden',
       }}
     >
-      {/* ── Background Image Layer ───────────────────────────────── */}
       <Box
         sx={{
           position: 'absolute',
@@ -32,12 +38,11 @@ export default function EventDetailHero({
             : 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
           backgroundSize: 'cover',
           backgroundPosition: 'center top',
-          filter: 'blur(20px) brightness(0.4)', // 👈 blurred dark background
-          transform: 'scale(1.1)',               // 👈 prevents blur edges showing
+          filter: 'blur(20px) brightness(0.4)',
+          transform: 'scale(1.1)',
         }}
       />
 
-      {/* ── Dark Overlay ─────────────────────────────────────────── */}
       <Box
         sx={{
           position: 'absolute',
@@ -46,7 +51,6 @@ export default function EventDetailHero({
         }}
       />
 
-      {/* ── Content — EventDetailCard renders here ───────────────── */}
       <Box sx={{ position: 'relative', zIndex: 1 }}>
         {children}
       </Box>

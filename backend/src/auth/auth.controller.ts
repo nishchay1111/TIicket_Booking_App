@@ -8,13 +8,22 @@ import { Throttle } from '@nestjs/throttler';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import type { Request, Response } from 'express';
-import {Public} from '../RBAC/public.decorator'
+import { Public } from '../RBAC/public.decorator';
 
+/**
+ * Controller responsible for handling authentication infrastructure requests,
+ * including user registration, login sessions, token cycling, and identity retrieval.
+ */
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   
+  /**
+   * Registers a new user account within the system.
+   * Rate Limiting: Maximum 3 requests per minute.
+   * Access: Public.
+   */
   @Public()
   @Throttle({ default: { limit: 3, ttl: 60000 } }) 
   @Post('createuser')
@@ -22,6 +31,11 @@ export class AuthController {
     return this.authService.createUser(createUserDto, res);
   }
 
+  /**
+   * Authenticates user credentials to establish a valid session.
+   * Rate Limiting: Maximum 5 requests per minute.
+   * Access: Public.
+   */
   @Public()
   @Throttle({ default: { limit: 5, ttl: 60000 } }) 
   @Post('login')
@@ -29,6 +43,10 @@ export class AuthController {
     return this.authService.login(loginDto, res);
   }
 
+  /**
+   * Cycles expiring access tokens using a valid background refresh token cookie.
+   * Access: Authenticated via HTTP-only cookie validation.
+   */
   @Post('refresh-token')
   async refresh(@Req() req: Request) {
     const token = req.cookies?.refreshToken;
@@ -36,14 +54,22 @@ export class AuthController {
     return this.authService.refresh(token);
   }
 
+  /**
+   * Destroys active authentication sessions and clears token states.
+   * Access: Public.
+   */
   @Public()
   @Post('logout')
-  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) { // 👈 1. Added @Req() parameter
-    return this.authService.logout(req, res); // 👈 2. Delegated extraction and file tracking to AuthService
+  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    return this.authService.logout(req, res);
   }
 
+  /**
+   * Retrieves profile details for the currently logged-in identity context.
+   * Access: Restricted to accounts matching USER or ORGANIZER roles.
+   */
   @UseGuards(UserGuard)
-  @Roles(Role.USER)
+  @Roles(Role.USER, Role.ORGANIZER)
   @Post('getuser')
   async getUser(@Req() req: any) {
     return this.authService.getUser(req.user.id);

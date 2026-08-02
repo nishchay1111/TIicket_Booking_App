@@ -5,20 +5,21 @@ import cookieParser from 'cookie-parser';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import { join } from 'path';
 
+/**
+ * Bootstraps the core NestJS application instance, configuring global middleware,
+ * filesystem asset routing pipelines, interceptors, validation pipes, and CORS policies.
+ */
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.use(cookieParser());
 
-  // 1. Serve static files from DataStore/Posters ─────────────────────────
-  app.useStaticAssets(join(__dirname, '..', 'DataStore', 'Posters'), { // 👈 fixed — one less '..'
+  app.useStaticAssets(join(__dirname, '..', 'DataStore', 'Posters'), {
     prefix: '/posters',
   });
 
-  // 2. Global Serialization (This makes @Exclude work globally) ──────────
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-  // 3. Global Validation & Transformation ────────────────────────────────
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
@@ -33,7 +34,7 @@ async function bootstrap() {
   const port = process.env.PORT || 5001;
   await app.listen(port);
 
-  console.log(`🚀 Application is running on: http://localhost:${port}`);
-  console.log(`🖼️  Posters served at: http://localhost:${port}/posters`);
+  console.log(`Application is running on: http://localhost:${port}`);
+  console.log(`Posters served at: http://localhost:${port}/posters`);
 }
 bootstrap();

@@ -28,4 +28,4 @@ dist/
 .env
 *.log
 updates.txt
-code.json
+code.jsonbackend/DataStore/Posters/

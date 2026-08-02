@@ -13,9 +13,9 @@ import {
   ClassSerializerInterceptor,
   UploadedFile,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';  // 👈 added
-import { diskStorage } from 'multer';                         // 👈 added
-import { extname } from 'path';                               // 👈 added
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 import { OrganizersService } from './organizers.service';
 import { UserGuard } from '../user.guard';
 import { RolesGuard } from '../RBAC/roles.guard';
@@ -27,12 +27,22 @@ import { CreateOrganizerDto } from './dto/create-organizer.dto';
 import { CreateEventDto } from './dto/create-event.dto';
 import { Request, Response } from 'express';
 
+/**
+ * Controller managing administrative operations for event organizers, including
+ * profile authentication, asset storage, event lifecycles, and scheduling updates.
+ */
 @Controller('organizers')
 @UseInterceptors(ClassSerializerInterceptor)
 export class OrganizersController {
   constructor(private readonly orgService: OrganizersService) {}
 
-  // ─── Create Organizer ─────────────────────────────────────────────────
+  /**
+   * Registers a new organizer account on the platform.
+   * Rate Limiting: Maximum 3 requests per minute.
+   * Access: Public.
+   * @param createOrgDto - The validated onboarding payload data.
+   * @param res - Express response object utilized for processing session tokens.
+   */
   @Public()
   @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Post('createorganizer')
@@ -43,17 +53,27 @@ export class OrganizersController {
     return this.orgService.createOrganizer(createOrgDto, res);
   }
 
-  // ─── Organizer Login ──────────────────────────────────────────────────
+  /**
+   * Authenticates organizer credentials to establish an administrative session.
+   * Access: Public.
+   * @param body - The unvalidated payload containing username and password fields.
+   * @param res - Express response object for cookie handling.
+   */
   @Public()
   @Post('organizerlogin')
   async login(
     @Body() body: any,
     @Res({ passthrough: true }) res: Response,
   ) {
-    return this.orgService.organizerLogin(body, res); // 👈 fixed method name
+    return this.orgService.organizerLogin(body, res);
   }
 
-  // ─── Organizer Logout ─────────────────────────────────────────────────
+  /**
+   * Destroys the active organizer session and flushes state cookies.
+   * Access: Public.
+   * @param req - Express request object representing the sender.
+   * @param res - Express response context used to clear authentication headers.
+   */
   @Public()
   @Post('logout')
   async logout(
@@ -63,29 +83,38 @@ export class OrganizersController {
     return this.orgService.logout(req, res);
   }
 
-  // ─── Fetch Organizer Events ───────────────────────────────────────────
+  /**
+   * Retrieves all event configurations owned or created by the logged-in organizer.
+   * Access: Restricted to accounts matching the ORGANIZER role.
+   * @param req - The request identity context holding the decoded organizer metadata.
+   */
   @UseGuards(UserGuard, RolesGuard)
   @Roles(Role.ORGANIZER)
   @Get('fetchorganizersevents')
   async getEvents(@Req() req: any) {
-    return this.orgService.fetchOrganizerEvents(req.user.id); // 👈 fixed method name
+    return this.orgService.fetchOrganizerEvents(req.user.id);
   }
 
-  // ─── Upload Event Poster ──────────────────────────────────────────────
+  /**
+   * Processes binary uploads for event poster imagery, applying file filters and limits.
+   * Access: Restricted to accounts matching the ORGANIZER role.
+   * Constraints: Maximum 5MB file size limit. Restricts validation to standard image MIME types.
+   * @param file - The parsed Multer file structure metadata map.
+   */
   @UseGuards(UserGuard, RolesGuard)
   @Roles(Role.ORGANIZER)
   @Post('uploadposter')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './DataStore/Posters', // 👈 save to DataStore/Posters
+        destination: './DataStore/Posters',
         filename: (req, file, cb) => {
           const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${extname(file.originalname)}`;
           cb(null, uniqueName);
         },
       }),
       limits: {
-        fileSize: 5 * 1024 * 1024, // 👈 5MB max
+        fileSize: 5 * 1024 * 1024,
       },
       fileFilter: (req, file, cb) => {
         if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|webp)$/)) {
@@ -99,7 +128,13 @@ export class OrganizersController {
     return this.orgService.uploadPoster(file);
   }
 
-  // ─── Create Event ─────────────────────────────────────────────────────
+  /**
+   * Compiles and instantiates a new root parent event profile record.
+   * Rate Limiting: Maximum 2 requests per 10 minutes.
+   * Access: Restricted to accounts matching the ORGANIZER role.
+   * @param createEventDto - The validated nested scheduling asset properties payload.
+   * @param req - The execution context holding identity keys.
+   */
   @UseGuards(UserGuard, RolesGuard)
   @Roles(Role.ORGANIZER)
   @Throttle({ default: { limit: 2, ttl: 600000 } })
@@ -108,10 +143,15 @@ export class OrganizersController {
     @Body() createEventDto: CreateEventDto,
     @Req() req: any,
   ) {
-    return this.orgService.createEvent(createEventDto, req.user.id); // 👈 pass only id
+    return this.orgService.createEvent(createEventDto, req.user.id);
   }
 
-  // ─── Delete Event ─────────────────────────────────────────────────────
+  /**
+   * Completely purges an event tree profile entry based on its primary identity key.
+   * Access: Restricted to accounts matching the ORGANIZER role.
+   * @param eventId - The target event system record key.
+   * @param req - The context mapping for ownership validation.
+   */
   @UseGuards(UserGuard, RolesGuard)
   @Roles(Role.ORGANIZER)
   @Delete('deleteevent/:id')
@@ -122,7 +162,13 @@ export class OrganizersController {
     return this.orgService.deleteEvent(eventId, req.user.id);
   }
 
-  // ─── Cancel Show ──────────────────────────────────────────────────────
+  /**
+   * Suspends visibility or operations of an active show sub-element inside a specific event structure.
+   * Access: Restricted to accounts matching the ORGANIZER role.
+   * @param eventId - The primary key of the container event entity.
+   * @param showId - The specific unique scheduling timeline reference sequence.
+   * @param req - Request context for author verification checks.
+   */
   @UseGuards(UserGuard, RolesGuard)
   @Roles(Role.ORGANIZER)
   @Put('cancelshow/:eventId/:showId')
@@ -134,7 +180,13 @@ export class OrganizersController {
     return this.orgService.cancelShow(eventId, showId, req.user.id);
   }
 
-  // ─── Add Show ─────────────────────────────────────────────────────────
+  /**
+   * Appends extra show times and facility limits to an existing event layout.
+   * Access: Restricted to accounts matching the ORGANIZER role.
+   * @param eventId - The targeted event tracking token block.
+   * @param showData - The incoming unvalidated configuration fields map.
+   * @param req - Request authority identification context block.
+   */
   @UseGuards(UserGuard, RolesGuard)
   @Roles(Role.ORGANIZER)
   @Post('addshows/:id')

@@ -6,7 +6,6 @@ export class AdminService {
   constructor(private readonly jsonStore: JsonStoreService) {}
 
   getAdminStats() {
-    // This is a placeholder for your admin logic
     return {
       message: "Admin stats logic will go here",
       timestamp: new Date().toISOString()

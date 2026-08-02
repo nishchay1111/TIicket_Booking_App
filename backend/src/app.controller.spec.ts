@@ -1,8 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Reflector } from '@nestjs/core'; // 👈 Import Reflector
+import { Reflector } from '@nestjs/core';
 
+/**
+ * Unit testing suite for the root AppController lifecycle.
+ * Verifies core entry point responses and stubs global authorization dependencies.
+ */
 describe('AppController', () => {
   let appController: AppController;
 
@@ -11,7 +15,6 @@ describe('AppController', () => {
       controllers: [AppController],
       providers: [
         AppService,
-        // 👈 Provide a mock Reflector to prevent RolesGuard from crashing the test
         {
           provide: Reflector,
           useValue: {
@@ -25,6 +28,9 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
+    /**
+     * Verifies that the base index route correctly delivers the application welcome string.
+     */
     it('should return the welcome message', () => {
       expect(appController.getHello()).toBe('Welcome to the Ticket Booking App API!');
     });

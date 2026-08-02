@@ -9,11 +9,13 @@ import { JsonStoreService } from '../common/json-store.service';
 import { UserGuard } from '../user.guard';
 import { RolesGuard } from '../RBAC/roles.guard';
 import { TokenBlacklistService } from '../common/token-blacklist.service';
-// 👆 Remove the AppModule import entirely
 
+/**
+ * Feature module responsible for orchestrating authentication infrastructure,
+ * token signing policies, guard registries, and request boundary security strategy bindings.
+ */
 @Module({
   imports: [
-    // 👈 Remove AppModule from here
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       inject: [ConfigService],

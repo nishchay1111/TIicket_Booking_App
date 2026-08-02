@@ -31,6 +31,10 @@ import { JsonStoreService } from './common/json-store.service';
 import { UserGuard } from './user.guard';
 import { RolesGuard } from './RBAC/roles.guard';
 
+/**
+ * Root application module responsible for importing global configurations, scheduling infrastructure,
+ * rate limit thresholds, shared authorization layers, and domain-specific feature modules.
+ */
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -44,8 +48,8 @@ import { RolesGuard } from './RBAC/roles.guard';
       ttl: 3600000,
       limit: 500,
     }]),
-    PassportModule.register({ defaultStrategy: 'jwt' }), // 👈 added back
-    JwtModule.registerAsync({                             // 👈 added back
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_ACCESS_SECRET'),
@@ -82,6 +86,12 @@ import { RolesGuard } from './RBAC/roles.guard';
   exports: [PassportModule, JwtModule, JwtStrategy, UserGuard, RolesGuard],
 })
 export class AppModule implements NestModule {
+  /**
+   * Configures global request pipeline middleware integrations.
+   * Enforces SSL/HTTPS redirection execution policies when running inside production environments.
+   * 
+   * @param consumer - The NestJS MiddlewareConsumer pipeline builder.
+   */
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply((req: Request, res: Response, next: NextFunction) => {

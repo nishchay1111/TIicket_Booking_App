@@ -1,12 +1,14 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-// Add the 'type' keyword here
 import type { BaseQueryFn } from "@reduxjs/toolkit/query/react";
 import axiosInstance from "../../api/axiosInstance";
-// Add the 'type' keyword here as well
 import type { AxiosRequestConfig, AxiosError } from "axios";
 
-// --- 1. The Axios Base Query Wrapper ---
-// This tells RTK Query: "Don't use fetch, use my Axios instance instead"
+/**
+ * Custom base query factory wrapper that bridges RTK Query lifecycle events 
+ * with an underlying Axios instance configuration.
+ * 
+ * @returns An asynchronous query handler capable of dispatching standard request parameters.
+ */
 const axiosBaseQuery = (): BaseQueryFn<
   {
     url: string;
@@ -31,7 +33,9 @@ const axiosBaseQuery = (): BaseQueryFn<
   }
 };
 
-// --- 2. Interfaces ---
+/**
+ * Structural definition for an individual ticket reservation asset.
+ */
 export interface Ticket {
   ticket_id: string;
   event_name: string;
@@ -40,29 +44,51 @@ export interface Ticket {
   number_of_tickets: number;
 }
 
+/**
+ * Structural definition for an event payload containing detailed nesting 
+ * for venues, showtimes, and structural ticket pricing bounds.
+ */
 export interface Event {
   event_id: string;
   event_name: string;
-  event_city?: string;
-  event_location?: string;
+  event_description?: string;
+  event_category?: string;
+  event_gener?: string;
+  organizer_id?: string;
   image_url?: string | null;
-  show_dates: {
+  shows: {
     show_id: string;
+    venue_name: string;
+    venue_address?: {
+      street?: string;
+      city?: string;
+      state?: string;
+      zip?: string;
+    };
     show_date: string;
     show_time: string;
-    ticket_price?: number;
-    price?: number;
+    screen?: string | null;
+    show_language: string;
+    total_tickets: number;
     available_tickets: number;
-    cancelled?: boolean;
+    ticket_price: number;
+    active?: boolean;
   }[];
+  date_created?: string;
 }
 
+/**
+ * Layout of the response body returned when querying active consumer ticket lists.
+ */
 export interface UserTicketsResponse {
   success: boolean;
   userTickets: Ticket[];
   message?: string;
 }
 
+/**
+ * Core customer profile payload structure returning identification and identity roles.
+ */
 export interface User {
   success: boolean;
   user: {
@@ -74,11 +100,13 @@ export interface User {
   }
 }
 
-// --- 3. The API Definition ---
+/**
+ * RTK Query API slice definitions providing auto-generated hooks for 
+ * customer authentication, ticket execution, and dynamic event catalog browsing.
+ */
 export const appApi = createApi({
   reducerPath: "appApi",
   tagTypes: ["User", "Ticket", "Event"],
-  // Now using our custom Axios-backed base query
   baseQuery: axiosBaseQuery(),
   endpoints: (builder) => ({
     createUser: builder.mutation<any, any>({
@@ -94,13 +122,13 @@ export const appApi = createApi({
     getUser: builder.query<User, void>({
       query: () => ({
         url: 'auth/getuser',
-        method: 'POST',  // 👈 must be POST
+        method: 'POST',
       }),
       providesTags: ['User'],
     }),
 
     getUserTickets: builder.query<UserTicketsResponse, void>({
-      query: () => ({ url: "booking/fetchalltickets", method: "POST" }), // Changed to match your backend route
+      query: () => ({ url: "booking/fetchalltickets", method: "POST" }),
       providesTags: (result) =>
         result && result.userTickets
           ? [
@@ -113,7 +141,7 @@ export const appApi = createApi({
     bookTicket: builder.mutation<any, { showId: string, numberOfTickets: number }>({
       query: ({ showId, numberOfTickets }) => ({
         url: `booking/bookticket/${showId}`,
-        method: "POST", // Changed to POST to match your backend logic
+        method: "POST",
         data: { numberOfTickets }
       }),
       invalidatesTags: () => [{ type: "Ticket", id: "LIST" }],

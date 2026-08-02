@@ -1,9 +1,14 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import type { BaseQueryFn } from "@reduxjs/toolkit/query/react";
-import axiosInstance from "../../api/axiosInstance"; // Adjust path as needed
+import axiosInstance from "../../api/axiosInstance";
 import type { AxiosRequestConfig, AxiosError } from "axios";
 
-// --- 1. The Axios Base Query Wrapper ---
+/**
+ * Custom base query factory wrapper that bridges RTK Query lifecycle events 
+ * with an underlying Axios instance configuration.
+ * 
+ * @returns An asynchronous query handler capable of dispatching standard request parameters.
+ */
 const axiosBaseQuery = (): BaseQueryFn<
   {
     url: string;
@@ -28,7 +33,9 @@ const axiosBaseQuery = (): BaseQueryFn<
   }
 };
 
-// --- 2. Interfaces ---
+/**
+ * Details the scheduling, pricing, and ticket availability bounds for an event showtime.
+ */
 export interface ShowData {
   show_id?: string;
   show_date: string;
@@ -40,6 +47,9 @@ export interface ShowData {
   active?: boolean;
 }
 
+/**
+ * Outlines the comprehensive metadata, location, and timeline sets for an organizer event.
+ */
 export interface OrganizerEvent {
   event_id: string;
   event_name: string;
@@ -49,19 +59,24 @@ export interface OrganizerEvent {
   organizer_id: string;
 }
 
+/**
+ * Layout of the response body returned when querying the active event catalog list.
+ */
 export interface OrganizerEventsResponse {
   success: boolean;
   count: number;
   orgEvents: OrganizerEvent[];
 }
 
-// --- 3. The API Definition ---
+/**
+ * RTK Query API slice definitions providing auto-generated hooks for 
+ * organizer profile actions, event planning, and show ticketing workflows.
+ */
 export const organizerApi = createApi({
   reducerPath: "organizerApi",
-  tagTypes: ["Organizer", "Event", "User"], 
+  tagTypes: ["Organizer", "Event", "User"],
   baseQuery: axiosBaseQuery(),
   endpoints: (builder) => ({
-    // --- Organizer Endpoints ---
     createOrganizer: builder.mutation<any, any>({
       query: (newOrganizer) => ({
         url: "organizers/createorganizer",
@@ -76,7 +91,7 @@ export const organizerApi = createApi({
         method: "POST",
         data: credentials,
       }),
-      invalidatesTags: ["Organizer"], 
+      invalidatesTags: ["Organizer"],
     }),
     getOrganizer: builder.query<any, void>({
       query: () => ({
@@ -86,18 +101,17 @@ export const organizerApi = createApi({
       providesTags: ["Organizer"],
     }),
 
-    // --- Event Endpoints ---
     fetchOrganizerEvents: builder.query<OrganizerEventsResponse, void>({
-      query: () => ({ 
-        url: "organizers/fetchorganizersevents", 
-        method: "GET" 
+      query: () => ({
+        url: "organizers/fetchorganizersevents",
+        method: "GET"
       }),
       providesTags: (result) =>
         result && result.orgEvents
           ? [
-              ...result.orgEvents.map(({ event_id }) => ({ type: "Event" as const, id: event_id })),
-              { type: "Event" as const, id: "LIST" },
-            ]
+            ...result.orgEvents.map(({ event_id }) => ({ type: "Event" as const, id: event_id })),
+            { type: "Event" as const, id: "LIST" },
+          ]
           : [{ type: "Event" as const, id: "LIST" }],
     }),
 
@@ -133,7 +147,15 @@ export const organizerApi = createApi({
         data: showData
       }),
       invalidatesTags: (result, error, { eventId }) => [{ type: "Event", id: eventId }],
-    })
+    }),
+
+    uploadPoster: builder.mutation<any, FormData>({
+      query: (formData) => ({
+        url: 'organizers/uploadposter',
+        method: 'POST',
+        data: formData,
+      }),
+    }),
   }),
 });
 
@@ -145,5 +167,6 @@ export const {
   useCreateEventMutation,
   useDeleteEventMutation,
   useCancelShowMutation,
-  useAddShowMutation
+  useAddShowMutation,
+  useUploadPosterMutation
 } = organizerApi;

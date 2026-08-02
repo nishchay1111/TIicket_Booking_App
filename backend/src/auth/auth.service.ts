@@ -1,33 +1,44 @@
 import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JsonStoreService } from '../common/json-store.service';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config'; 
-import { TokenBlacklistService } from '../common/token-blacklist.service'; // 👈 1. Import the blacklist service
+import { ConfigService } from '@nestjs/config';
+import { TokenBlacklistService } from '../common/token-blacklist.service';
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import { Role } from '../RBAC/role.enum';
-import { UserEntity } from './entities/user.entity'; 
-import { plainToInstance } from 'class-transformer'; 
+import { UserEntity } from './entities/user.entity';
+import { plainToInstance } from 'class-transformer';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
-import type { Response, Request } from 'express'; // 👈 2. Import Express Request type
+import type { Response, Request } from 'express';
 
+/**
+ * Service handling business logic for authentication infrastructure,
+ * including user registration, session management, token issuance, and revocation.
+ */
 @Injectable()
 export class AuthService {
 
   constructor(
     private readonly jsonStore: JsonStoreService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService, 
-    private readonly tokenBlacklist: TokenBlacklistService, // 👈 3. Inject TokenBlacklistService
-  ) {}
+    private readonly configService: ConfigService,
+    private readonly tokenBlacklist: TokenBlacklistService,
+  ) { }
 
+  /**
+   * Generates access tokens and sets a secure refresh token cookie on the client response.
+   * @param res - The Express response object used to attach cookies.
+   * @param userId - The unique identifier of the target user.
+   * @param role - The authorized system role assigned to the user.
+   * @returns A signed short-lived JSON Web Token for authorization headers.
+   */
   generateAndSendTokens(res: Response, userId: string, role: string) {
     const payload = { user: { id: userId, role: role } };
-    
+
     const authtoken = this.jwtService.sign(payload);
-    
+
     const refreshToken = this.jwtService.sign({ id: userId, role: role }, {
       secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
       expiresIn: '7d'
@@ -43,6 +54,12 @@ export class AuthService {
     return authtoken;
   }
 
+  /**
+   * Registers a new user inside the persistence layer, hashing their credential payload.
+   * @param createUserDto - The structural details required for generating a user account.
+   * @param res - The Express response object used to drop session state cookies.
+   * @returns The outcome state along with the new authorized entity instance.
+   */
   async createUser(createUserDto: CreateUserDto, res: Response) {
     const users = this.jsonStore.loadData('users');
     const { name, email, password } = createUserDto;
@@ -67,14 +84,20 @@ export class AuthService {
     this.jsonStore.saveData('users', users);
 
     const authtoken = this.generateAndSendTokens(res, newUser.user_id, newUser.role);
-    
-    return { 
-      success: true, 
-      authtoken, 
-      user: plainToInstance(UserEntity, newUser) 
+
+    return {
+      success: true,
+      authtoken,
+      user: plainToInstance(UserEntity, newUser)
     };
   }
 
+  /**
+   * Validates matching credentials against persisted users to initialize a session.
+   * @param loginDto - The input payload consisting of primary identifier fields.
+   * @param res - The Express response object used to drop session state cookies.
+   * @returns The authorization response containing the access token.
+   */
   async login(loginDto: LoginDto, res: Response) {
     const { email, password } = loginDto;
     const users = this.jsonStore.loadData('users');
@@ -85,32 +108,32 @@ export class AuthService {
     }
 
     const authtoken = this.generateAndSendTokens(res, user.user_id, user.role || Role.USER);
-    
-    return { 
-      success: true, 
-      authtoken, 
-      user: plainToInstance(UserEntity, user) 
+
+    return {
+      success: true,
+      authtoken,
+      user: plainToInstance(UserEntity, user)
     };
   }
 
   /**
-   * Stateful Logout for Users
+   * Explicitly terminates active session contexts, revoking tokens within the blacklist engine.
+   * @param req - The incoming Express request object containing headers and cookies.
+   * @param res - The outgoing Express response context to wipe browser records.
+   * @returns Status affirmation signaling a cleared session.
    */
-  async logout(req: Request, res: Response) { // 👈 4. Added stateful logout method
+  async logout(req: Request, res: Response) {
     const authToken = req.headers['auth-token'] as string;
     const refreshToken = req.cookies?.['refreshToken'];
 
-    // Blacklist the incoming active auth header token
     if (authToken) {
       await this.tokenBlacklist.revokeToken(authToken);
     }
 
-    // Blacklist the cookie refresh token if it exists
     if (refreshToken) {
       await this.tokenBlacklist.revokeToken(refreshToken);
     }
 
-    // Clear cookie from the user's browser
     res.clearCookie('refreshToken', {
       httpOnly: true,
       secure: this.configService.get<string>('NODE_ENV') === 'production',
@@ -120,19 +143,23 @@ export class AuthService {
     return { success: true, message: 'User logged out and tokens revoked successfully.' };
   }
 
+  /**
+   * Reissues fresh short-lived verification tokens after auditing token validity.
+   * @param refreshToken - The unverified refresh token string supplied by the host client.
+   * @returns A renewed access token wrapping payload context.
+   */
   refresh(refreshToken: string) {
-    // 🛑 5. Block refresh operations instantly if the refresh token string is blacklisted
     if (this.tokenBlacklist.isTokenRevoked(refreshToken)) {
       throw new UnauthorizedException('This refresh token has been revoked.');
     }
 
     try {
-      const decoded: any = this.jwtService.verify(refreshToken, { 
-        secret: this.configService.get<string>('JWT_REFRESH_SECRET') 
+      const decoded: any = this.jwtService.verify(refreshToken, {
+        secret: this.configService.get<string>('JWT_REFRESH_SECRET')
       });
-      
-      const authtoken = this.jwtService.sign({ 
-        user: { id: decoded.id, role: decoded.role } 
+
+      const authtoken = this.jwtService.sign({
+        user: { id: decoded.id, role: decoded.role }
       });
       return { success: true, authtoken };
     } catch {
@@ -140,11 +167,25 @@ export class AuthService {
     }
   }
 
+  /**
+   * Looks up a registered entity across user and organizer storage planes.
+   * @param userId - The identity identifier key being searched.
+   * @returns A stripped UserEntity profile instance safe for transmission.
+   */
   async getUser(userId: string) {
     const users = this.jsonStore.loadData('users');
+    const organizers = this.jsonStore.loadData('organizers');
     const user = users.find((u) => u.user_id === userId);
-    if (!user) throw new BadRequestException('User not found');
+    const organizer = organizers.find((o) => o.organizer_id === userId);
+    
+    if (user) return {
+      success: true,
+      user: plainToInstance(UserEntity, user, { excludeExtraneousValues: true })
+    };
 
-    return { success: true, user: plainToInstance(UserEntity, user) };
+    if (organizer) return {
+      success: true,
+      user: plainToInstance(UserEntity, organizer, { excludeExtraneousValues: true })
+    };
   }
 }

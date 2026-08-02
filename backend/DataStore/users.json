@@ -4,6 +4,7 @@
         "user_name": "Nishchay1",
         "user_password": "$2a$10$XGruPJf/JNKf9qHAKJqgS.2c/ooWnPOIqW4IroyxRgbGNkF6ECifO",
         "user_email": "nishchay1@gmail.com",
+        "role":"user",
         "date_created": "2026-01-20T23:35:47.795Z"
     },
     {
@@ -11,6 +12,7 @@
         "user_name": "Nishchay2",
         "user_password": "$2a$10$8t8VsOPtpGKJRGkB43sP0.jRK/afIDPx5nVml/VGbZTEo1MykXqcy",
         "user_email": "nishchay2@gmail.com",
+        "role":"user",
         "date_created": "2026-01-20T23:36:01.113Z"
     },
     {
@@ -18,6 +20,7 @@
         "user_name": "Nishchay3",
         "user_password": "$2a$10$mq2S4iMN3D4rvkz2qbgycOtoixEYoP0Ycto9CSmGWRJV7w81OHqXe",
         "user_email": "nishchay3@gmail.com",
+        "role":"user",
         "date_created": "2026-01-20T23:36:11.343Z"
     },
     {
@@ -32,6 +35,7 @@
         "user_name": "Nishchay5",
         "user_password": "$2a$10$QsYKepIjqlqS4cpwckGyOugRQSExKpaKmNGOkhlBdfwkHnUGukyqC",
         "user_email": "nishchay5@gmail.com",
+        "role":"user",
         "date_created": "2026-01-20T23:37:23.313Z"
     },
     {

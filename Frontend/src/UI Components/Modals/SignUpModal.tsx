@@ -17,15 +17,17 @@ import {
   Divider,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../redux/hooks';
-import { showAlert } from '../redux/slice/alert';
-import { useLoginMutation } from '../redux/slice/usersOperations';
-import { useOrganizerLoginMutation } from '../redux/slice/organizerOperations';
+import { useAppDispatch } from '../../redux/hooks';
+import { showAlert } from '../../redux/slice/alert';
+import { useCreateUserMutation } from '../../redux/slice/usersOperations';
+import { useCreateOrganizerMutation } from '../../redux/slice/organizerOperations';
 
-// ─── 🌙 Toggle Dark Mode Here ─────────────────────────────────────────────────
-const DARK_MODE = false; // 👈 Change to true for dark, false for light
+const DARK_MODE = false;
 
-// ─── Slide Up Transition ──────────────────────────────────────────────────────
+/**
+ * Slide transition wrapper component driving the entry animations 
+ * for the structural sign-up dialog container.
+ */
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>;
@@ -35,43 +37,62 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-// ─── Props ────────────────────────────────────────────────────────────────────
-interface LoginModalProps {
-  open: boolean;
-  onClose: () => void;
-}
-
-// ─── View Type ────────────────────────────────────────────────────────────────
 type ViewType = 'user' | 'organizer';
 
-// ─── Component ────────────────────────────────────────────────────────────────
-export default function LoginModal({
+/**
+ * Property interface definitions detailing visibility metrics, 
+ * initial dashboard views, and modal transition toggles.
+ */
+interface SignUpModalProps {
+  open: boolean;
+  onClose: () => void;
+  initialView?: ViewType;
+  onSwitchToLogin?: () => void;
+}
+
+/**
+ * SignUpModal manages registration workflows for both standard consumers 
+ * and platform event organizers, handling separate asynchronous RTK-Query mutations,
+ * validation tracking, and token management.
+ */
+export default function SignUpModal({
   open,
   onClose,
-}: LoginModalProps) {
+  initialView = 'user',
+  onSwitchToLogin,
+}: SignUpModalProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const [view, setView] = React.useState<ViewType>('user');
+  const [view, setView] = React.useState<ViewType>(initialView);
 
-  const [login, { isLoading: userLoading, isSuccess: userSuccess, isError: userIsError, data: userData, error: userError }] = useLoginMutation();
-  const [organizerLogin, { isLoading: orgLoading, isSuccess: orgSuccess, isError: orgIsError, data: orgData, error: orgError }] = useOrganizerLoginMutation();
+  const [createUser, { isLoading: userLoading, isSuccess: userSuccess, isError: userIsError, data: userData, error: userError }] = useCreateUserMutation();
+  const [createOrganizer, { isLoading: orgLoading, isSuccess: orgSuccess, isError: orgIsError, data: orgData, error: orgError }] = useCreateOrganizerMutation();
 
-  // ── Form state ────────────────────────────────────────────────────────
-  const [email, setEmail]         = React.useState('');
-  const [password, setPassword]   = React.useState('');
-  const [formError, setFormError] = React.useState('');
+  const [name, setName]                 = React.useState('');
+  const [email, setEmail]               = React.useState('');
+  const [password, setPassword]         = React.useState('');
+  const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [formError, setFormError]       = React.useState('');
 
-  const isLoading        = view === 'user' ? userLoading : orgLoading;
-  const isButtonDisabled = !email.trim() || !password.trim() || isLoading;
+  const isLoading = view === 'user' ? userLoading : orgLoading;
 
-  // ── Theme ─────────────────────────────────────────────────────────────
+  const passwordsMatch = password === confirmPassword;
+  const confirmPasswordError = !!confirmPassword && !passwordsMatch;
+
+  const isButtonDisabled =
+    !name.trim() ||
+    !email.trim() ||
+    !password.trim() ||
+    !confirmPassword.trim() ||
+    !passwordsMatch ||
+    isLoading;
+
   const theme = React.useMemo(
     () => createTheme({ palette: { mode: DARK_MODE ? 'dark' : 'light' } }),
     []
   );
 
-  // ── Colors based on mode ──────────────────────────────────────────────
   const colors = {
     bg:          DARK_MODE ? '#1a1a2e'              : '#ffffff',
     text:        DARK_MODE ? '#ffffff'              : '#000000',
@@ -85,79 +106,106 @@ export default function LoginModal({
     closeBtn:    DARK_MODE ? '#ffffff'              : '#000000',
   };
 
-  // ── Reset form when modal closes or view changes ──────────────────────
   React.useEffect(() => {
+    setName('');
     setEmail('');
     setPassword('');
+    setConfirmPassword('');
     setFormError('');
-  }, [open, view]);
+    setView(initialView);
+  }, [open, initialView]);
 
-  // ── User Success ──────────────────────────────────────────────────────
+  React.useEffect(() => {
+    setName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setFormError('');
+  }, [view]);
+
   React.useEffect(() => {
     if (userSuccess && userData?.success) {
       localStorage.setItem('token', userData.authtoken);
-      dispatch(showAlert({ message: 'Login successful! Welcome back.', severity: 'success' }));
+      dispatch(showAlert({ message: 'Account created! Welcome.', severity: 'success' }));
       onClose();
       window.location.reload();
     }
   }, [userSuccess, userData, dispatch, onClose]);
 
-  // ── Organizer Success ─────────────────────────────────────────────────
   React.useEffect(() => {
     if (orgSuccess && orgData?.success) {
       const token = orgData.authToken || orgData.authtoken;
       localStorage.setItem('token', token);
-      dispatch(showAlert({ message: 'Organizer login successful!', severity: 'success' }));
+      dispatch(showAlert({ message: 'Organizer account created!', severity: 'success' }));
       onClose();
       navigate('/organizershome');
     }
   }, [orgSuccess, orgData, dispatch, onClose, navigate]);
 
-  // ── User Error ────────────────────────────────────────────────────────
   React.useEffect(() => {
     if (userIsError) {
       const errMsg =
         (userError as any)?.data?.error ||
         (userError as any)?.data?.message ||
-        'Login failed. Please check your credentials.';
+        'Signup failed. Please try again.';
       setFormError(errMsg);
       dispatch(showAlert({ message: errMsg, severity: 'error' }));
     }
   }, [userIsError, userError, dispatch]);
 
-  // ── Organizer Error ───────────────────────────────────────────────────
   React.useEffect(() => {
     if (orgIsError) {
       const errMsg =
         (orgError as any)?.data?.error ||
         (orgError as any)?.data?.message ||
-        'Organizer login failed.';
+        'Signup failed. Please try again.';
       setFormError(errMsg);
       dispatch(showAlert({ message: errMsg, severity: 'error' }));
     }
   }, [orgIsError, orgError, dispatch]);
 
-  // ── Submit ────────────────────────────────────────────────────────────
+  /**
+   * Handles multi-step form submissions, enforcing parameter checks, 
+   * length allocations, and matching parameters before dispatching mutations.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError('');
 
-    if (!email || !password) {
-      setFormError('Email and password are required.');
+    if (!name || !email || !password || !confirmPassword) {
+      setFormError('All fields are required.');
+      return;
+    }
+
+    if (!passwordsMatch) {
+      setFormError('Passwords do not match.');
+      return;
+    }
+
+    if (password.length < 6) {
+      setFormError('Password must be at least 6 characters.');
       return;
     }
 
     try {
       if (view === 'user') {
-        await login({ email, password }).unwrap();
+        await createUser({ name, email, password }).unwrap();
       } else {
-        await organizerLogin({ email, password }).unwrap();
+        await createOrganizer({ name, email, password }).unwrap();
       }
     } catch (err: any) {
-      const message =
-        err?.data?.error || err?.data?.message || 'Invalid credentials.';
+      const message = err?.data?.error || err?.data?.message || 'Signup failed.';
       setFormError(message);
     }
+  };
+
+  /**
+   * Closes the active register footprint context and invokes parent links
+   * to immediately present authentication screens.
+   */
+  const handleSwitchToLogin = () => {
+    onClose();
+    onSwitchToLogin?.();
   };
 
   return (
@@ -172,18 +220,15 @@ export default function LoginModal({
         PaperProps={{
           sx: {
             borderRadius: 3,
-            bgcolor: colors.bg,       // 👈 white or dark
+            bgcolor: colors.bg,
             px: 1,
             pb: 3,
             boxShadow: DARK_MODE
               ? '0 8px 32px rgba(0,0,0,0.8)'
-              : '0 8px 32px rgba(0,0,0,0.15)', // 👈 subtle shadow in light mode
+              : '0 8px 32px rgba(0,0,0,0.15)',
           },
         }}
       >
-        <CssBaseline />
-
-        {/* ── Close Button ────────────────────────────────────────── */}
         <IconButton
           onClick={onClose}
           sx={{
@@ -198,19 +243,17 @@ export default function LoginModal({
 
         <DialogContent sx={{ pt: 4 }}>
 
-          {/* ── Logo ──────────────────────────────────────────────── */}
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
             <img src="/logo192.png" alt="Logo" style={{ height: 32 }} />
           </Box>
 
-          {/* ── Title ─────────────────────────────────────────────── */}
           <Typography
             variant="h5"
             fontWeight="bold"
             textAlign="center"
             sx={{ color: colors.text, mb: 0.5 }}
           >
-            {view === 'user' ? 'User Login' : 'Organizer Login'}
+            {view === 'user' ? 'Create Account' : 'Organizer Sign Up'}
           </Typography>
 
           <Typography
@@ -219,23 +262,40 @@ export default function LoginModal({
             sx={{ color: colors.subtext, mb: 3 }}
           >
             {view === 'user'
-              ? 'Login to book tickets and more'
-              : 'Login to manage your events'}
+              ? 'Sign up to start booking tickets'
+              : 'Sign up to start hosting events'}
           </Typography>
 
-          {/* ── Form ──────────────────────────────────────────────── */}
           <Box
             component="form"
             onSubmit={handleSubmit}
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           >
-            {/* Email */}
+            <TextField
+              label="Name"
+              type="text"
+              required
+              fullWidth
+              autoFocus
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your name"
+              variant="outlined"
+              size="small"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: colors.border },
+                },
+                '& .MuiInputLabel-root': { color: colors.subtext },
+                '& .MuiInputBase-input': { color: colors.text },
+              }}
+            />
+
             <TextField
               label="Email"
               type="email"
               required
               fullWidth
-              autoFocus
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter Your E-Mail"
@@ -250,7 +310,6 @@ export default function LoginModal({
               }}
             />
 
-            {/* Password */}
             <TextField
               label="Password"
               type="password"
@@ -270,14 +329,33 @@ export default function LoginModal({
               }}
             />
 
-            {/* Error */}
+            <TextField
+              label="Confirm Password"
+              type="password"
+              required
+              fullWidth
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Re-enter Your Password"
+              variant="outlined"
+              size="small"
+              error={confirmPasswordError}
+              helperText={confirmPasswordError ? 'Passwords do not match' : ''}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: colors.border },
+                },
+                '& .MuiInputLabel-root': { color: colors.subtext },
+                '& .MuiInputBase-input': { color: colors.text },
+              }}
+            />
+
             {formError && (
               <Typography variant="body2" color="error" textAlign="center">
                 {formError}
               </Typography>
             )}
 
-            {/* Login Button */}
             <Button
               type="submit"
               variant="outlined"
@@ -295,70 +373,29 @@ export default function LoginModal({
                 },
               }}
             >
-              {isLoading ? 'Logging in...' : 'Login'}
+              {isLoading ? 'Creating Account...' : 'Sign Up'}
             </Button>
-
-            {/* Sign Up Button */}
-            {view === 'user' && (
-              <Button
-                component="a"
-                href="/user_signup"
-                variant="outlined"
-                fullWidth
-                sx={{
-                  py: 1.2,
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  borderColor: colors.btnBorder,
-                  color: colors.btnColor,
-                  '&:hover': {
-                    borderColor: colors.btnBorder,
-                    bgcolor: colors.btnHoverBg,
-                  },
-                }}
-              >
-                Sign Up
-              </Button>
-            )}
-
-            {/* Organizer Sign Up */}
-            {view === 'organizer' && (
-              <Button
-                component="a"
-                href="/organizer_signup"
-                variant="outlined"
-                fullWidth
-                sx={{
-                  py: 1.2,
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  borderColor: colors.btnBorder,
-                  color: colors.btnColor,
-                  '&:hover': {
-                    borderColor: colors.btnBorder,
-                    bgcolor: colors.btnHoverBg,
-                  },
-                }}
-              >
-                Organizer Sign Up
-              </Button>
-            )}
 
             <Divider sx={{ borderColor: colors.divider }} />
 
-            {/* Terms */}
-            <Typography
-              variant="caption"
-              textAlign="center"
-              sx={{ color: colors.subtext }}
-            >
-              By continuing, you agree to our{' '}
-              <Link href="#" sx={{ color: colors.link }}>Terms & Conditions</Link>
-              {' '}and{' '}
-              <Link href="#" sx={{ color: colors.link }}>Privacy Policy</Link>
-            </Typography>
+            <Box sx={{ textAlign: 'center' }}>
+              <Link
+                component="button"
+                type="button"
+                underline="hover"
+                onClick={handleSwitchToLogin}
+                sx={{
+                  color: colors.link,
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  background: 'none',
+                  border: 'none',
+                }}
+              >
+                Already have an account? Sign In
+              </Link>
+            </Box>
 
-            {/* Switch view link */}
             <Box sx={{ textAlign: 'center' }}>
               {view === 'user' ? (
                 <Link
@@ -374,7 +411,7 @@ export default function LoginModal({
                     border: 'none',
                   }}
                 >
-                  Click here for Organizer Login
+                  Click here for Organizer Sign Up
                 </Link>
               ) : (
                 <Link
@@ -390,7 +427,7 @@ export default function LoginModal({
                     border: 'none',
                   }}
                 >
-                  Click here for User Login
+                  Click here for User Sign Up
                 </Link>
               )}
             </Box>

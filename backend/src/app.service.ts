@@ -1,24 +1,31 @@
 import { Injectable } from '@nestjs/common';
 
+/**
+ * Global application service responsible for root diagnostics,
+ * baseline text configurations, and environment telemetry lookup maps.
+ */
 @Injectable()
 export class AppService {
   /**
-   * Returns a welcome message for the API root.
+   * Compiles the standard application welcome identity string.
+   * 
+   * @returns A uniform text greeting block representing the API root.
    */
   getHello(): string {
     return 'Welcome to the Ticket Booking App API!';
   }
 
   /**
-   * Returns basic system information.
-   * Useful for the health check endpoint in AppController.
+   * Gathers active server performance states and process platform identifiers.
+   * 
+   * @returns A system diagnostics payload mapping names, versions, and deployment modes.
    */
   getSystemInfo() {
     return {
       name: 'Ticket Booking Backend',
       version: '1.0.0',
       environment: process.env.NODE_ENV || 'development',
-      platform: process.platform, // Will show 'darwin' on your MacBook Air
+      platform: process.platform,
     };
   }
 }

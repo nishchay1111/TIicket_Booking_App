@@ -5,6 +5,7 @@
         "organizer_name": "NishchayO1",
         "organizer_password": "$2a$10$gwUmJ/FOCcmwl4kgzLhtCeTi9x3HRNFi0MS5Zsx5ZXGRkn5wQwolC",
         "admin_verification": 1,
+        "role":"organizer",
         "date_created": "2026-01-20T23:40:37.869Z"
     },
     {
@@ -13,6 +14,7 @@
         "organizer_name": "NishchayO2",
         "organizer_password": "$2a$10$N.N7mtHDL1DuwJ63pK7xCO3kFsqx6nW6jUQ1Jqg.VzaiLGGXYTFTe",
         "admin_verification": 1,
+        "role":"organizer",
         "date_created": "2026-01-20T23:40:48.846Z"
     },
     {
@@ -21,6 +23,7 @@
         "organizer_name": "NishchayO3",
         "organizer_password": "$2a$10$O57.I8yQek3QHCaWFINF5eBpS/6xd/pRBocjBia/4svNTzmxwZP46",
         "admin_verification": 1,
+        "role":"organizer",
         "date_created": "2026-01-20T23:41:10.139Z"
     },
     {
@@ -29,6 +32,7 @@
         "organizer_name": "NishchayO4",
         "organizer_password": "$2a$10$WwCuLXtjY/hQIwb2.FD55.x9/QYVkcS0HGeV9uakhIo89FtHiLzWG",
         "admin_verification": 1,
+        "role":"organizer",
         "date_created": "2026-01-20T23:41:22.768Z"
     },
     {
@@ -37,6 +41,7 @@
         "organizer_name": "NishchayO5",
         "organizer_password": "$2a$10$q9VNzR/xbhcCBxj8GhNynO5zHmAiJ0SqkWVL9oBkILNQ6/DJnjcTG",
         "admin_verification": 1,
+        "role":"organizer",
         "date_created": "2026-01-20T23:41:57.024Z"
     },
     {

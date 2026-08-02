@@ -7,7 +7,10 @@ import {
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+/**
+ * Shape of individual event data structures containing identifiers,
+ * scheduling milestones, routing descriptors, and dynamic fallback iconography parameters.
+ */
 export interface EventItem {
   event_id: string;
   event_name: string;
@@ -18,7 +21,10 @@ export interface EventItem {
   image_url?: string | null;
 }
 
-// ─── Event Card Component ─────────────────────────────────────────────────────
+/**
+ * EventCard manages the visualization of single item previews, tracking local 
+ * asset load errors to render gradient fallback wrappers while offering structural scaling interactions.
+ */
 export function EventCard({
   event,
   onClick,
@@ -111,21 +117,30 @@ export function EventCard({
   );
 }
 
-// ─── Carousel Component ───────────────────────────────────────────────────────
+/**
+ * EventCarousel encapsulates a horizontally scrollable gallery framework, combining passive scroll 
+ * listeners and native viewport resize recalculations to orchestrate dynamic layout edge detection.
+ */
 export function EventCarousel({
   title,
   events,
   onCardClick,
+  onSeeAllClick,
 }: {
   title: string;
   events: EventItem[];
   onCardClick?: (eventId: string) => void;
+  onSeeAllClick?: () => void;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const [showLeft, setShowLeft]   = useState(false);
   const [showRight, setShowRight] = useState(true);
 
+  /**
+   * Evaluates the bounding coordinates of the list element to determine if
+   * navigational triggers require explicit presentation thresholds.
+   */
   const updateArrows = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -148,6 +163,10 @@ export function EventCarousel({
     return () => window.removeEventListener('resize', updateArrows);
   }, [updateArrows]);
 
+  /**
+   * Orchestrates animated smooth vector transitions within the list container
+   * based on explicit direction selections.
+   */
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
       scrollRef.current.scrollBy({
@@ -160,7 +179,6 @@ export function EventCarousel({
   return (
     <Box sx={{ mb: 5 }}>
 
-      {/* ── Section Header ─────────────────────────────────────────────── */}
       <Box sx={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -170,14 +188,22 @@ export function EventCarousel({
         <Typography variant="h6" fontWeight="bold">
           {title}
         </Typography>
-        <Typography
-          variant="body2"
-          sx={{ color: '#e91e63', cursor: 'pointer', fontWeight: 500 }}
-        >
-        </Typography>
+        {onSeeAllClick && (
+          <Typography
+            variant="body2"
+            onClick={onSeeAllClick}
+            sx={{
+              color: '#e91e63',
+              cursor: 'pointer',
+              fontWeight: 500,
+              '&:hover': { textDecoration: 'underline' },
+            }}
+          >
+            See All &rsaquo;
+          </Typography>
+        )}
       </Box>
 
-      {/* ── Carousel Wrapper ─────────────────────────────────────────────── */}
       <Box sx={{ position: 'relative' }}>
 
         {showLeft && (

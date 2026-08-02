@@ -9,7 +9,10 @@ import {
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+/**
+ * Shape definition for detailed event item metadata, including scheduling parameters,
+ * localized tracking metrics, classification formats, and individual booking arrays.
+ */
 export interface EventDetail {
   event_id: string;
   event_name: string;
@@ -31,21 +34,31 @@ export interface EventDetail {
   }[];
 }
 
-// ─── Props ────────────────────────────────────────────────────────────────────
+/**
+ * Property interface definitions detailing interaction callbacks, layout mode 
+ * configurations, and conditional component slot overrides.
+ */
 interface EventDetailCardProps {
   event: EventDetail;
   onBookTickets?: () => void;
   onInterested?: () => void;
   darkMode?: boolean;
+  actions?: React.ReactNode;
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
+/**
+ * EventDetailCard presents a responsive hero layout displaying specific item posters,
+ * timeline metadata, interactive interest counters, and contextually injected control blocks.
+ */
 export default function EventDetailCard({
   event,
   onBookTickets,
   onInterested,
   darkMode = true,
+  actions,
 }: EventDetailCardProps) {
+  const [imageError, setImageError] = React.useState(false);
+
   return (
     <Box
       sx={{
@@ -56,7 +69,6 @@ export default function EventDetailCard({
         p: { xs: 3, md: 5 },
       }}
     >
-      {/* ── Left — Movie Poster Card ───────────────────────────────── */}
       <Box sx={{ flexShrink: 0 }}>
         <Box
           sx={{
@@ -67,16 +79,15 @@ export default function EventDetailCard({
             position: 'relative',
           }}
         >
-          {/* Poster Image */}
-          {event.image_url ? (
+          {event.image_url && !imageError ? (
             <Box
               component="img"
               src={event.image_url}
               alt={event.event_name}
-              sx={{ width: '100%', display: 'block' }}
+              onError={() => setImageError(true)}
+              sx={{ width: '100%', height: 320, objectFit: 'cover', display: 'block' }}
             />
           ) : (
-            // 👈 Placeholder if no image
             <Box
               sx={{
                 height: 320,
@@ -91,7 +102,6 @@ export default function EventDetailCard({
             </Box>
           )}
 
-          {/* Trailers Button overlay at bottom */}
           <Box
             sx={{
               position: 'absolute',
@@ -114,7 +124,6 @@ export default function EventDetailCard({
           </Box>
         </Box>
 
-        {/* Release Date below poster */}
         {event.release_date && (
           <Typography
             variant="caption"
@@ -130,10 +139,7 @@ export default function EventDetailCard({
         )}
       </Box>
 
-      {/* ── Right — Event Details ──────────────────────────────────── */}
       <Box sx={{ flex: 1 }}>
-
-        {/* Event Name */}
         <Typography
           variant="h4"
           fontWeight="bold"
@@ -142,7 +148,6 @@ export default function EventDetailCard({
           {event.event_name}
         </Typography>
 
-        {/* Interested Count */}
         {event.interested_count !== undefined && (
           <Box
             sx={{
@@ -187,7 +192,6 @@ export default function EventDetailCard({
           </Box>
         )}
 
-        {/* Duration & Genres */}
         {(event.duration || event.genres?.length) && (
           <Typography
             variant="body2"
@@ -197,7 +201,6 @@ export default function EventDetailCard({
           </Typography>
         )}
 
-        {/* Formats */}
         {event.formats && event.formats.length > 0 && (
           <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 1.5 }}>
             {event.formats.map((format) => (
@@ -216,7 +219,6 @@ export default function EventDetailCard({
           </Stack>
         )}
 
-        {/* Languages */}
         {event.languages && event.languages.length > 0 && (
           <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 3 }}>
             {event.languages.map((lang) => (
@@ -235,24 +237,27 @@ export default function EventDetailCard({
           </Stack>
         )}
 
-        {/* Book Tickets Button */}
-        <Button
-          variant="contained"
-          size="large"
-          onClick={onBookTickets}
-          sx={{
-            bgcolor: '#e91e63',
-            color: '#fff',
-            px: 5,
-            py: 1.5,
-            fontWeight: 'bold',
-            fontSize: '16px',
-            borderRadius: 1,
-            '&:hover': { bgcolor: '#c2185b' },
-          }}
-        >
-          Book Tickets
-        </Button>
+        {actions ? (
+          actions
+        ) : (
+          <Button
+            variant="contained"
+            size="large"
+            onClick={onBookTickets}
+            sx={{
+              bgcolor: '#e91e63',
+              color: '#fff',
+              px: 5,
+              py: 1.5,
+              fontWeight: 'bold',
+              fontSize: '16px',
+              borderRadius: 1,
+              '&:hover': { bgcolor: '#c2185b' },
+            }}
+          >
+            Book Tickets
+          </Button>
+        )}
       </Box>
     </Box>
   );
