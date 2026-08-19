@@ -1,5 +1,4 @@
-import axios from 'axios';
-import type { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios, {type AxiosError, type InternalAxiosRequestConfig} from 'axios'
 import axiosRetry from 'axios-retry';
 import { showAlert } from '../redux/slice/alert';
 
